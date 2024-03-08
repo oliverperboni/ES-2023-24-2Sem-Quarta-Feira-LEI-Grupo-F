@@ -2,4 +2,4 @@
 Repositorio para o projeto da cadeira de Engenharia de Software 2023/24
 
 ## Nome e Número dos alunos e username no GitHub
- Oliver Oliveira - 104904 - oliverpernoni | Antonio Chumbo  -xxxxxx- antoniopombeiro | Tiago Soares -xxxxxx- username | Daniel Ferreira -104703- DAN1Ss | Edgar -xxxxxx- username
+ Oliver Oliveira - 104904 - oliverpernoni | Antonio Chumbo  -xxxxxx- antoniopombeiro | Tiago Soares -xxxxxx- username | Daniel Ferreira -104703- DAN1Ss | Edgar -99150- emqos-iscte
