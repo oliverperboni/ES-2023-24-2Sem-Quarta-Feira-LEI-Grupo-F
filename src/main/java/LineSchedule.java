@@ -1,15 +1,15 @@
 public class LineSchedule {
-    String curso;
-    String unidade_curricular;
-    String turno;
-    String turma;
-    Integer inscritos;
-    String dia_semana;
-    String hora_inicio;
-    String hora_fim;
-    String data_aula;
-    String caracteristicas_sala;
-    String sala;
+    private String curso;
+    private String unidade_curricular;
+    private String turno;
+    private String turma;
+    private Integer inscritos;
+    private String dia_semana;
+    private String hora_inicio;
+    private String hora_fim;
+    private String data_aula;
+    private String caracteristicas_sala;
+    private String sala;
 
     public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos, String dia_semana, String hora_inicio, String hora_fim,  String data_aula, String caracteristicas_sala, String sala) {
         this.curso = curso;
@@ -29,7 +29,7 @@ public class LineSchedule {
         return curso;
     }
 
-    public String getUnidade_curricular() {
+    public String getUnidadeCurricular() {
         return unidade_curricular;
     }
 
@@ -45,23 +45,23 @@ public class LineSchedule {
         return inscritos;
     }
 
-    public String getDia_semana() {
+    public String getDiaSemana() {
         return dia_semana;
     }
 
-    public String getHora_inicio() {
+    public String getHoraInicio() {
         return hora_inicio;
     }
 
-    public String getHora_fim() {
+    public String getHoraFim() {
         return hora_fim;
     }
 
-    public String getData_aula() {
+    public String getDataAula() {
         return data_aula;
     }
 
-    public String getCaracteristicas_sala() {
+    public String getCaracteristicasSala() {
         return caracteristicas_sala;
     }
 
