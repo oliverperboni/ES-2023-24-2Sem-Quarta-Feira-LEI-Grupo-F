@@ -21,14 +21,18 @@ public class ReadCSV {
         return lineSchedules;
     }
 
+    public ArrayList<LineSchedule> getCsvData(){
+            return ReadCSV.readScheduleCSV("csv/HorarioDeExemplo.csv");
+    }
+
     public static void main(String[] args) {
         String localFile = "csv/HorarioDeExemplo.csv";
         ArrayList<LineSchedule> lineSchedules = readScheduleCSV(localFile);
         for (LineSchedule schedule : lineSchedules) {
             System.out.println(schedule);
         }
-        System.out.println("FEITO DO GIT");
-
+        
+        /// FEITO DO GIT ///
         String gitFile = "https://raw.githubusercontent.com/oliverperboni/ES-2023-24-2Sem-Quarta-Feira-LEI-Grupo-F/Load-csv/csv/HorarioDeExemplo.csv";
         ArrayList<LineSchedule> lineSchedules2 = readScheduleCSV(localFile);
         for (LineSchedule schedule : lineSchedules2) {
