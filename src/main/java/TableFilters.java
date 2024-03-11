@@ -2,14 +2,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class TableFilters{
 
     public JFrame panel;
 
-    public TableFilters(){
+    public JFrame addFilter(JFrame panel, JTable tabela){
         panel = new JFrame();
 
         panel.setSize(900, 800);
@@ -25,22 +24,16 @@ public class TableFilters{
         //TextField
         textFieldsCreation(filterPanel);
 
-        //Tabelas
-        JTable tabela = Table();
-        //Scroll Option
-        JScrollPane scrollPane = new JScrollPane(tabela);
-        scrollPane.setBorder(BorderFactory.createMatteBorder(20,20,20,20, panel.getBackground()));
-
         //Botoes
         JButton filtrarbtn = new JButton("Filtrar");
         btnCreation(filtrarbtn, tabela, filterPanel);
         buttonPanel.add(filtrarbtn);
 
         panel.add(filterPanel, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
         panel.add(buttonPanel, BorderLayout.SOUTH);
-        panel.setVisible(true);
+        return panel;
     }
+
 
     //Criação dos labels e textFields para os filtros
     private void textFieldsCreation(JPanel filterPanel) {
@@ -56,6 +49,8 @@ public class TableFilters{
         addLabelAndTextField(filterPanel, "Data da Aula");
         addLabelAndTextField(filterPanel, "Caracteristicas da Sala");
         addLabelAndTextField(filterPanel, "Sala atribuida à Sala");
+        addLabelAndTextField(filterPanel, "Semana Semestre");
+        addLabelAndTextField(filterPanel, "Semana Ano");
     }
 
     //Adicionar á tabela a Label e o Textfield
@@ -109,45 +104,7 @@ public class TableFilters{
             sorter.setRowFilter(compoundRowFilter);
         }
     }
-
-    //Função para criar a tabela passei o que o Oliver fez para aqui para ficar mais fácil
-    public JTable Table(){
-        // array com os dados do excel
-        ArrayList<LineSchedule> data = ReadCSV.readScheduleCSV("csv/HorarioDeExemplo.csv");
-
-        // Cria uma tabela
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Curso");
-        model.addColumn("Unidade Curricular");
-        model.addColumn("Turno");
-        model.addColumn("Turma");
-        model.addColumn("Inscritos no turno");
-        model.addColumn("Dia da Semana");
-        model.addColumn("Hora Início da Aula");
-        model.addColumn("Hora Fim da Aula");
-        model.addColumn("Data da Aula");
-        model.addColumn("Características da Sala");
-        model.addColumn("Sala atribuida à sala");
-
-        //adiciona as linhas do CSV a tabela
-        for (LineSchedule ls : data) {
-            Object[] row = {normalizeValue(ls.getCurso()),normalizeValue(ls.getUnidadeCurricular()),normalizeValue(ls.getTurno()),normalizeValue(ls.getTurma()),ls.getInscritos(),
-                    ls.getDiaSemana(),ls.getHoraInicio(),ls.getHoraFim(),ls.getDataAula(),ls.getCaracteristicasSala(),ls.getSala()};
-            model.addRow(row);
-        }
-
-        //Retorna a tabela
-        return new JTable(model);
-    }
-
-    //Funcao para normalizar e tirar os acentos e caracteres especiais da string
-    private String normalizeValue(String value) {
-        if (value != null) {
-            value = Normalizer.normalize(value, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-            return value.toUpperCase();
-        }
-        return "";
-    }
+   
 
     public static void main(String[] args) {
         new TableFilters();
