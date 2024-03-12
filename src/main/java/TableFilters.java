@@ -4,17 +4,17 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class TableFilters{
+public class TableFilters {
 
     public JFrame panel;
 
-    public JFrame addFilter(JFrame panel, JTable tabela){
+    public JFrame addFilter(JFrame panel, JTable tabela) {
         panel = new JFrame();
 
         panel.setSize(900, 800);
         panel.setLayout(new BorderLayout());
         panel.setUndecorated(false);
-        panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20,20,20,20, panel.getBackground()));
+        panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, panel.getBackground()));
         panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Paneis
@@ -42,15 +42,15 @@ public class TableFilters{
         addLabelAndTextField(filterPanel, "UC");
         addLabelAndTextField(filterPanel, "Turno");
         addLabelAndTextField(filterPanel, "Turma");
-        addLabelAndTextField(filterPanel, "Inscritos no Turno");
-        addLabelAndTextField(filterPanel, "Dia de Semana");
-        addLabelAndTextField(filterPanel, "Hora de Inicio");
+        addLabelAndTextField(filterPanel, "N.º de inscritos no turno");
+        addLabelAndTextField(filterPanel, "Dia da Semana");
+        addLabelAndTextField(filterPanel, "Hora de Início");
         addLabelAndTextField(filterPanel, "Hora de Fim");
         addLabelAndTextField(filterPanel, "Data da Aula");
-        addLabelAndTextField(filterPanel, "Caracteristicas da Sala");
-        addLabelAndTextField(filterPanel, "Sala atribuida à Sala");
-        addLabelAndTextField(filterPanel, "Semana Semestre");
-        addLabelAndTextField(filterPanel, "Semana Ano");
+        addLabelAndTextField(filterPanel, "Tipo de Sala");
+        addLabelAndTextField(filterPanel, "Sala atribuida");
+        addLabelAndTextField(filterPanel, "Semana do semestre");
+        addLabelAndTextField(filterPanel, "Semana do ano");
     }
 
     //Adicionar á tabela a Label e o Textfield
@@ -74,7 +74,7 @@ public class TableFilters{
 
     }
 
-    public void function_filtrarBtn(JTable tabela, JPanel filterPanel){
+    public void function_filtrarBtn(JTable tabela, JPanel filterPanel) {
         int countFilterPreenchido = 0;
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
@@ -82,34 +82,31 @@ public class TableFilters{
 
         ArrayList<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-        for(int i = 0; i < filterPanel.getComponentCount(); i+=2){
+        for (int i = 0; i < filterPanel.getComponentCount(); i += 2) {
             Component component = filterPanel.getComponent(i + 1);
-            if(component instanceof JTextField textField){
+            if (component instanceof JTextField textField) {
                 String filterText = textField.getText().toUpperCase();
 
                 int columnIndex = i / 2;
 
-                if(!filterText.isEmpty()){
+                if (!filterText.isEmpty()) {
                     countFilterPreenchido++;
                     filters.add(RowFilter.regexFilter("(?i)\\b" + filterText + "\\b", columnIndex));
                 }
             }
         }
 
-        if(countFilterPreenchido == 1){
+        if (countFilterPreenchido == 1) {
             RowFilter<Object, Object> compoundRowFilter = RowFilter.orFilter(filters);
             sorter.setRowFilter(compoundRowFilter);
-        }else {
+        } else {
             RowFilter<Object, Object> compoundRowFilter = RowFilter.andFilter(filters);
             sorter.setRowFilter(compoundRowFilter);
         }
     }
-   
 
     public static void main(String[] args) {
         new TableFilters();
     }
-
-
 
 }
