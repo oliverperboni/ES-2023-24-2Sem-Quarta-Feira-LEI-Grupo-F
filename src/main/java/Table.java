@@ -1,3 +1,8 @@
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -9,10 +14,17 @@ import java.time.temporal.ChronoUnit;
 public class Table {
     private JFrame app;
 
-    public Table() {
+    public Table(String filePath, boolean isGit) throws IOException {
+        ArrayList<LineSchedule> data;
 
-        // array com os dados do excel
-        ArrayList<LineSchedule> data = ReadCSV.readScheduleCSV("csv/HorarioDeExemplo.csv");
+        if (isGit) {
+            // Se estiver carregando do Git, use a função getInputStreamFromURL
+            InputStream inputStream = ReadCSV.getInputStreamFromURL(filePath);
+            data = ReadCSV.readScheduleCSV(inputStream);
+        } else {
+            // Se estiver carregando localmente, use a função readScheduleCSV
+            data = ReadCSV.readScheduleCSV(filePath);
+        }
         // classe que cria e adiciona os filtros
         TableFilters tabFilter = new TableFilters();
         // Cria uma tabela
@@ -103,9 +115,4 @@ public class Table {
         }
         return -1;
     }
-
-    public static void main(String[] args) {
-        new Table();
-    }
-
 }
