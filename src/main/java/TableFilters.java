@@ -36,7 +36,7 @@ public class TableFilters {
 
 
     //Criação dos labels e textFields para os filtros
-    private void textFieldsCreation(JPanel filterPanel) {
+    public void textFieldsCreation(JPanel filterPanel) {
         filterPanel.setLayout(new GridLayout(0, 2, 5, 5)); // 0 indica número indefinido de linhas
         addLabelAndTextField(filterPanel, "Curso");
         addLabelAndTextField(filterPanel, "UC");
