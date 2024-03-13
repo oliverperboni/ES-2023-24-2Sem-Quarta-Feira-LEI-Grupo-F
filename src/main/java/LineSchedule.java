@@ -11,7 +11,7 @@ public class LineSchedule {
     private String caracteristicas_sala;
     private String sala;
 
-    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos, String dia_semana, String hora_inicio, String hora_fim,  String data_aula, String caracteristicas_sala, String sala) {
+    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos, String dia_semana, String hora_inicio, String hora_fim, String data_aula, String caracteristicas_sala, String sala) {
         this.curso = curso;
         this.unidade_curricular = unidade_curricular;
         this.turno = turno;

@@ -1,8 +1,6 @@
 import java.text.Normalizer;
 import java.util.ArrayList;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,15 +21,18 @@ public class Table {
 
         // adiciona as linhas do CSV a tabela
         for (LineSchedule ls : data) {
-            Object[] row = { normalizeValue(ls.getCurso()), normalizeValue(ls.getUnidadeCurricular()),
+            Object[] row = {normalizeValue(ls.getCurso()), normalizeValue(ls.getUnidadeCurricular()),
                     normalizeValue(ls.getTurno()), normalizeValue(ls.getTurma()), ls.getInscritos(),
                     ls.getDiaSemana(), ls.getHoraInicio(), ls.getHoraFim(), ls.getDataAula(),
-                    ls.getCaracteristicasSala(), ls.getSala(), countWeeksBetween("02/09/2022", ls.getDataAula()),getWeekOfYear(ls.getDataAula()) };
+                    ls.getCaracteristicasSala(), ls.getSala(), countWeeksBetween("02/09/2022", ls.getDataAula()), getWeekOfYear(ls.getDataAula())};
             model.addRow(row);
         }
 
         // cria tabela
         JTable table = new JTable(model);
+        table.setAutoCreateRowSorter(true); // Creates a TableRowSorter for the table
+        addColumnSorting(table); // Method enables "sort by column" functionality for every column on the table
+
         app = tabFilter.addFilter(app, table);
         app.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -48,15 +49,32 @@ public class Table {
         model.addColumn("Unidade Curricular");
         model.addColumn("Turno");
         model.addColumn("Turma");
-        model.addColumn("Inscritos no turno");
+        model.addColumn("N.º Inscritos Turno");
         model.addColumn("Dia da Semana");
-        model.addColumn("Hora Início da Aula");
-        model.addColumn("Hora Fim da Aula");
-        model.addColumn("Data da Aula");
-        model.addColumn("Características da Sala");
-        model.addColumn("Sala atribuida à sala");
-        model.addColumn("Semana Semestre");
-        model.addColumn("Semana Ano");
+        model.addColumn("Hora de Início");
+        model.addColumn("Hora de Fim");
+        model.addColumn("Data");
+        model.addColumn("Tipo de Sala");
+        model.addColumn("Sala Atribuída");
+        model.addColumn("Semana do Semestre");
+        model.addColumn("Semana do Ano");
+    }
+
+    private void addColumnSorting(JTable table) {
+        // Gets the table's sorter and casts it to a DefaultRowSorter
+        DefaultRowSorter sorter = ((DefaultRowSorter)table.getRowSorter());
+        // Enables immediate sorting after an insert operation
+        sorter.setSortsOnUpdates(true);
+
+        // ArrayList to store SortKeys for the every column in the table
+        ArrayList<RowSorter.SortKey> sortKeyList = new ArrayList<>();
+        for (int i = 0; i < table.getColumnCount(); i++)
+            // Creates a SortKey for every column, ascending order
+            sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING) );
+
+        // Adds SortKeys to sorter, and sorts
+        sorter.setSortKeys(sortKeyList);
+        sorter.sort();
     }
 
     private String normalizeValue(String value) {
@@ -77,7 +95,6 @@ public class Table {
     }
 
     public static int countWeeksBetween(String startDateString, String endDateString) {
-
         if (!endDateString.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate startDate = LocalDate.parse(startDateString, formatter);
