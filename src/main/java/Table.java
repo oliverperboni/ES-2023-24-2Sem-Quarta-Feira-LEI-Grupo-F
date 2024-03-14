@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -99,19 +100,28 @@ public class Table {
 
     public static int getWeekOfYear(String dateString) {
         if (!dateString.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate date = LocalDate.parse(dateString, formatter);
-            return date.get(java.time.temporal.ChronoField.ALIGNED_WEEK_OF_YEAR);
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate date = LocalDate.parse(dateString, formatter);
+                return date.get(java.time.temporal.ChronoField.ALIGNED_WEEK_OF_YEAR);
+            }catch (DateTimeParseException e){
+                return -1;
+            }
         }
         return -1;
     }
 
     public static int countWeeksBetween(String startDateString, String endDateString) {
-        if (!endDateString.isEmpty()) {
+        if (!endDateString.isEmpty() && !startDateString.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate startDate = LocalDate.parse(startDateString, formatter);
             LocalDate endDate = LocalDate.parse(endDateString, formatter);
-            return (int) ChronoUnit.WEEKS.between(startDate, endDate);
+           if (startDate.isEqual(endDate)){
+               return 0;
+           }
+           if ((int) ChronoUnit.WEEKS.between(startDate, endDate)> 0){
+               return (int) ChronoUnit.WEEKS.between(startDate, endDate);
+           }
         }
         return -1;
     }
