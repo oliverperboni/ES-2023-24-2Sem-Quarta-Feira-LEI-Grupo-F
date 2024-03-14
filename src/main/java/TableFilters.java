@@ -105,8 +105,5 @@ public class TableFilters {
         }
     }
 
-    public static void main(String[] args) {
-        new TableFilters();
-    }
 
 }
