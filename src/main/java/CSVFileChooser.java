@@ -8,6 +8,7 @@ import java.io.IOException;
 public class CSVFileChooser {
     private JFrame fileChooserFrame;
     private JTextField filePathTextField;
+    private String filePath;
 
     public CSVFileChooser() {
         fileChooserFrame = new JFrame("Escolher Arquivo CSV");
@@ -24,7 +25,8 @@ public class CSVFileChooser {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openTableWindow(filePathTextField.getText(), gitCheckBox.isSelected());
+                filePath = filePathTextField.getText();
+                openTableWindow(filePath, gitCheckBox.isSelected());
             }
         });
 
@@ -38,18 +40,19 @@ public class CSVFileChooser {
         fileChooserFrame.setVisible(true);
     }
 
-    private void openTableWindow(String filePath, boolean isGit) {
+    public void openTableWindow(String filePath, boolean isGit) {
         try {
             new Table(filePath, isGit);
         }catch (IOException e) {}
         //Fecha a janela após abrir a próxima janela (a tabela)
         fileChooserFrame.dispose();
     }
+
     public static void main(String[] args) {
+        new CSVFileChooser();
+    }
 
-
-                new CSVFileChooser();
-
-
+    public String getFilePath() {
+        return filePath;
     }
 }
