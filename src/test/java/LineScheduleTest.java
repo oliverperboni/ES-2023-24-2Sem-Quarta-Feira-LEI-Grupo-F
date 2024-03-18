@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LineScheduleTest {
     LineSchedule ls = new LineSchedule("Curso Teste", "UC Teste", "Turno Teste", "Turma Teste", 20, "Segunda-feira",

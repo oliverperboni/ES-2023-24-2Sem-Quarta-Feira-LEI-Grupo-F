@@ -1,19 +1,17 @@
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class Table {
     private JFrame app;
+    private JTable appTable;
 
     public Table(String filePath, boolean isGit) throws IOException {
         ArrayList<LineSchedule> data;
@@ -42,19 +40,23 @@ public class Table {
         }
 
         // cria tabela
-        JTable table = new JTable(model);
-        table.setAutoCreateRowSorter(true); // Creates a TableRowSorter for the table
-        addColumnSorting(table); // Method enables "sort by column" functionality for every column on the table
+        appTable = new JTable(model);
+        appTable.setAutoCreateRowSorter(true); // Creates a TableRowSorter for the table
+        addColumnSorting(appTable); // Method enables "sort by column" functionality for every column on the table
 
-        app = tabFilter.addFilter(app, table);
+        app = tabFilter.addFilter(app, appTable);
         app.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // cria a opção de scroll se necessario
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(appTable);
 
         app.getContentPane().add(scrollPane);
         app.setVisible(true);
 
+    }
+
+    public JTable getJTable() {
+        return appTable;
     }
 
     private void addColumns(DefaultTableModel model) {
@@ -73,7 +75,7 @@ public class Table {
         model.addColumn("Semana do Ano");
     }
 
-    private void addColumnSorting(JTable table) {
+    void addColumnSorting(JTable table) {
         // Gets the table's sorter and casts it to a DefaultRowSorter
         DefaultRowSorter sorter = ((DefaultRowSorter)table.getRowSorter());
         // Enables immediate sorting after an insert operation
@@ -125,4 +127,5 @@ public class Table {
         }
         return -1;
     }
+
 }
