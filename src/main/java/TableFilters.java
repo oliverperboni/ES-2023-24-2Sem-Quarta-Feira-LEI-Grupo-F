@@ -1,10 +1,14 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.List;
 
 public class TableFilters {
+
+    List<Integer> a = new ArrayList<>();
 
     public JFrame panel;
 
@@ -25,9 +29,27 @@ public class TableFilters {
         textFieldsCreation(filterPanel);
 
         //Botoes
+
+
+
         JButton filtrarbtn = new JButton("Filtrar");
+        JButton esconderbtn = new JButton("Esconder");
+        JButton revelarbtn = new JButton("Revelar Tabelas Escondidas");
+
         btnCreation(filtrarbtn, tabela, filterPanel);
+        btnCreation(esconderbtn, tabela, filterPanel);
+        btnCreation(revelarbtn, tabela, filterPanel);
+
         buttonPanel.add(filtrarbtn);
+        buttonPanel.add(esconderbtn);
+        buttonPanel.add(revelarbtn);
+
+
+        //Ações dos Botões
+        filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
+        esconderbtn.addActionListener(e -> function_esconderBtn(tabela));
+        revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
+
 
         panel.add(filterPanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -62,17 +84,32 @@ public class TableFilters {
     }
 
     //Criação do Botão Filtrar
-    private void btnCreation(JButton filtrarbtn, JTable tabela, JPanel filterPanel) {
+    private void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
 
         //Estilo do Botão
-        filtrarbtn.setForeground(Color.WHITE);
-        filtrarbtn.setBackground(new Color(46, 139, 87)); // Cor verde
-        filtrarbtn.setFocusPainted(false); // Remove a borda de foco
-        filtrarbtn.setFont(new Font("Arial", Font.BOLD, 14));
-        //Acao do Button
-        filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(new Color(46, 139, 87)); // Cor verde
+        btn.setFocusPainted(false); // Remove a borda de foco
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
 
     }
+
+    public void function_esconderBtn(JTable tabela) {
+        int columnIndex = tabela.getSelectedColumn();
+        TableColumn d = tabela.getColumnModel().getColumn(columnIndex);
+        a.add(d.getModelIndex());
+        tabela.removeColumn(d);
+    }
+
+    public void function_revelarBtn(JTable tabela) {
+            for(int x :a){
+                TableColumn c = new TableColumn(x);
+                tabela.addColumn(c);
+                tabela.moveColumn(tabela.getColumnCount()-1,x);
+            }
+        a.clear();
+    }
+
 
     public void function_filtrarBtn(JTable tabela, JPanel filterPanel) {
         int countFilterPreenchido = 0;
