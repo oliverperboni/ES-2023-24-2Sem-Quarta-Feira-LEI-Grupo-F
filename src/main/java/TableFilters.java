@@ -84,7 +84,7 @@ public class TableFilters {
     }
 
     //Criação do Botão Filtrar
-    private void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
+    public void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
 
         //Estilo do Botão
         btn.setForeground(Color.WHITE);
