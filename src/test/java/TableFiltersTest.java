@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -122,6 +123,54 @@ class TableFiltersTest {
         assertEquals("Item1", tabela.getValueAt(0, 0)); // Espera-se que o item1 seja exibido
         assertEquals("A", tabela.getValueAt(0, 1)); // Espera-se que a categoria A seja exibida
     }
-    
-    
+
+    @Test
+    public void testBtnCreation() {
+        TableFilters tableFilters = new TableFilters();
+        JButton button = new JButton();
+
+        // Chama o método
+        tableFilters.btnCreation(button, new JTable(), new JPanel());
+
+        // Verifica se o botão tem os atributos definidos
+        assertEquals(Color.WHITE, button.getForeground());
+        assertEquals(new Color(46, 139, 87), button.getBackground());
+        assertFalse(button.isFocusPainted());
+        assertEquals(new Font("Arial", Font.BOLD, 14), button.getFont());
+    }
+
+    @Test
+    public void testFunctionEsconderBtn() {
+        TableFilters tableFilters = new TableFilters();
+        JTable table = new JTable(new DefaultTableModel(2, 2));
+        table.changeSelection(1, 1, false, false);
+        TableColumn column = table.getColumnModel().getColumn(1);
+
+        // Chama o método
+        tableFilters.function_esconderBtn(table);
+
+        // Verifica se a coluna foi removida da tabela
+        assertEquals(1, table.getColumnCount());
+        assertNotEquals(column, table.getColumnModel().getColumn(0));
+    }
+
+    @Test
+    public void testFunctionRevelarBtn() {
+        TableFilters tableFilters = new TableFilters();
+        JTable table = new JTable(new DefaultTableModel(2, 2));
+        table.changeSelection(1, 1, false, false);
+        TableColumn column = table.getColumnModel().getColumn(1);
+
+        // Chama o método function_esconderBtn(), de forma a ocultar uma coluna
+        tableFilters.function_esconderBtn(table);
+
+        // Chama o método a ser testado
+        tableFilters.function_revelarBtn(table);
+
+        // Verifica se a coluna volta a ser visível novamente
+        assertEquals(2, table.getColumnCount());
+        table.changeSelection(1, 1, false, false);
+        column = table.getColumnModel().getColumn(1);
+        assertEquals(column, table.getColumnModel().getColumn(1));
+    }
 }
