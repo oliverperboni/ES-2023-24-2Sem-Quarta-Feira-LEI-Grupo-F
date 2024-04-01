@@ -25,6 +25,19 @@ public class ReadCSV {
         }
         return lineSchedules;
     }
+    public static ArrayList<Rooms> readRoomsCSV(String csvFile) {
+        ArrayList<Rooms> lineRooms = new ArrayList<>();
+        try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
+            for (CSVRecord csvRecord : csvParser) {
+                Rooms Rooms = new Rooms(csvRecord);
+                lineRooms.add(Rooms);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lineRooms;
+    }
+
 
     //PARA LER FICHEIROS CSV DO GIT
     public static ArrayList<LineSchedule> readScheduleCSV(InputStream inputStream) {
