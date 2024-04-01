@@ -1,5 +1,12 @@
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.Normalizer;
@@ -8,14 +15,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Table {
-    private JFrame app;
+    private static JFrame app;
     private JTable appTable;
+    private static String filePath;
+    private static DefaultTableModel model;
 
     public Table(String filePath, boolean isGit) throws IOException {
-        ArrayList<LineSchedule> data;
+        this.filePath = filePath;
 
+        ArrayList<LineSchedule> data;
         if (isGit) {
             // Se estiver carregando do Git, use a função getInputStreamFromURL
             InputStream inputStream = ReadCSV.getInputStreamFromURL(filePath);
@@ -27,7 +38,7 @@ public class Table {
         // classe que cria e adiciona os filtros
         TableFilters tabFilter = new TableFilters();
         // Cria uma tabela
-        DefaultTableModel model = new DefaultTableModel();
+        model = new DefaultTableModel();
         addColumns(model);
 
         // adiciona as linhas do CSV a tabela
@@ -52,7 +63,6 @@ public class Table {
 
         app.getContentPane().add(scrollPane);
         app.setVisible(true);
-
     }
 
     public JTable getJTable() {
@@ -126,6 +136,26 @@ public class Table {
            }
         }
         return -1;
+    }
+
+    static void saveChanges() {
+        try (FileWriter fileWriter = new FileWriter(filePath);
+             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withDelimiter(';').withHeader("Curso", "Unidade Curricular", "Turno", "Turma", "Inscritos no turno", "Dia da semana", "Hora início da aula", "Hora fim da aula", "Data da aula", "Características da sala pedida para a aula", "Sala atribuída à aula"))) {
+
+            for (int row = 0; row < model.getRowCount(); row++) {
+                List<String> rowData = new ArrayList<>();
+                for (int column = 0; column < model.getColumnCount(); column++) {
+                    rowData.add(model.getValueAt(row, column).toString());
+                }
+                csvPrinter.printRecord(rowData);
+            }
+
+            JOptionPane.showMessageDialog(app, "Alterações salvas com sucesso!");
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }

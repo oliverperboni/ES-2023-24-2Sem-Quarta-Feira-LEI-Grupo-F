@@ -3,6 +3,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
@@ -35,6 +37,13 @@ public class TableFilters {
         JButton filtrarbtn = new JButton("Filtrar");
         JButton esconderbtn = new JButton("Esconder");
         JButton revelarbtn = new JButton("Revelar Tabelas Escondidas");
+        JButton saveButton = new JButton("Salvar");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Table.saveChanges();
+            }
+        });
 
         btnCreation(filtrarbtn, tabela, filterPanel);
         btnCreation(esconderbtn, tabela, filterPanel);
@@ -43,7 +52,7 @@ public class TableFilters {
         buttonPanel.add(filtrarbtn);
         buttonPanel.add(esconderbtn);
         buttonPanel.add(revelarbtn);
-
+        buttonPanel.add(saveButton);
 
         //Ações dos Botões
         filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
