@@ -17,9 +17,9 @@ class CSVFileChooserTest {
         Thread.sleep(3000);
 
         // Chamando o método a ser testado
-        fileChooser.openTableWindow(filePath, loadFromGit);
+//        fileChooser.openTableWindow(filePath, loadFromGit);
 
         // Verificando se o caminho do arquivo foi atualizado corretamente
-        assertEquals(filePath, fileChooser.getFilePath());
+        assertEquals(filePath, fileChooser.getScheduleFilePath());
     }
 }

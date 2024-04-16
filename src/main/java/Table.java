@@ -1,40 +1,25 @@
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Table {
+
     private static JFrame app;
     private JTable appTable;
-    private static String filePath;
     private static DefaultTableModel model;
 
-    public Table(String filePath, boolean isGit) throws IOException {
-        this.filePath = filePath;
+    public ScheduleDataModel dataModel;
+    public ScheduleEngine engine;
 
-        ArrayList<LineSchedule> data;
-        if (isGit) {
-            // Se estiver carregando do Git, use a função getInputStreamFromURL
-            InputStream inputStream = ReadCSV.getInputStreamFromURL(filePath);
-            data = ReadCSV.readScheduleCSV(inputStream);
-        } else {
-            // Se estiver carregando localmente, use a função readScheduleCSV
-            data = ReadCSV.readScheduleCSV(filePath);
-        }
+    public Table(ScheduleDataModel dataModel) throws IOException {
+        this.dataModel = dataModel;
+
         // classe que cria e adiciona os filtros
         TableFilters tabFilter = new TableFilters();
         // Cria uma tabela
@@ -42,7 +27,7 @@ public class Table {
         addColumns(model);
 
         // adiciona as linhas do CSV a tabela
-        for (LineSchedule ls : data) {
+        for (LineSchedule ls : dataModel.getScheduleEntries()) {
             Object[] row = {normalizeValue(ls.getCurso()), normalizeValue(ls.getUnidadeCurricular()),
                     normalizeValue(ls.getTurno()), normalizeValue(ls.getTurma()), ls.getInscritos(),
                     ls.getDiaSemana(), ls.getHoraInicio(), ls.getHoraFim(), ls.getDataAula(),
@@ -67,6 +52,10 @@ public class Table {
 
     public JTable getJTable() {
         return appTable;
+    }
+
+    public ScheduleDataModel getDataModel() {
+        return dataModel;
     }
 
     private void addColumns(DefaultTableModel model) {
@@ -138,24 +127,24 @@ public class Table {
         return -1;
     }
 
-    static void saveChanges() {
-        try (FileWriter fileWriter = new FileWriter(filePath);
-             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withDelimiter(';').withHeader("Curso", "Unidade Curricular", "Turno", "Turma", "Inscritos no turno", "Dia da semana", "Hora início da aula", "Hora fim da aula", "Data da aula", "Características da sala pedida para a aula", "Sala atribuída à aula"))) {
-
-            for (int row = 0; row < model.getRowCount(); row++) {
-                List<String> rowData = new ArrayList<>();
-                for (int column = 0; column < model.getColumnCount(); column++) {
-                    rowData.add(model.getValueAt(row, column).toString());
-                }
-                csvPrinter.printRecord(rowData);
-            }
-
-            JOptionPane.showMessageDialog(app, "Alterações salvas com sucesso!");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    static void saveChanges() {
+//        try (FileWriter fileWriter = new FileWriter(filePath);
+//             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withDelimiter(';').withHeader("Curso", "Unidade Curricular", "Turno", "Turma", "Inscritos no turno", "Dia da semana", "Hora início da aula", "Hora fim da aula", "Data da aula", "Características da sala pedida para a aula", "Sala atribuída à aula"))) {
+//
+//            for (int row = 0; row < model.getRowCount(); row++) {
+//                List<String> rowData = new ArrayList<>();
+//                for (int column = 0; column < model.getColumnCount(); column++) {
+//                    rowData.add(model.getValueAt(row, column).toString());
+//                }
+//                csvPrinter.printRecord(rowData);
+//            }
+//
+//            JOptionPane.showMessageDialog(app, "Alterações salvas com sucesso!");
+//
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 
 }

@@ -6,53 +6,71 @@ import java.io.IOException;
 
 //Esta classe é referente à janela inicial do JFrame onde indicamos se pretendemos carregar dos ficheiros locais ou do git
 public class CSVFileChooser {
+
     private JFrame fileChooserFrame;
-    private JTextField filePathTextField;
-    private String filePath;
+    private JTextField roomsFileField;
+    private JTextField scheduleFileField;
+    private String scheduleFilePath;
+    private String roomsFilePath;
 
     public CSVFileChooser() {
-        fileChooserFrame = new JFrame("Escolher Arquivo CSV");
+        fileChooserFrame = new JFrame("Escolher ficheiros CSV");
         fileChooserFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        JLabel filePathLabel = new JLabel("Caminho do arquivo CSV:");
-        filePathTextField = new JTextField(30);
-        JButton addButton = new JButton("Adicionar");
-        JCheckBox gitCheckBox = new JCheckBox("Carregar do Git"); //Checkbox para escolher entre Git e local
+        JLabel scheduleFileLabel = new JLabel("Ficheiro horários (CSV)");
+        scheduleFileField = new JTextField(30);
+        JCheckBox scheduleGitCheckbox = new JCheckBox("Carregar do Git");
 
-        addButton.addActionListener(new ActionListener() {
+        JLabel roomsFileLabel = new JLabel("Ficheiro salas (CSV)");
+        roomsFileField = new JTextField(30);
+        JCheckBox roomsGitCheckbox = new JCheckBox("Carregar do Git");
+
+        JButton button1 = new JButton("Iniciar");
+
+        button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                filePath = filePathTextField.getText();
-                openTableWindow(filePath, gitCheckBox.isSelected());
+                scheduleFilePath = scheduleFileField.getText();
+                roomsFilePath = roomsFileField.getText();
+                openTableWindow(scheduleFilePath, scheduleGitCheckbox.isSelected(),
+                        roomsFilePath, roomsGitCheckbox.isSelected());
             }
         });
 
-        panel.add(filePathLabel);
-        panel.add(filePathTextField);
-        panel.add(gitCheckBox);
-        panel.add(addButton);
+        panel.add(scheduleFileLabel);
+        panel.add(scheduleFileField);
+        panel.add(scheduleGitCheckbox);
+        panel.add(roomsFileLabel);
+        panel.add(roomsFileField);
+        panel.add(roomsGitCheckbox);
+        panel.add(button1);
 
         fileChooserFrame.getContentPane().add(BorderLayout.CENTER, panel);
         fileChooserFrame.setSize(400, 200);
         fileChooserFrame.setVisible(true);
     }
 
-    public void openTableWindow(String filePath, boolean isGit) {
+    public void openTableWindow(String scheduleFile, boolean scheduleRemote, String roomsFile, boolean roomsRemote) {
         try {
-            new Table(filePath, isGit);
-        }catch (IOException e) {}
-        //Fecha a janela após abrir a próxima janela (a tabela)
-        fileChooserFrame.dispose();
+            ScheduleDataModel dataModel = new ScheduleDataModel(scheduleFile, scheduleRemote, roomsFile, roomsRemote);
+            new Table(dataModel);
+        } catch (IOException e) {}
+        fileChooserFrame.dispose(); // Fecha a janela logo depois de abrir a tabela
     }
 
     public static void main(String[] args) {
         new CSVFileChooser();
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getScheduleFilePath() {
+        return scheduleFilePath;
     }
+
+    public String getRoomsFilePath() {
+        return roomsFilePath;
+    }
+
 }
