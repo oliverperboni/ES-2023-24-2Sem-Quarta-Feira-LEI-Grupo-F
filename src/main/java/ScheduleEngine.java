@@ -45,8 +45,8 @@ public class ScheduleEngine {
                         }
             }
 
-            for (LineSchedule possibility : possibilityList)
-                for (LineSchedule scheduled : alreadyScheduledList)
+//            for (LineSchedule possibility : possibilityList)
+//                for (LineSchedule scheduled : alreadyScheduledList)
 //                    if (possibility.getWeekDay().equals())
 
 
@@ -60,8 +60,6 @@ public class ScheduleEngine {
         }
 
         return classSchedule;
-        return classSchedule;
     }
-
 
 }
