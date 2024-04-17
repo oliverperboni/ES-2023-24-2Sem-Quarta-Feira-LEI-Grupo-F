@@ -1,22 +1,15 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 import static java.awt.event.KeyEvent.*;
 import static org.apache.commons.lang3.SystemUtils.IS_OS_MAC;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CSVFileChooserTest {
-
-//    @BeforeEach
-//    public void setUpHeadlessMode() {
-//        System.setProperty("java.awt.headless", "true");
-//    }
 
     @Test
     public void testOpenTableWindow_FilePath() throws InterruptedException, AWTException {

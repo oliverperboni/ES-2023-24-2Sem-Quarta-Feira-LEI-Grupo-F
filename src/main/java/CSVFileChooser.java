@@ -13,9 +13,6 @@ public class CSVFileChooser {
     public CSVFileChooser() {
         fileChooserFrame = new JFrame("Escolher Arquivo CSV");
         fileChooserFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        System.out.println(fileChooserFrame.getSize().getWidth());
-        System.out.println(fileChooserFrame.getSize().getHeight());
-
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());

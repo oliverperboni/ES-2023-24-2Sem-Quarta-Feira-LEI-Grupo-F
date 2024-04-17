@@ -1,14 +1,8 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TableTest {
-
-//    @BeforeEach
-//    public void setUpHeadlessMode() {
-//        System.setProperty("java.awt.headless", "true");
-//    }
 
     @Test
     public void getWeekOfYear() {
