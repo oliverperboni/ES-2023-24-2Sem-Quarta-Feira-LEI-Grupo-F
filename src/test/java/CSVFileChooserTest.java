@@ -1,8 +1,14 @@
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CSVFileChooserTest {
+
+    @Before
+    public void setUpHeadlessMode() {
+        System.setProperty("java.awt.headless", "true");
+    }
 
     @Test
     public void testOpenTableWindow_FilePath() throws InterruptedException {

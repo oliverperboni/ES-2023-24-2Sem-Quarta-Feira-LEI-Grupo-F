@@ -1,3 +1,4 @@
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -9,6 +10,11 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TableFiltersTest {
+
+    @Before
+    public void setUpHeadlessMode() {
+        System.setProperty("java.awt.headless", "true");
+    }
 
     @Test
     public void addFilter() {
