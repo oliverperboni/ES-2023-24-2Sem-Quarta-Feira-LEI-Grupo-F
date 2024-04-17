@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -5,7 +6,12 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ReadCSVTest {
+class ReadCSVTest {
+
+    @BeforeEach
+    public void setUpHeadlessMode() {
+        System.setProperty("java.awt.headless", "true");
+    }
 
     @Test
     public void testReadScheduleCSV() {

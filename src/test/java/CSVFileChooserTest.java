@@ -1,11 +1,11 @@
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CSVFileChooserTest {
+class CSVFileChooserTest {
 
-    @Before
+    @BeforeEach
     public void setUpHeadlessMode() {
         System.setProperty("java.awt.headless", "true");
     }

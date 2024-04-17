@@ -1,4 +1,4 @@
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -9,9 +9,9 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TableFiltersTest {
+class TableFiltersTest {
 
-    @Before
+    @BeforeEach
     public void setUpHeadlessMode() {
         System.setProperty("java.awt.headless", "true");
     }

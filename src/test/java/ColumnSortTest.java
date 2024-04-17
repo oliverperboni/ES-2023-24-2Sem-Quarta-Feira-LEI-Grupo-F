@@ -1,4 +1,4 @@
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -9,9 +9,9 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ColumnSortTest {
+class ColumnSortTest {
 
-    @Before
+    @BeforeEach
     public void setUpHeadlessMode() {
         System.setProperty("java.awt.headless", "true");
     }
