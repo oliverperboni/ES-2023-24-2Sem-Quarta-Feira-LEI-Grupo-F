@@ -8,10 +8,10 @@ import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TableFiltersTest {
+public class TableFiltersTest {
 
     @Test
-    void addFilter() {
+    public void addFilter() {
 
         TableFilters  tf = new TableFilters();
          // Criação de objetos necessários
@@ -56,7 +56,7 @@ class TableFiltersTest {
     
 
     @Test
-    void textFieldsCreation() {
+    public void textFieldsCreation() {
             TableFilters  tf = new TableFilters();
 
 
@@ -92,7 +92,7 @@ class TableFiltersTest {
     
 
     @Test
-    void function_filtrarBtn() {
+    public void function_filtrarBtn() {
 
         JTable tabela = new JTable();
         DefaultTableModel modelo = new DefaultTableModel();

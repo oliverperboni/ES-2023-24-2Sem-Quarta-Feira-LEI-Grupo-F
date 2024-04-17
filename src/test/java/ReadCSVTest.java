@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class ReadCSVTest {
+public class ReadCSVTest {
 
     @Test
-    void testReadScheduleCSV() {
+    public void testReadScheduleCSV() {
         String csvFile = "csv/HorarioDeExemplo.csv";
 
         //Chama o método readScheduleCSV

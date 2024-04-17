@@ -2,10 +2,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class CSVFileChooserTest {
+public class CSVFileChooserTest {
 
     @Test
-    void testOpenTableWindow_FilePath() throws InterruptedException {
+    public void testOpenTableWindow_FilePath() throws InterruptedException {
         // Criando uma instância da classe CSVFileChooser
         CSVFileChooser fileChooser = new CSVFileChooser();
 

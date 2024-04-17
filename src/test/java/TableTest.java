@@ -2,10 +2,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TableTest {
+public class TableTest {
 
     @Test
-    void getWeekOfYear() {
+    public void getWeekOfYear() {
         // Caso de teste 1: data válida
         assertEquals(1, Table.getWeekOfYear("01/01/2022"));
 
@@ -20,7 +20,7 @@ class TableTest {
     }
 
     @Test
-    void countWeeksBetween() {
+    public void countWeeksBetween() {
 
         // Caso de teste 1: datas válidas
         assertEquals(2, Table.countWeeksBetween("01/01/2022", "15/01/2022"));

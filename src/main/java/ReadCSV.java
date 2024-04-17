@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class ReadCSV {
 
     //PARA LER FICHEIROS LOCAIS
