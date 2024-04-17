@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TableFiltersTest {
 
-    @BeforeEach
-    public void setUpHeadlessMode() {
-        System.setProperty("java.awt.headless", "true");
-    }
+//    @BeforeEach
+//    public void setUpHeadlessMode() {
+//        System.setProperty("java.awt.headless", "true");
+//    }
 
     @Test
     public void addFilter() {

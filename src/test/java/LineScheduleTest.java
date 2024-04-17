@@ -7,10 +7,10 @@ class LineScheduleTest {
     LineSchedule ls = new LineSchedule("Curso Teste", "UC Teste", "Turno Teste", "Turma Teste", 20, "Segunda-feira",
             "08:00", "10:00", "01/01/2022", "Características Sala Teste", "Sala Teste");
 
-    @BeforeEach
-    public void setUpHeadlessMode() {
-        System.setProperty("java.awt.headless", "true");
-    }
+//    @BeforeEach
+//    public void setUpHeadlessMode() {
+//        System.setProperty("java.awt.headless", "true");
+//    }
 
     @Test
     public void getCurso() {

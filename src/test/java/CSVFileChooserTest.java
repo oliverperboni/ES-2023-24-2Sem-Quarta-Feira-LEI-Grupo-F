@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CSVFileChooserTest {
 
-    @BeforeEach
-    public void setUpHeadlessMode() {
-        System.setProperty("java.awt.headless", "true");
-    }
+//    @BeforeEach
+//    public void setUpHeadlessMode() {
+//        System.setProperty("java.awt.headless", "true");
+//    }
 
     @Test
     public void testOpenTableWindow_FilePath() throws InterruptedException {
