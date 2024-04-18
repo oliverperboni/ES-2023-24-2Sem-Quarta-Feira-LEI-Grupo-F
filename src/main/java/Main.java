@@ -14,9 +14,7 @@ public class Main {
                 filterFrame.show();
             }
         });
-        for (Rooms rooms : roomsList) {
-            System.out.println(rooms.getEdificio());
-        }
+      
     }
 
 }

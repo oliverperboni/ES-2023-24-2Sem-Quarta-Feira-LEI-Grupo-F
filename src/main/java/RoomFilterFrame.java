@@ -19,7 +19,7 @@ public class RoomFilterFrame {
     private void initialize() {
         frame = new JFrame("Filtrar Salas");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(800, 400);
+        frame.setSize(600, 300);
         frame.setLocationRelativeTo(null); // Centralizar na tela
 
         // Obter nomes de todas as colunas dos quartos
@@ -37,7 +37,7 @@ public class RoomFilterFrame {
         frame.add(scrollPane, BorderLayout.CENTER);
 
         JPanel filterPanel = new JPanel();
-        filterPanel.setLayout(new FlowLayout());
+        filterPanel.setLayout(new GridLayout());
 
         // Campos de filtro para características das salas
         JLabel typeLabel = new JLabel("Nome Sala:");
@@ -54,7 +54,7 @@ public class RoomFilterFrame {
         JTextField capacityTextField = new JTextField(10);
         filterPanel.add(capacityLabel);
         filterPanel.add(capacityTextField);
-        
+
         JLabel capacityLabel1 = new JLabel("Capacidade minima:");
         JTextField capacityTextField1 = new JTextField(10);
         filterPanel.add(capacityLabel1);
@@ -86,18 +86,36 @@ public class RoomFilterFrame {
         filterPanel.add(endDateTextField);
 
         JButton filterButton = new JButton("Aplicar Filtro");
+
         filterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String typeFilter = typeTextField.getText().toLowerCase();
-                int capacityFilter = Integer.parseInt(capacityTextField.getText());
-                int capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
+                int capacityFilter = 0;
+                int capacityFilter2 = 0;
+                if (!capacityTextField.getText().equals("") ||capacityTextField.getText() == null ) {
+                    capacityFilter = Integer.valueOf(capacityTextField.getText());
+                }
+                if (!capacityTextField1.getText().equals("") ||capacityTextField1.getText() == null ) {
+                    capacityFilter2 = Integer.valueOf(capacityTextField1.getText());
+                }
                 String locationFilter = locationTextField.getText().toLowerCase();
+                String edificeFilter = edificeTextField.getText().toLowerCase();
                 String startDateFilter = startDateTextField.getText();
                 String endDateFilter = endDateTextField.getText();
                 Boolean select = jRadioButton1.isSelected();
+                typeFilter = typeFilter != null ? typeFilter : "";
+                locationFilter = locationFilter != null ? locationFilter : "";
+                edificeFilter = edificeFilter != null ? edificeFilter : "";
+                startDateFilter = startDateFilter != null ? startDateFilter : "";
+                endDateFilter = endDateFilter != null ? endDateFilter : "";
 
-                filterRooms(typeFilter, capacityFilter, capacityFilter2 ,locationFilter, startDateFilter, endDateFilter, select);
+               
+
+                filterRooms(typeFilter, capacityFilter, capacityFilter2, locationFilter, edificeFilter, startDateFilter,
+                        endDateFilter, select);
+                // filterRooms(typeFilter, capacityFilter, capacityFilter2 ,locationFilter,
+                // startDateFilter, endDateFilter, select);
             }
         });
         filterPanel.add(filterButton);
@@ -140,41 +158,123 @@ public class RoomFilterFrame {
         };
     }
 
-    private void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter, String startDateFilter,
-            String endDateFilter, Boolean logic) {
+    // public void filterRooms(String typeFilter, int capacityFilter, int
+    // capacityFilter2, String locationFilter,
+    // String edificeFilter,
+    // String startDateFilter, String endDateFilter, Boolean logic) {
+    // tableModel.setRowCount(0);
+    // System.out.println(typeFilter);
+    // System.out.println(capacityFilter);
+    // System.out.println(capacityFilter2);
+    // System.out.println(locationFilter);
+    // System.out.println(edificeFilter);
+    // System.out.println(startDateFilter);
+    // System.out.println(endDateFilter);
+
+    // if (typeFilter == null && capacityFilter == 0 && capacityFilter2 == 0 &&
+    // locationFilter == null && edificeFilter == null &&
+    // startDateFilter == null && endDateFilter == null) {
+
+    // return;
+    // }
+    // for (Rooms room : roomsList) {
+    // System.out.println("ESTIVE AQUI");
+    // // Check filter criteria
+    // if (logic || logic == null) {
+    // System.out.println("ESTIVE AQUI E");
+    // boolean typeMatches = typeFilter.isEmpty() ||
+    // room.getNomeSala().toLowerCase().contains(typeFilter);
+    // boolean capacityMatches = (capacityFilter == 0 || room.getCapacidadeNormal()
+    // > capacityFilter) &&
+    // (capacityFilter2 == 0 || room.getCapacidadeNormal() < capacityFilter2);
+    // boolean locationMatches = locationFilter.isEmpty()
+    // || room.getEdificio().toLowerCase().contains(locationFilter);
+    // boolean edificeMatches = edificeFilter.isEmpty()
+    // || room.getEdificio().toLowerCase().contains(edificeFilter);
+
+    // if (typeMatches && capacityMatches && locationMatches && edificeMatches) {
+    // Object[] rowData = getRoomRowData(room);
+    // tableModel.addRow(rowData);
+    // }
+    // } else {
+    // System.out.println("ESTIVE AQUI OU");
+    // boolean typeMatches = typeFilter.isEmpty() ||
+    // room.getNomeSala().toLowerCase().contains(typeFilter);
+    // boolean capacityMatches = (capacityFilter == 0 || room.getCapacidadeNormal()
+    // > capacityFilter) ||
+    // (capacityFilter2 == 0 || room.getCapacidadeNormal() < capacityFilter2);
+    // boolean locationMatches = locationFilter.isEmpty()
+    // || room.getEdificio().toLowerCase().contains(locationFilter);
+    // boolean edificeMatches = edificeFilter.isEmpty()
+    // || room.getEdificio().toLowerCase().contains(edificeFilter);
+
+    // if (typeMatches || capacityMatches || locationMatches || edificeMatches) {
+    // Object[] rowData = getRoomRowData(room);
+    // tableModel.addRow(rowData);
+    // }
+    // }
+    // }
+    // }
+    public void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter,
+            String edificeFilter,
+            String startDateFilter, String endDateFilter, Boolean logic) {
         tableModel.setRowCount(0);
+        if( typeFilter ==  null){
+            typeFilter = "";
+        }
+        if( locationFilter ==  null){
+            locationFilter = "";
+        }
+        if( edificeFilter ==  null){
+            edificeFilter = "";
+        }
+        if( startDateFilter ==  null){
+            startDateFilter = "";
+        }
+        if( endDateFilter ==  null){
+            endDateFilter = "";
+        }
+
+        if (typeFilter.isEmpty() && capacityFilter == 0 && capacityFilter2 == 0 &&
+                locationFilter.isEmpty() && edificeFilter.isEmpty() &&
+                startDateFilter.isEmpty() && endDateFilter.isEmpty()) {
+            // If all filters are empty, do not perform any filtering
+            return;
+        }
+
         for (Rooms room : roomsList) {
-            // Verifique os critérios de filtro
-            // "E"
+            // Check filter criteria
+            boolean typeMatches = room.getNomeSala().toLowerCase().contains(typeFilter);
+            boolean capacityMatches = (capacityFilter == 0 || room.getCapacidadeNormal() > capacityFilter) &&
+                    (capacityFilter2 == 0 || room.getCapacidadeNormal() < capacityFilter2);
+            boolean locationMatches = room.getEdificio().toLowerCase().contains(locationFilter);
+            boolean edificeMatches = room.getEdificio().toLowerCase().contains(edificeFilter);
+
             if (logic || logic == null) {
-
-                if (room.getNomeSala().toLowerCase().contains(typeFilter) &&
-                        room.getCapacidadeNormal() > capacityFilter && room.getCapacidadeNormal() < capacityFilter2&&
-                        room.getEdificio().toLowerCase().contains(locationFilter)) {
-                    // Adicione lógica de filtragem para critérios temporais aqui
-                    // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
-                    // de tipo
+                if (typeMatches && capacityMatches && locationMatches && edificeMatches) {
                     Object[] rowData = getRoomRowData(room);
                     tableModel.addRow(rowData);
                 }
-               
-            }else{
-                if (room.getNomeSala().toLowerCase().contains(typeFilter) ||
-                        room.getCapacidadeNormal() > capacityFilter ||room.getCapacidadeNormal() < capacityFilter2||
-                        room.getEdificio().toLowerCase().contains(locationFilter)) {
-                    // Adicione lógica de filtragem para critérios temporais aqui
-                    // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
-                    // de tipo
+            } else {
+                // if (typeMatches || capacityMatches || locationMatches || edificeMatches) {
+                //     Object[] rowData = getRoomRowData(room);
+                //     tableModel.addRow(rowData);
+                // }
+                
+                if (room.getNomeSala().toLowerCase().contains(typeFilter) ||room.getEdificio().toLowerCase().contains(edificeFilter) || (room.getCapacidadeNormal() > capacityFilter && room.getCapacidadeNormal() < capacityFilter2)) {
                     Object[] rowData = getRoomRowData(room);
                     tableModel.addRow(rowData);
                 }
+                System.out.println(this.tableModel.getRowCount());
             }
-             // "OU"
-
         }
     }
 
     public void show() {
         frame.setVisible(true);
+    }
+
+    public DefaultTableModel getTableModel() {
+        return this.tableModel;
     }
 }
