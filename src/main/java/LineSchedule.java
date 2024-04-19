@@ -16,10 +16,8 @@ public class LineSchedule {
     private String data_aula;
     private String caracteristicas_sala;
     private String sala;
-    private LocalDate date;
-    private DayOfWeek weekDay;
-    private LocalTime startTime;
-    private LocalTime endTime;
+
+    private ScheduleInstant scheduleInstant;
 
     public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos, String dia_semana, String hora_inicio, String hora_fim, String data_aula, String caracteristicas_sala, String sala) {
         this.curso = curso;
@@ -34,16 +32,35 @@ public class LineSchedule {
         this.caracteristicas_sala = caracteristicas_sala;
         this.sala = sala;
 
-        if (!hora_inicio.isEmpty()) this.startTime = LocalTime.parse(hora_inicio);
-
-        if (!hora_fim.isEmpty()) this.endTime = LocalTime.parse(hora_fim);
-
-        if (!data_aula.isEmpty()) {
+        if (!hora_inicio.isEmpty() && !hora_fim.isEmpty() && !data_aula.isEmpty()) {
+            SchedulePeriod schedulePeriod = new SchedulePeriod(LocalTime.parse(hora_inicio), LocalTime.parse(hora_fim));
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            this.date = LocalDate.parse(data_aula, formatter);
-            this.weekDay = date.getDayOfWeek();
-        }
+            LocalDate scheduleDate = LocalDate.parse(data_aula, formatter);
 
+            this.scheduleInstant = new ScheduleInstant(scheduleDate, schedulePeriod);
+        }
+    }
+
+    public LineSchedule (LineSchedule schedule) {
+        this.curso = schedule.curso;
+        this.unidade_curricular = schedule.unidade_curricular;
+        this.turno = schedule.turno;
+        this.turma = schedule.turma;
+        this.inscritos = Integer.valueOf(schedule.inscritos);
+        this.dia_semana = schedule.dia_semana;
+        this.hora_inicio = schedule.hora_inicio;
+        this.hora_fim = schedule.hora_fim;
+        this.data_aula = schedule.data_aula;
+        this.caracteristicas_sala = schedule.caracteristicas_sala;
+        this.sala = schedule.sala;
+
+        if (!hora_inicio.isEmpty() && !hora_fim.isEmpty() && !data_aula.isEmpty()) {
+            SchedulePeriod schedulePeriod = new SchedulePeriod(LocalTime.parse(hora_inicio), LocalTime.parse(hora_fim));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate scheduleDate = LocalDate.parse(data_aula, formatter);
+
+            this.scheduleInstant = new ScheduleInstant(scheduleDate, schedulePeriod);
+        }
     }
 
     public String getCurso() {
@@ -134,36 +151,19 @@ public class LineSchedule {
         this.sala = sala;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public ScheduleInstant getScheduleInstant() {
+        return scheduleInstant;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setScheduleInstant(ScheduleInstant scheduleInstant) {
+        this.scheduleInstant = scheduleInstant;
     }
 
-    public DayOfWeek getWeekDay() {
-        return weekDay;
+    @Override
+    public String toString() {
+        return this.curso + " " + this.unidade_curricular + " " + this.turno + " " + this.turma +
+                " " + this.inscritos + " " + this.dia_semana + " " + this.hora_inicio + " " + this.hora_fim +
+                " " + this.data_aula + " " + this.caracteristicas_sala + " " + this.sala +
+                " " + scheduleInstant.toString();
     }
-
-    public void setWeekDay(DayOfWeek weekDay) {
-        this.weekDay = weekDay;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
 }

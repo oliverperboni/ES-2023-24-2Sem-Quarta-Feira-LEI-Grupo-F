@@ -9,6 +9,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class ScheduleDataModel {
 
@@ -16,6 +17,9 @@ public class ScheduleDataModel {
     private ArrayList<Rooms> roomEntries;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    private TreeMap<ScheduleInstant, LineSchedule> scheduleMap;
+
 
     public ScheduleDataModel(String scheduleFile, boolean scheduleRemote, String roomsFile, boolean roomsRemote) {
         try {
