@@ -17,8 +17,8 @@ import java.util.List;
 public class Table {
     private static JFrame app;
     private JTable appTable;
-    private static String filePath;
-    private static DefaultTableModel model;
+    static String filePath;
+    static DefaultTableModel model;
 
     public Table(String filePath, boolean isGit) throws IOException {
         this.filePath = filePath;
@@ -135,7 +135,7 @@ public class Table {
         return -1;
     }
 
-    static void saveChanges() {
+    static boolean saveChanges() {
         try (FileWriter fileWriter = new FileWriter(filePath);
              CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withDelimiter(';').withHeader("Curso", "Unidade Curricular", "Turno", "Turma", "Inscritos no turno", "Dia da semana", "Hora início da aula", "Hora fim da aula", "Data da aula", "Características da sala pedida para a aula", "Sala atribuída à aula"))) {
 
@@ -146,12 +146,15 @@ public class Table {
                 }
                 csvPrinter.printRecord(rowData);
             }
-
             JOptionPane.showMessageDialog(app, "Alterações salvas com sucesso!");
+            csvPrinter.close(); // Fecha o CSVPrinter
+            fileWriter.close(); // Fecha o FileWriter
+            return true;
 
         } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 
