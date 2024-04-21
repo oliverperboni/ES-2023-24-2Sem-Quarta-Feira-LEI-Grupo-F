@@ -1,3 +1,5 @@
+import structures.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -17,7 +19,7 @@ public class ScheduleEngine {
                                     ArrayList<SchedulePeriod> allowedPeriods, ArrayList<RoomPreference> roomTypePreferences,
                                     ArrayList<Room> roomTypeExclusions) {
 
-//      classSchedule é uma LineSchedule com a aula a remarcar
+//      classSchedule é uma structures.LineSchedule com a aula a remarcar
 //      Dela é calculada a duração da aula a remarcar
         int classDuration = (int) MINUTES.between(classSchedule.getScheduleInstant().getScheduleTime().getStartTime(),
                 classSchedule.getScheduleInstant().getScheduleTime().getEndTime());
@@ -68,6 +70,13 @@ public class ScheduleEngine {
         auxSchedule.setCaracteristicasSala(resultRoom.getRoomSpec());
 
         return auxSchedule;
+    }
+
+    public List<Room> roomTypeSearch (RoomPreference roomPreference) {
+        List<Room> resultRoomList = new ArrayList<>();
+        for (Room room : dataModel.getRoomEntries())
+            if (room.getRoomSpec().equals(roomPreference.toString())) resultRoomList.add(room);
+        return resultRoomList;
     }
 
     public static void main(String[] args) {

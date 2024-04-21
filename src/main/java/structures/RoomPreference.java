@@ -1,3 +1,5 @@
+package structures;
+
 public class RoomPreference {
 
     public static final RoomPreference ANFITEATRO_AULAS = new RoomPreference("", true,

@@ -1,3 +1,6 @@
+import filters.TableFilters;
+import structures.LineSchedule;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.IOException;

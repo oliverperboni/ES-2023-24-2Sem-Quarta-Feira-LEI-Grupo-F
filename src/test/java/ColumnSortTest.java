@@ -13,7 +13,9 @@ public class ColumnSortTest {
     @Test
     public void addColumnSortingTest() throws IOException {
         // Table instance using a schedule .csv file
-        Table table = new Table("csv/HorarioDeExemplo.csv", false);
+        ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv",
+                false, "csv/CaracterizaçãoDasSalas.csv", false);
+        Table table = new Table(dataModel);
 
         // Sorter associated with the Table instance's JTable
         TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) table.getJTable().getRowSorter();

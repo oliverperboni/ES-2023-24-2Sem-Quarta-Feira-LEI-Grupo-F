@@ -14,7 +14,7 @@ class CSVFileChooserTest {
         // Não queremos carregar do Git
         boolean loadFromGit = false;
 
-        Thread.sleep(3000);
+        Thread.sleep(6000);
 
         // Chamando o método a ser testado
 //        fileChooser.openTableWindow(filePath, loadFromGit);

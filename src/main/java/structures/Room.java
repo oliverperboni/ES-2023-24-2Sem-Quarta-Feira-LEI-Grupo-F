@@ -1,4 +1,4 @@
-import java.util.List;
+package structures;
 
 public class Room {
 

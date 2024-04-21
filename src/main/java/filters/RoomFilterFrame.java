@@ -1,3 +1,7 @@
+package filters;
+
+import structures.Room;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -124,7 +128,7 @@ public class RoomFilterFrame {
     }
 
     private Object[] getRoomRowData(Room room) {
-        // Obter dados da linha para o objeto Room
+        // Obter dados da linha para o objeto structures.Room
         return new Object[] {
                 room.getEdificio(), room.getNomeSala(), room.getCapacidadeNormal(), room.getCapacidadeExame(),
                 room.getNumCaracteristicas(), room.isAnfiteatroAulas(), room.isApoioTecnicoEventos(),
