@@ -81,8 +81,5 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
     </build>
-
-
 </project>

@@ -1,3 +1,5 @@
+package filters;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -35,13 +37,13 @@ public class TableFilters {
 
 
         JButton filtrarbtn = new JButton("Filtrar");
-        JButton esconderbtn = new JButton("Esconder");
-        JButton revelarbtn = new JButton("Revelar Tabelas Escondidas");
-        JButton saveButton = new JButton("Salvar");
+        JButton esconderbtn = new JButton("Esconder coluna");
+        JButton revelarbtn = new JButton("Revelar colunas escondidas");
+        JButton saveButton = new JButton("Guardar");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Table.saveChanges();
+//                Table.saveChanges();
             }
         });
 
@@ -96,10 +98,10 @@ public class TableFilters {
     public void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
 
         //Estilo do Botão
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(new Color(46, 139, 87)); // Cor verde
-        btn.setFocusPainted(false); // Remove a borda de foco
-        btn.setFont(new Font("Arial", Font.BOLD, 14));
+//        btn.setForeground(Color.WHITE);
+//        btn.setBackground(new Color(46, 139, 87)); // Cor verde
+//        btn.setFocusPainted(false); // Remove a borda de foco
+//        btn.setFont(new Font("Arial", Font.BOLD, 14));
 
     }
 
