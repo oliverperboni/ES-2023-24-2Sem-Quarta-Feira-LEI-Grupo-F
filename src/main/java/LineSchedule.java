@@ -1,4 +1,3 @@
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -41,6 +40,7 @@ public class LineSchedule {
         }
     }
 
+    // Copy constructor
     public LineSchedule (LineSchedule schedule) {
         this.curso = schedule.curso;
         this.unidade_curricular = schedule.unidade_curricular;
@@ -163,7 +163,7 @@ public class LineSchedule {
     public String toString() {
         return this.curso + " " + this.unidade_curricular + " " + this.turno + " " + this.turma +
                 " " + this.inscritos + " " + this.dia_semana + " " + this.hora_inicio + " " + this.hora_fim +
-                " " + this.data_aula + " " + this.caracteristicas_sala + " " + this.sala +
-                " " + scheduleInstant.toString();
+                " " + this.data_aula + " " + this.caracteristicas_sala + " " + this.sala;
+//                + " " + scheduleInstant.toString();
     }
 }

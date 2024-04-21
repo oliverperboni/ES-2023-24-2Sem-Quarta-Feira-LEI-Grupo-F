@@ -8,13 +8,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 public class ScheduleDataModel {
 
     private ArrayList<LineSchedule> scheduleEntries;
-    private ArrayList<Rooms> roomEntries;
+    private ArrayList<Room> roomEntries;
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -35,6 +36,10 @@ public class ScheduleDataModel {
     public ArrayList<LineSchedule> getScheduleEntries() {
         return scheduleEntries;
     }
+    public ArrayList<Room> getRoomEntries() {
+        return roomEntries;
+    }
+
 
     public static ArrayList<LineSchedule> readScheduleCSV(String csvFile) {
         ArrayList<LineSchedule> lineScheduleArray = new ArrayList<>();
@@ -49,17 +54,30 @@ public class ScheduleDataModel {
         return lineScheduleArray;
     }
 
-    public static ArrayList<Rooms> readRoomsCSV(String csvFile) {
-        ArrayList<Rooms> lineRooms = new ArrayList<>();
+    public static ArrayList<Room> readRoomsCSV(String csvFile) {
+        ArrayList<Room> roomLineArray = new ArrayList<>();
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
+            List<String> columnHeaders = csvParser.getHeaderNames();
+
             for (CSVRecord csvRecord : csvParser) {
-                Rooms Rooms = new Rooms(csvRecord);
-                lineRooms.add(Rooms);
+                String edificio = csvRecord.get("Edifício");
+                String nomeSala = csvRecord.get("Nome sala");
+                int capacidadeNormal = Integer.parseInt(csvRecord.get("Capacidade Normal"));
+                int capacidadeExame = Integer.parseInt(csvRecord.get("Capacidade Exame"));
+                String numCaracteristicas = csvRecord.get("N¼ caracterásticas");
+
+                String roomSpec = "";
+                for (int i = 5; i < columnHeaders.size(); i++)
+                    if (!csvRecord.get(i).isEmpty())
+                        roomSpec = columnHeaders.get(i);
+
+                Room roomLine = new Room(edificio, nomeSala, capacidadeNormal, capacidadeExame, numCaracteristicas, roomSpec);
+                roomLineArray.add(roomLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return lineRooms;
+        return roomLineArray;
     }
 
     //Para ler ficheiros CSV do GitHub
@@ -87,6 +105,13 @@ public class ScheduleDataModel {
             }
         }
         return lineSchedules;
+    }
+
+    public List<Room> roomTypeSearch (RoomPreference roomPreference) {
+        List<Room> resultRoomList = new ArrayList<>();
+        for (Room room : roomEntries)
+            if (room.getRoomSpec().equals(roomPreference.toString())) resultRoomList.add(room);
+        return resultRoomList;
     }
 
 }

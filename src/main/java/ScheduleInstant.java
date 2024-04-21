@@ -1,4 +1,7 @@
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class ScheduleInstant {
 
@@ -32,11 +35,14 @@ public class ScheduleInstant {
 
     @Override
     public String toString() {
-        return scheduleDate.toString() + " " + scheduleTime.toString();
+        return scheduleTime.toString() + " " + scheduleDate.toString();
     }
 
     public String weekDayToString() {
-        return scheduleDate.getDayOfWeek().toString().substring(0,2);
+        Locale prtLocal = new Locale.Builder().setLanguage("pt").setScript("Latn").setRegion("PT").build();
+        String smallDisplayName =
+                scheduleDate.getDayOfWeek().getDisplayName(TextStyle.SHORT_STANDALONE, prtLocal).substring(0,3);
+        return Pattern.compile("^.").matcher(smallDisplayName).replaceFirst(m -> m.group().toUpperCase());
     }
 
 }

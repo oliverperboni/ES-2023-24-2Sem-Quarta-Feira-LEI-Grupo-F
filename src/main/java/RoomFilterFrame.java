@@ -7,12 +7,12 @@ import java.util.List;
 
 public class RoomFilterFrame {
     private JFrame frame;
-    private List<Rooms> roomsList;
+    private List<Room> roomList;
     private JTable roomsTable;
     private DefaultTableModel tableModel;
 
-    public RoomFilterFrame(List<Rooms> roomsList) {
-        this.roomsList = roomsList;
+    public RoomFilterFrame(List<Room> roomList) {
+        this.roomList = roomList;
         initialize();
     }
 
@@ -27,7 +27,7 @@ public class RoomFilterFrame {
 
         tableModel = new DefaultTableModel(columnNames, 0);
 
-        for (Rooms room : roomsList) {
+        for (Room room : roomList) {
             Object[] rowData = getRoomRowData(room);
             tableModel.addRow(rowData);
         }
@@ -123,11 +123,11 @@ public class RoomFilterFrame {
         };
     }
 
-    private Object[] getRoomRowData(Rooms room) {
+    private Object[] getRoomRowData(Room room) {
         // Obter dados da linha para o objeto Room
         return new Object[] {
                 room.getEdificio(), room.getNomeSala(), room.getCapacidadeNormal(), room.getCapacidadeExame(),
-                room.getCaracteristicas(), room.isAnfiteatroAulas(), room.isApoioTecnicoEventos(),
+                room.getNumCaracteristicas(), room.isAnfiteatroAulas(), room.isApoioTecnicoEventos(),
                 room.isArq1(), room.isArq2(), room.isArq3(), room.isArq4(), room.isArq5(),
                 room.isArq6(), room.isArq9(), room.isByod(), room.isFocusGroup(),
                 room.isHorarioSalaVisivelPortalPublico(), room.isLaboratorioArquiteturaComputadoresI(),
@@ -143,7 +143,7 @@ public class RoomFilterFrame {
     private void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter, String startDateFilter,
             String endDateFilter, Boolean logic) {
         tableModel.setRowCount(0);
-        for (Rooms room : roomsList) {
+        for (Room room : roomList) {
             // Verifique os critérios de filtro
             // "E"
             if (logic || logic == null) {
