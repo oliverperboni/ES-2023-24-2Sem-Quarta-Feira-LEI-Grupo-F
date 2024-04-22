@@ -4,6 +4,12 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+* The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
+* end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
+* represent a user's time preferences when rescheduling a class, or when scheduling an entire new course.
+* @author António Pombeiro
+*/
 public class SchedulePeriod {
 
     // Time slots
@@ -42,18 +48,47 @@ public class SchedulePeriod {
     public static SchedulePeriod SEXTA_FEIRA = new SchedulePeriod(DayOfWeek.FRIDAY);
 
 
+	/**
+	* Indicates if the SchedulePeriod instance refers to a time slot (start and end times).
+	*/
     final private boolean isTimeSlot;
-    final private LocalTime startTime;
-    final private LocalTime endTime;
-
+    
+	/**
+	* LocalTime object containing the time slot or time period start time.
+	*/
+	final private LocalTime startTime;
+    
+	/**
+	* LocalTime object containing the time slot or time period end time.
+	*/
+	final private LocalTime endTime;
+	
+	/**
+	* Indicates if the SchedulePeriod instance refers to a time slot (period of a day with start and end times).
+	*/
     final private boolean isTimePeriod;
-    final private List<SchedulePeriod> timeSlotList;
+    
+	/**
+	* List of SchedulePeriod objects consisting of the time slots that make up a time period.
+	*/
+	final private List<SchedulePeriod> timeSlotList;
 
+	/**
+	* Indicates if the SchedulePeriod instance refers to a day of the week.
+	*/
     final private boolean isWeekDay;
-    final private DayOfWeek preferredDay;
+    
+	/**
+	* DayOfWeek object referring to the day of the week represented by the SchedulePeriod object.
+	*/
+	final private DayOfWeek preferredDay;
 
 
-    // Constructor for time slot
+    /**
+	* Constructor for a SchedulePeriod object representing a time slot.
+	* @param startTime LocalTime object containing the time slot's start time
+	* @param endTime LocalTime object containing the time slot's end time
+	*/
     public SchedulePeriod(LocalTime startTime, LocalTime endTime) {
         this.isTimeSlot = true;
         this.isTimePeriod = false;
@@ -64,7 +99,12 @@ public class SchedulePeriod {
         this.preferredDay = null;
     }
 
-    // Constructor for time period
+    /**
+	* Constructor for a SchedulePeriod object representing a time period.
+	* @param startTime LocalTime object containing the time period's start time
+	* @param endTime LocalTime object containing the time period's end time
+	* @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
+	*/
     public SchedulePeriod(LocalTime startTime, LocalTime endTime, List<SchedulePeriod> timeSlots) {
         this.isTimeSlot = false;
         this.isTimePeriod = true;
@@ -75,7 +115,10 @@ public class SchedulePeriod {
         this.preferredDay = null;
     }
 
-    // Constructor for week day
+    /**
+	* Constructor for a SchedulePeriod object representing a week day
+	* @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
+	*/
     public SchedulePeriod(DayOfWeek day) {
         this.isTimeSlot = false;
         this.isTimePeriod = false;
@@ -110,7 +153,13 @@ public class SchedulePeriod {
         return preferredDay;
     }
 
-
+	/**
+	* Returns distinct string representations depending on if the SchedulePeriod object represents a timeslot, a
+	* time period, or a week day. The week day representation matches the format found in ISCTE-IUL schedule files.
+	* @return String representing start and end time for time slots and periods, or first three letters of day name
+	* for week days
+	* @since 1.0
+	*/
     @Override
     public String toString() {
         if (this.isTimeSlot)

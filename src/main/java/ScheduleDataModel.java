@@ -16,14 +16,18 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+/**
+* The ScheduleDataModel class represents the data model object associated with the scheduling application at any
+* given time. It contains structures that hold information about the currently loaded schedule and list of rooms
+* and their specifications.
+* @author Daniel Ferreira
+* @author António Pombeiro
+*/
 public class ScheduleDataModel {
 
     private ArrayList<LineSchedule> scheduleEntries;
     private ArrayList<Room> roomEntries;
-    private LocalDate startDate;
-    private LocalDate endDate;
-
-    private TreeMap<ScheduleInstant, LineSchedule> scheduleMap;
+   	private TreeMap<ScheduleInstant, LineSchedule> scheduleMap;
 
 
     public ScheduleDataModel(String scheduleFile, boolean scheduleRemote, String roomsFile, boolean roomsRemote) {
@@ -36,15 +40,22 @@ public class ScheduleDataModel {
             e.printStackTrace();
         }
     }
-
+		
     public ArrayList<LineSchedule> getScheduleEntries() {
         return scheduleEntries;
     }
+		
     public ArrayList<Room> getRoomEntries() {
         return roomEntries;
     }
 
-
+	/**
+	* Reads a schedule CSV file, and returns an ArrayList of LineSchedule objects representing every schedule entry
+	* present in it. 
+	* @param csvFile file path to schedule CSV file
+	* @return ArrayList of all schedule entries in the file
+	* @since 1.0
+	*/
     public static ArrayList<LineSchedule> readScheduleCSV(String csvFile) {
         ArrayList<LineSchedule> lineScheduleArray = new ArrayList<>();
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
@@ -58,6 +69,12 @@ public class ScheduleDataModel {
         return lineScheduleArray;
     }
 
+	/**
+	* Reads a rooms CSV file, and returns an ArrayList of Room objects representing every room entry present in it.
+	* @param csvFile file path to rooms CSV file
+	* @return ArrayList of all room entries in the file
+	* @since 1.0
+	*/
     public static ArrayList<Room> readRoomsCSV(String csvFile) {
         ArrayList<Room> roomLineArray = new ArrayList<>();
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
@@ -84,6 +101,13 @@ public class ScheduleDataModel {
         return roomLineArray;
     }
 
+	/**
+	* Reads a schedule CSV file hosted on a GitHub repository, and returns an ArrayList of LineSchedule objects
+	* representing every schedule entry present in it. 
+	* @param fileURL schedule CSV file URL
+	* @return ArrayList of all schedule entries in the file
+	* @since 1.0
+	*/
     //Para ler ficheiros CSV do GitHub
     public static ArrayList<LineSchedule> readGitScheduleCSV(String fileURL) throws IOException {
         URL fileUrl = new URL(fileURL);
@@ -110,12 +134,5 @@ public class ScheduleDataModel {
         }
         return lineSchedules;
     }
-
-    public List<Room> roomTypeSearch (RoomPreference roomPreference) {
-        List<Room> resultRoomList = new ArrayList<>();
-        for (Room room : roomEntries)
-            if (room.getRoomSpec().equals(roomPreference.toString())) resultRoomList.add(room);
-        return resultRoomList;
-    }
-
+		
 }

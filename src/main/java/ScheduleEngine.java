@@ -8,6 +8,11 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
 
+/**
+* The ScheduleEngine class hosts methods that drive the scheduling application's automatic operations over the
+* currently loaded schedule and room entries.
+* @author António Pombeiro
+*/
 public class ScheduleEngine {
     private ScheduleDataModel dataModel;
 
@@ -53,6 +58,16 @@ public class ScheduleEngine {
 
     }
 
+	/**
+	* Given a schedule entry that's to be rescheduled, this method creates a copy of it, and then replaces its
+	* date, start and end times, week day, room and room type. 
+	* @param classSchedule LineSchedule object of the schedule entry to be rescheduled
+	* @param dayPeriod SchedulePeriod object for the new day of the week for the schedule entry
+	* @param resultRoom Room object for the new room
+	* @param timeSlot SchedulePeriod object for the new time slot, and start and end times
+	* @return LineSchedule object representing a copy of the original, but with schedule and room altered
+	* @since 1.0
+	*/
     public LineSchedule createSchedulePossibility
             (LineSchedule classSchedule, SchedulePeriod dayPeriod, Room resultRoom, SchedulePeriod timeSlot ) {
         LineSchedule auxSchedule = new LineSchedule(classSchedule);
@@ -72,12 +87,20 @@ public class ScheduleEngine {
         return auxSchedule;
     }
 
+	/**
+	* Searches the currently loaded room entries for rooms matching a provided RoomPreference, and returns them in
+	* a list.
+	* @param roomPreference RoomPreference object representing desired room specification 
+	* @return List of all rooms matching the criteria, represented by Room objects
+	* @since 1.0
+	*/
     public List<Room> roomTypeSearch (RoomPreference roomPreference) {
         List<Room> resultRoomList = new ArrayList<>();
         for (Room room : dataModel.getRoomEntries())
             if (room.getRoomSpec().equals(roomPreference.toString())) resultRoomList.add(room);
         return resultRoomList;
     }
+		
 
     public static void main(String[] args) {
         LineSchedule reSchedule = new LineSchedule(
