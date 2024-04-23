@@ -11,6 +11,9 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
+/**
+ * The Table class represents a table view of schedule data with filtering and sorting functionality.
+ */
 public class Table {
 
     private static JFrame app;
@@ -20,6 +23,12 @@ public class Table {
     public ScheduleDataModel dataModel;
     public ScheduleEngine engine;
 
+    /**
+     * Constructs a new Table object with the provided data model.
+     *
+     * @param dataModel The ScheduleDataModel containing schedule data.
+     * @throws IOException If an I/O error occurs.
+     */
     public Table(ScheduleDataModel dataModel) throws IOException {
         this.dataModel = dataModel;
 
@@ -53,14 +62,29 @@ public class Table {
         app.setVisible(true);
     }
 
+    /**
+     * Retrieves the JTable component.
+     *
+     * @return The JTable component.
+     */
     public JTable getJTable() {
         return appTable;
     }
 
+    /**
+     * Retrieves the data model.
+     *
+     * @return The ScheduleDataModel.
+     */
     public ScheduleDataModel getDataModel() {
         return dataModel;
     }
 
+    /**
+     * Adds columns to the table model.
+     *
+     * @param model The DefaultTableModel.
+     */
     private void addColumns(DefaultTableModel model) {
         model.addColumn("Curso");
         model.addColumn("Unidade Curricular");
@@ -77,6 +101,11 @@ public class Table {
         model.addColumn("Semana do Ano");
     }
 
+    /**
+     * Adds sorting functionality to the table.
+     *
+     * @param table The JTable.
+     */
     void addColumnSorting(JTable table) {
         // Gets the table's sorter and casts it to a DefaultRowSorter
         DefaultRowSorter sorter = ((DefaultRowSorter)table.getRowSorter());
@@ -94,6 +123,12 @@ public class Table {
         sorter.sort();
     }
 
+    /**
+     * Normalizes a string value.
+     *
+     * @param value The value to normalize.
+     * @return The normalized value.
+     */
     private String normalizeValue(String value) {
         if (value != null) {
             value = Normalizer.normalize(value, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
@@ -102,6 +137,12 @@ public class Table {
         return "";
     }
 
+    /**
+     * Retrieves the week of the year for a given date.
+     *
+     * @param dateString The date string.
+     * @return The week of the year.
+     */
     public static int getWeekOfYear(String dateString) {
         if (!dateString.isEmpty()) {
             try {
@@ -115,6 +156,13 @@ public class Table {
         return -1;
     }
 
+    /**
+     * Counts the number of weeks between two dates.
+     *
+     * @param startDateString The start date string.
+     * @param endDateString   The end date string.
+     * @return The number of weeks between the dates.
+     */
     public static int countWeeksBetween(String startDateString, String endDateString) {
         if (!endDateString.isEmpty() && !startDateString.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

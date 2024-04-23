@@ -1,3 +1,10 @@
+/**
+ * The RoomFilterFrame class is a graphical user interface (GUI) that allows filtering rooms based on different criteria.
+ * The filter criteria include room name, capacity, building, and date range.
+ * This class displays a table of rooms and provides input fields to apply filters.
+ * When filters are applied, the table is updated to display only the rooms that match the specified filter criteria.
+ */
+
 package filters;
 
 import structures.Room;
@@ -15,11 +22,19 @@ public class RoomFilterFrame {
     private JTable roomsTable;
     private DefaultTableModel tableModel;
 
+    /**
+     * Constructor for the RoomFilterFrame class.
+     *
+     * @param roomList List of rooms to be filtered.
+     */
     public RoomFilterFrame(List<Room> roomList) {
         this.roomList = roomList;
         initialize();
     }
 
+    /**
+     * Initializes the graphical user interface and configures the components.
+     */
     private void initialize() {
         frame = new JFrame("Filtrar Salas");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -58,7 +73,7 @@ public class RoomFilterFrame {
         JTextField capacityTextField = new JTextField(10);
         filterPanel.add(capacityLabel);
         filterPanel.add(capacityTextField);
-        
+
         JLabel capacityLabel1 = new JLabel("Capacidade minima:");
         JTextField capacityTextField1 = new JTextField(10);
         filterPanel.add(capacityLabel1);
@@ -111,6 +126,11 @@ public class RoomFilterFrame {
         frame.add(filterPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Retrieves column names based on the attributes of the Room object.
+     *
+     * @return An array of column names.
+     */
     private String[] getRoomColumnNames() {
         // Obtenha nomes das colunas baseados nos atributos do objeto Rooms
         return new String[] {
@@ -127,6 +147,12 @@ public class RoomFilterFrame {
         };
     }
 
+    /**
+     * Retrieves row data for the Room object.
+     *
+     * @param room The Room object for which row data is retrieved.
+     * @return An array of row data.
+     */
     private Object[] getRoomRowData(Room room) {
         // Obter dados da linha para o objeto structures.Room
         return new Object[] {
@@ -144,8 +170,19 @@ public class RoomFilterFrame {
         };
     }
 
+    /**
+     * Filters rooms based on the specified criteria.
+     *
+     * @param typeFilter      The filter for room name.
+     * @param capacityFilter  The filter for normal capacity.
+     * @param capacityFilter2 The filter for normal capacity 2.
+     * @param locationFilter  The filter for building location.
+     * @param startDateFilter The filter for start date/time.
+     * @param endDateFilter   The filter for end date/time.
+     * @param logic           The filter logic (AND or OR).
+     */
     private void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter, String startDateFilter,
-            String endDateFilter, Boolean logic) {
+                             String endDateFilter, Boolean logic) {
         tableModel.setRowCount(0);
         for (Room room : roomList) {
             // Verifique os critérios de filtro
@@ -161,7 +198,7 @@ public class RoomFilterFrame {
                     Object[] rowData = getRoomRowData(room);
                     tableModel.addRow(rowData);
                 }
-               
+
             }else{
                 if (room.getNomeSala().toLowerCase().contains(typeFilter) ||
                         room.getCapacidadeNormal() > capacityFilter ||room.getCapacidadeNormal() < capacityFilter2||
@@ -173,11 +210,14 @@ public class RoomFilterFrame {
                     tableModel.addRow(rowData);
                 }
             }
-             // "OU"
+            // "OU"
 
         }
     }
 
+    /**
+     * Displays the GUI frame.
+     */
     public void show() {
         frame.setVisible(true);
     }

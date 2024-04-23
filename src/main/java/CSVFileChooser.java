@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-//Esta classe é referente à janela inicial do JFrame onde indicamos se pretendemos carregar dos ficheiros locais ou do git
+/**
+ * The CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want to load from local files or from Git.
+ */
 public class CSVFileChooser {
 
     private JFrame fileChooserFrame;
@@ -13,6 +15,9 @@ public class CSVFileChooser {
     private String scheduleFilePath;
     private String roomsFilePath;
 
+    /**
+     * Constructs a new CSVFileChooser object and initializes the GUI components.
+     */
     public CSVFileChooser() {
         fileChooserFrame = new JFrame("Escolher ficheiros CSV");
         fileChooserFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,6 +58,14 @@ public class CSVFileChooser {
         fileChooserFrame.setVisible(true);
     }
 
+    /**
+     * Opens the table window with the provided file paths and loading options.
+     *
+     * @param scheduleFile   The path to the schedule file.
+     * @param scheduleRemote Whether to load the schedule file from remote (Git) or not.
+     * @param roomsFile      The path to the rooms file.
+     * @param roomsRemote    Whether to load the rooms file from remote (Git) or not.
+     */
     public void openTableWindow(String scheduleFile, boolean scheduleRemote, String roomsFile, boolean roomsRemote) {
         try {
             ScheduleDataModel dataModel = new ScheduleDataModel(scheduleFile, scheduleRemote, roomsFile, roomsRemote);
@@ -61,14 +74,27 @@ public class CSVFileChooser {
         fileChooserFrame.dispose(); // Fecha a janela logo depois de abrir a tabela
     }
 
+    /**
+     * The main method to start the application.
+     *
+     * @param args The command-line arguments.
+     */
     public static void main(String[] args) {
         new CSVFileChooser();
     }
 
-    public String getScheduleFilePath() {
-        return scheduleFilePath;
-    }
+    /**
+     * Returns the file path of the schedule file.
+     *
+     * @return The file path of the schedule file.
+     */
+    public String getScheduleFilePath() {return scheduleFilePath; }
 
+    /**
+     * Returns the file path of the rooms file.
+     *
+     * @return The file path of the rooms file.
+     */
     public String getRoomsFilePath() {
         return roomsFilePath;
     }
