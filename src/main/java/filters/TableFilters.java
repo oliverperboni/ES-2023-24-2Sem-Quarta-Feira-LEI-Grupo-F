@@ -10,12 +10,24 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The TableFilters class provides functionality to add filters to a JTable and perform various operations like hiding columns, revealing hidden columns, and saving changes.
+ */
+
 public class TableFilters {
 
+    /** List to store column indexes of hidden columns */
     List<Integer> a = new ArrayList<>();
 
     public JFrame panel;
 
+    /**
+     * Adds filter components to the JFrame panel.
+     *
+     * @param panel  The JFrame panel.
+     * @param tabela The JTable to which filters will be added.
+     * @return The updated JFrame panel with added filters.
+     */
     public JFrame addFilter(JFrame panel, JTable tabela) {
         panel = new JFrame();
 
@@ -68,7 +80,11 @@ public class TableFilters {
     }
 
 
-    //Criação dos labels e textFields para os filtros
+    /**
+     * Creates labels and text fields for filters and adds them to the provided panel.
+     *
+     * @param filterPanel The panel to which labels and text fields will be added.
+     */
     public void textFieldsCreation(JPanel filterPanel) {
         filterPanel.setLayout(new GridLayout(0, 2, 5, 5)); // 0 indica número indefinido de linhas
         addLabelAndTextField(filterPanel, "Curso");
@@ -86,7 +102,12 @@ public class TableFilters {
         addLabelAndTextField(filterPanel, "Semana do ano");
     }
 
-    //Adicionar á tabela a Label e o Textfield
+    /**
+     * Adds a label and a text field to the provided panel.
+     *
+     * @param panel The panel to which the label and text field will be added.
+     * @param label The text for the label.
+     */
     private void addLabelAndTextField(JPanel panel, String label) {
         JLabel jLabel = new JLabel(label);
         JTextField jTextField = new JTextField("");
@@ -94,7 +115,13 @@ public class TableFilters {
         panel.add(jTextField);
     }
 
-    //Criação do Botão Filtrar
+    /**
+     * Creates a button with specified style settings.
+     *
+     * @param btn         The button to be styled.
+     * @param tabela      The JTable associated with the button.
+     * @param filterPanel The panel containing the filters.
+     */
     public void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
 
         //Estilo do Botão
@@ -105,6 +132,11 @@ public class TableFilters {
 
     }
 
+    /**
+     * Hides the selected column from the JTable.
+     *
+     * @param tabela The JTable from which the column will be hidden.
+     */
     public void function_esconderBtn(JTable tabela) {
         int columnIndex = tabela.getSelectedColumn();
         TableColumn d = tabela.getColumnModel().getColumn(columnIndex);
@@ -112,6 +144,11 @@ public class TableFilters {
         tabela.removeColumn(d);
     }
 
+    /**
+     * Reveals previously hidden columns in the JTable.
+     *
+     * @param tabela The JTable in which hidden columns will be revealed.
+     */
     public void function_revelarBtn(JTable tabela) {
             for(int x :a){
                 TableColumn c = new TableColumn(x);
@@ -121,7 +158,12 @@ public class TableFilters {
         a.clear();
     }
 
-
+    /**
+     * Filters the JTable based on the input provided in the filter panel.
+     *
+     * @param tabela       The JTable to be filtered.
+     * @param filterPanel  The panel containing the filter components.
+     */
     public void function_filtrarBtn(JTable tabela, JPanel filterPanel) {
         int countFilterPreenchido = 0;
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
