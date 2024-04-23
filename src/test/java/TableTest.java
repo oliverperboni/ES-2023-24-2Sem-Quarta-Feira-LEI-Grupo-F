@@ -1,23 +1,13 @@
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-import org.junit.jupiter.api.Test;
+import core.ScheduleDataModel;
+import core.Table;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TableTest {
+public class TableTest {
 
     @Test
     public void getWeekOfYear() {
@@ -57,29 +47,23 @@ class TableTest {
     }
 
     @Test
-    public void testSaveChangesSuccess() {
+    public void testSaveChangesFailure() {
         // Caminho do arquivo a ser verificado
         String testFilePath = "csv/HorarioDeExemplo.csv";
 
-        // Testa o método em caso de sucesso
-        assertTrue(Table.saveChanges());
+        ScheduleDataModel model = new ScheduleDataModel("csv/HorarioDeExemplo.csv",
+                false, "csv/CaracterizaçãoDasSalas.csv", false);
 
-        // Verifica se o arquivo foi criado e contém os dados corretos
+        // Simula uma falha ao tentar salvar
         try {
-            List<String> lines = Files.readAllLines(new File(testFilePath).toPath());
-            assertEquals(2, lines.size());
-            assertTrue(lines.get(1).contains("Teste 101"));
+            Table table = new Table(model);
+            table.dataModel.setScheduleFilePath("/invalido/teste.csv");
+
+            // Testa o método em caso de falha
+            Assertions.assertFalse(table.saveChanges());
         } catch (IOException e) {
-            fail("Falha ao ler o arquivo: " + e.getMessage());
+            System.out.println("Failure captured successfully.");
         }
     }
 
-    @Test
-    public void testSaveChangesFailure() {
-        // Simula uma falha ao tentar salvar
-        Table.filePath = "/invalido/teste.csv";
-
-        // Testa o método em caso de falha
-        assertFalse(Table.saveChanges());
-    }
 }

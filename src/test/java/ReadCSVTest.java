@@ -1,3 +1,4 @@
+import core.ScheduleDataModel;
 import org.junit.jupiter.api.Test;
 import structures.LineSchedule;
 
@@ -6,7 +7,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class ReadCSVTest {
+public class ReadCSVTest {
 
     @Test
     public void testReadScheduleCSV() {

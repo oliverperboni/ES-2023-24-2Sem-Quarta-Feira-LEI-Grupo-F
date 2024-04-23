@@ -1,3 +1,5 @@
+import core.ScheduleDataModel;
+import core.Table;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -8,16 +10,16 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ColumnSortTest {
+public class ColumnSortTest {
 
     @Test
     public void addColumnSortingTest() throws IOException {
-        // Table instance using a schedule .csv file
+        // core.Table instance using a schedule .csv file
         ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv",
                 false, "csv/CaracterizaçãoDasSalas.csv", false);
         Table table = new Table(dataModel);
 
-        // Sorter associated with the Table instance's JTable
+        // Sorter associated with the core.Table instance's JTable
         TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) table.getJTable().getRowSorter();
 
         // Get the current sort keys

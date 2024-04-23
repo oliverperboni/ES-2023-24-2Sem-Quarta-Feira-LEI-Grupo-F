@@ -1,4 +1,5 @@
 package filters;
+import core.Table;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +21,11 @@ public class TableFilters {
     List<Integer> a = new ArrayList<>();
 
     public JFrame panel;
+    private Table table;
+
+    public TableFilters(Table table) {
+        this.table = table;
+    }
 
     /**
      * Adds filter components to the JFrame panel.
@@ -45,9 +51,6 @@ public class TableFilters {
         textFieldsCreation(filterPanel);
 
         //Botoes
-
-
-
         JButton filtrarbtn = new JButton("Filtrar");
         JButton esconderbtn = new JButton("Esconder coluna");
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
@@ -55,7 +58,7 @@ public class TableFilters {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                Table.saveChanges();
+                table.saveChanges();
             }
         });
 

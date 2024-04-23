@@ -1,23 +1,23 @@
+package core;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import structures.LineSchedule;
 import structures.Room;
-import structures.RoomPreference;
 import structures.ScheduleInstant;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
-* The ScheduleDataModel class represents the data model object associated with the scheduling application at any
+* The core.ScheduleDataModel class represents the data model object associated with the scheduling application at any
 * given time. It contains structures that hold information about the currently loaded schedule and list of rooms
 * and their specifications.
 * @author Daniel Ferreira
@@ -28,14 +28,30 @@ public class ScheduleDataModel {
     private ArrayList<LineSchedule> scheduleEntries;
     private ArrayList<Room> roomEntries;
    	private TreeMap<ScheduleInstant, LineSchedule> scheduleMap;
+    private String scheduleFilePath;
+    private boolean scheduleFileRemote;
+    private String roomsFilePath;
+    private boolean roomsFileRemote;
 
-
-    public ScheduleDataModel(String scheduleFile, boolean scheduleRemote, String roomsFile, boolean roomsRemote) {
+    public ScheduleDataModel(String scheduleFilePath, boolean scheduleRemote,
+                             String roomsFilePath, boolean roomsRemote) {
         try {
-            if (scheduleRemote) scheduleEntries = readGitScheduleCSV(scheduleFile);
-            else scheduleEntries = readScheduleCSV(scheduleFile);
-            if (roomsRemote) roomEntries = readRoomsCSV(roomsFile);
-            else roomEntries = readRoomsCSV(roomsFile);
+            if (scheduleRemote) {
+                this.scheduleEntries = readGitScheduleCSV(scheduleFilePath);
+                this.scheduleFileRemote = true;
+            } else {
+                this.scheduleEntries = readScheduleCSV(scheduleFilePath);
+                this.scheduleFileRemote = false;
+            }
+            if (roomsRemote) {
+                this.roomEntries = readRoomsCSV(roomsFilePath);
+                this.roomsFileRemote = true;
+            } else {
+                this.roomEntries = readRoomsCSV(roomsFilePath);
+                this.roomsFileRemote = false;
+            }
+            this.scheduleFilePath = scheduleFilePath;
+            this.roomsFilePath = roomsFilePath;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,7 +65,27 @@ public class ScheduleDataModel {
         return roomEntries;
     }
 
-	/**
+    public String getScheduleFilePath() {
+        return scheduleFilePath;
+    }
+
+    public void setScheduleFilePath(String newScheduleFilePath) {
+        this.scheduleFilePath = newScheduleFilePath;
+    }
+
+    public boolean isScheduleFileRemote() {
+        return scheduleFileRemote;
+    }
+
+    public String getRoomsFilePath() {
+        return roomsFilePath;
+    }
+
+    public boolean isRoomsFileRemote() {
+        return roomsFileRemote;
+    }
+
+    /**
 	* Reads a schedule CSV file, and returns an ArrayList of LineSchedule objects representing every schedule entry
 	* present in it. 
 	* @param csvFile file path to schedule CSV file

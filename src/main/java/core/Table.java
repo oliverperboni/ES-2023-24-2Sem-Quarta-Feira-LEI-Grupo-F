@@ -1,8 +1,13 @@
+package core;
+
 import filters.TableFilters;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import structures.LineSchedule;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.time.LocalDate;
@@ -10,9 +15,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * The Table class represents a table view of schedule data with filtering and sorting functionality.
+ * The core.Table class represents a table view of schedule data with filtering and sorting functionality.
  */
 public class Table {
 
@@ -24,16 +30,16 @@ public class Table {
     public ScheduleEngine engine;
 
     /**
-     * Constructs a new Table object with the provided data model.
+     * Constructs a new core.Table object with the provided data model.
      *
-     * @param dataModel The ScheduleDataModel containing schedule data.
+     * @param dataModel The core.ScheduleDataModel containing schedule data.
      * @throws IOException If an I/O error occurs.
      */
     public Table(ScheduleDataModel dataModel) throws IOException {
         this.dataModel = dataModel;
 
         // classe que cria e adiciona os filtros
-        TableFilters tabFilter = new TableFilters();
+        TableFilters tabFilter = new TableFilters(this);
         // Cria uma tabela
         model = new DefaultTableModel();
         addColumns(model);
@@ -74,7 +80,7 @@ public class Table {
     /**
      * Retrieves the data model.
      *
-     * @return The ScheduleDataModel.
+     * @return The core.ScheduleDataModel.
      */
     public ScheduleDataModel getDataModel() {
         return dataModel;
@@ -108,7 +114,7 @@ public class Table {
      */
     void addColumnSorting(JTable table) {
         // Gets the table's sorter and casts it to a DefaultRowSorter
-        DefaultRowSorter sorter = ((DefaultRowSorter)table.getRowSorter());
+        DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
         // Enables immediate sorting after an insert operation
         sorter.setSortsOnUpdates(true);
 
@@ -116,7 +122,7 @@ public class Table {
         ArrayList<RowSorter.SortKey> sortKeyList = new ArrayList<>();
         for (int i = 0; i < table.getColumnCount(); i++)
             // Creates a SortKey for every column, ascending order
-            sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING) );
+            sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
 
         // Adds SortKeys to sorter, and sorts
         sorter.setSortKeys(sortKeyList);
@@ -149,7 +155,7 @@ public class Table {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate date = LocalDate.parse(dateString, formatter);
                 return date.get(java.time.temporal.ChronoField.ALIGNED_WEEK_OF_YEAR);
-            }catch (DateTimeParseException e){
+            } catch (DateTimeParseException e) {
                 return -1;
             }
         }
@@ -168,34 +174,38 @@ public class Table {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate startDate = LocalDate.parse(startDateString, formatter);
             LocalDate endDate = LocalDate.parse(endDateString, formatter);
-           if (startDate.isEqual(endDate)){
-               return 0;
-           }
-           if ((int) ChronoUnit.WEEKS.between(startDate, endDate)> 0){
-               return (int) ChronoUnit.WEEKS.between(startDate, endDate);
-           }
+            if (startDate.isEqual(endDate)) {
+                return 0;
+            }
+            if ((int) ChronoUnit.WEEKS.between(startDate, endDate) > 0) {
+                return (int) ChronoUnit.WEEKS.between(startDate, endDate);
+            }
         }
         return -1;
     }
 
-//    static void saveChanges() {
-//        try (FileWriter fileWriter = new FileWriter(filePath);
-//             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withDelimiter(';').withHeader("Curso", "Unidade Curricular", "Turno", "Turma", "Inscritos no turno", "Dia da semana", "Hora início da aula", "Hora fim da aula", "Data da aula", "Características da sala pedida para a aula", "Sala atribuída à aula"))) {
-//
-//            for (int row = 0; row < model.getRowCount(); row++) {
-//                List<String> rowData = new ArrayList<>();
-//                for (int column = 0; column < model.getColumnCount(); column++) {
-//                    rowData.add(model.getValueAt(row, column).toString());
-//                }
-//                csvPrinter.printRecord(rowData);
-//            }
-//
-//            JOptionPane.showMessageDialog(app, "Alterações salvas com sucesso!");
-//
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
-//        }
-//    }
+    public boolean saveChanges() {
+        try (FileWriter fileWriter = new FileWriter(dataModel.getScheduleFilePath());
+
+             CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withDelimiter(';').withHeader("Curso",
+                     "Unidade Curricular", "Turno", "Turma", "Inscritos no turno", "Dia da semana",
+                     "Hora início da aula", "Hora fim da aula", "Data da aula",
+                     "Características da sala pedida para a aula", "Sala atribuída à aula"))) {
+
+            for (int row = 0; row < model.getRowCount(); row++) {
+                List<String> rowData = new ArrayList<>();
+                for (int column = 0; column < model.getColumnCount(); column++)
+                    rowData.add(model.getValueAt(row, column).toString());
+                csvPrinter.printRecord(rowData);
+            }
+
+            JOptionPane.showMessageDialog(app, "Alterações salvas com sucesso!");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
 
 }

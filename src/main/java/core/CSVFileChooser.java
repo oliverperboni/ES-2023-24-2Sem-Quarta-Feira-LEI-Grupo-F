@@ -1,3 +1,5 @@
+package core;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -5,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
- * The CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want to load from local files or from Git.
+ * The core.CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want to load from local files or from Git.
  */
 public class CSVFileChooser {
 
@@ -16,7 +18,7 @@ public class CSVFileChooser {
     private String roomsFilePath;
 
     /**
-     * Constructs a new CSVFileChooser object and initializes the GUI components.
+     * Constructs a new core.CSVFileChooser object and initializes the GUI components.
      */
     public CSVFileChooser() {
         fileChooserFrame = new JFrame("Escolher ficheiros CSV");

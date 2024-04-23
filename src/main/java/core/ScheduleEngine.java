@@ -1,3 +1,5 @@
+package core;
+
 import structures.*;
 
 import java.time.LocalDate;
@@ -9,7 +11,7 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
-* The ScheduleEngine class hosts methods that drive the scheduling application's automatic operations over the
+* TheScheduleEngine class hosts methods that drive the scheduling application's automatic operations over the
 * currently loaded schedule and room entries.
 * @author António Pombeiro
 */
@@ -39,7 +41,7 @@ public class ScheduleEngine {
             for (SchedulePeriod sp1 : allowedPeriods)
                 if (sp1.getIsWeekDay()) // Por cada preferência do tipo "dia da semana"
                     for (RoomPreference rp : roomTypePreferences) { // Por cada preferência de tipo de sala
-                        List<Room> resultRoomList = dataModel.roomTypeSearch(rp);
+                        List<Room> resultRoomList = roomTypeSearch(rp);
                         for (Room resultRoom : resultRoomList)
                             for (SchedulePeriod sp2 : allowedPeriods)
                                 if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)

@@ -3,7 +3,7 @@ import structures.LineSchedule;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class LineScheduleTest {
+public class LineScheduleTest {
     LineSchedule ls = new LineSchedule("Curso Teste", "UC Teste", "Turno Teste", "Turma Teste", 20, "Segunda-feira",
             "08:00", "10:00", "01/01/2022", "Características Sala Teste", "Sala Teste");
 

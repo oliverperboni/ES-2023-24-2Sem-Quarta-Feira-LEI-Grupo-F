@@ -157,16 +157,17 @@ public class RoomFilterFrame {
         // Obter dados da linha para o objeto structures.Room
         return new Object[] {
                 room.getEdificio(), room.getNomeSala(), room.getCapacidadeNormal(), room.getCapacidadeExame(),
-                room.getNumCaracteristicas(), room.isAnfiteatroAulas(), room.isApoioTecnicoEventos(),
-                room.isArq1(), room.isArq2(), room.isArq3(), room.isArq4(), room.isArq5(),
-                room.isArq6(), room.isArq9(), room.isByod(), room.isFocusGroup(),
-                room.isHorarioSalaVisivelPortalPublico(), room.isLaboratorioArquiteturaComputadoresI(),
-                room.isLaboratorioArquiteturaComputadoresII(), room.isLaboratorioBasesEngenharia(),
-                room.isLaboratorioEletronica(), room.isLaboratorioInformatica(), room.isLaboratorioJornalismo(),
-                room.isLaboratorioRedesComputadoresI(), room.isLaboratorioRedesComputadoresII(),
-                room.isLaboratorioTelecomunicacoes(), room.isSalaAulasMestrado(), room.isSalaAulasMestradoPlus(),
-                room.isSalaNEE(), room.isSalaProvas(), room.isSalaReuniao(), room.isSalaArquitetura(),
-                room.isSalaAulasNormal(), room.isVideoconferencia(), room.isAtrio()
+                room.getNumCaracteristicas()
+//                room.isAnfiteatroAulas(), room.isApoioTecnicoEventos(),
+//                room.isArq1(), room.isArq2(), room.isArq3(), room.isArq4(), room.isArq5(),
+//                room.isArq6(), room.isArq9(), room.isByod(), room.isFocusGroup(),
+//                room.isHorarioSalaVisivelPortalPublico(), room.isLaboratorioArquiteturaComputadoresI(),
+//                room.isLaboratorioArquiteturaComputadoresII(), room.isLaboratorioBasesEngenharia(),
+//                room.isLaboratorioEletronica(), room.isLaboratorioInformatica(), room.isLaboratorioJornalismo(),
+//                room.isLaboratorioRedesComputadoresI(), room.isLaboratorioRedesComputadoresII(),
+//                room.isLaboratorioTelecomunicacoes(), room.isSalaAulasMestrado(), room.isSalaAulasMestradoPlus(),
+//                room.isSalaNEE(), room.isSalaProvas(), room.isSalaReuniao(), room.isSalaArquitetura(),
+//                room.isSalaAulasNormal(), room.isVideoconferencia(), room.isAtrio()
         };
     }
 
