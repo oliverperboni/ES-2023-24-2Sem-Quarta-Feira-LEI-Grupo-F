@@ -97,17 +97,6 @@ public class RoomFilterFrame {
         G1.add(jRadioButton1);
         G1.add(jRadioButton2);
 
-        // Campos de filtro para critérios temporais
-        JLabel startDateLabel = new JLabel("Data/Hora Início (yyyy-MM-dd HH:mm):");
-        JTextField startDateTextField = new JTextField(16);
-        filterPanel.add(startDateLabel);
-        filterPanel.add(startDateTextField);
-
-        JLabel endDateLabel = new JLabel("Data/Hora Fim (yyyy-MM-dd HH:mm):");
-        JTextField endDateTextField = new JTextField(16);
-        filterPanel.add(endDateLabel);
-        filterPanel.add(endDateTextField);
-
         JButton filterButton = new JButton("Aplicar Filtro");
         filterButton.addActionListener(new ActionListener() {
             @Override
@@ -116,11 +105,9 @@ public class RoomFilterFrame {
                 int capacityFilter = Integer.parseInt(capacityTextField.getText());
                 int capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
                 String locationFilter = locationTextField.getText().toLowerCase();
-                String startDateFilter = startDateTextField.getText();
-                String endDateFilter = endDateTextField.getText();
                 Boolean select = jRadioButton1.isSelected();
 
-                filterRooms(typeFilter, capacityFilter, capacityFilter2 ,locationFilter, startDateFilter, endDateFilter, select);
+                filterRooms(typeFilter, capacityFilter, capacityFilter2, locationFilter, select);
             }
         });
         filterPanel.add(filterButton);
@@ -137,7 +124,7 @@ public class RoomFilterFrame {
      */
     private String[] getRoomColumnNames() {
         // Obtenha nomes das colunas baseados nos atributos do objeto Rooms
-        return new String[] {
+        return new String[]{
                 "Edifício", "Nome Sala", "Capacidade Normal", "Capacidade Exame",
                 "N¼ caracterásticas", "Anfiteatro aulas", "Apoio técnico eventos",
                 "Arq 1", "Arq 2", "Arq 3", "Arq 4", "Arq 5", "Arq 6", "Arq 9",
@@ -186,12 +173,9 @@ public class RoomFilterFrame {
      * @param capacityFilter  The filter for normal capacity.
      * @param capacityFilter2 The filter for normal capacity 2.
      * @param locationFilter  The filter for building location.
-     * @param startDateFilter The filter for start date/time.
-     * @param endDateFilter   The filter for end date/time.
      * @param logic           The filter logic (AND or OR).
      */
-    private void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter, String startDateFilter,
-                             String endDateFilter, Boolean logic) {
+    private void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter, Boolean logic) {
         tableModel.setRowCount(0);
         for (Room room : roomList) {
             // Verifique os critérios de filtro
@@ -199,7 +183,7 @@ public class RoomFilterFrame {
             if (logic || logic == null) {
 
                 if (room.getNomeSala().toLowerCase().contains(typeFilter) &&
-                        room.getCapacidadeNormal() > capacityFilter && room.getCapacidadeNormal() < capacityFilter2&&
+                        room.getCapacidadeNormal() > capacityFilter && room.getCapacidadeNormal() < capacityFilter2 &&
                         room.getEdificio().toLowerCase().contains(locationFilter)) {
                     // Adicione lógica de filtragem para critérios temporais aqui
                     // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
@@ -208,9 +192,9 @@ public class RoomFilterFrame {
                     tableModel.addRow(rowData);
                 }
 
-            }else{
+            } else {
                 if (room.getNomeSala().toLowerCase().contains(typeFilter) ||
-                        room.getCapacidadeNormal() > capacityFilter ||room.getCapacidadeNormal() < capacityFilter2||
+                        room.getCapacidadeNormal() > capacityFilter || room.getCapacidadeNormal() < capacityFilter2 ||
                         room.getEdificio().toLowerCase().contains(locationFilter)) {
                     // Adicione lógica de filtragem para critérios temporais aqui
                     // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
