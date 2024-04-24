@@ -102,8 +102,14 @@ public class RoomFilterFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String typeFilter = typeTextField.getText().toLowerCase();
-                int capacityFilter = Integer.parseInt(capacityTextField.getText());
-                int capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
+                int capacityFilter = -1;
+                if(!capacityTextField.getText().equals("") ){
+                    capacityFilter = Integer.parseInt(capacityTextField.getText());
+                }
+                int capacityFilter2 = -1;
+                  if(!capacityTextField1.getText().equals("")){
+                    capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
+                }
                 String locationFilter = locationTextField.getText().toLowerCase();
                 Boolean select = jRadioButton1.isSelected();
 
@@ -188,17 +194,22 @@ public class RoomFilterFrame {
                     // Adicione lógica de filtragem para critérios temporais aqui
                     // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
                     // de tipo
+                    
                     Object[] rowData = getRoomRowData(room).toArray();
                     tableModel.addRow(rowData);
                 }
 
             } else {
-                if (room.getNomeSala().toLowerCase().contains(typeFilter) ||
-                        room.getCapacidadeNormal() > capacityFilter || room.getCapacidadeNormal() < capacityFilter2 ||
-                        room.getEdificio().toLowerCase().contains(locationFilter)) {
+                System.out.println("ENTREI NO OU");
+                if (room.getNomeSala().equals(typeFilter) ||
+                    //(room.getCapacidadeNormal() > capacityFilter  && room.getCapacidadeNormal() != -1) || (room.getCapacidadeNormal() < capacityFilter2  && room.getCapacidadeNormal() != -1 ) ||
+                        room.getEdificio().equals(locationFilter) ) {
                     // Adicione lógica de filtragem para critérios temporais aqui
                     // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
                     // de tipo
+                        
+                    System.out.println(room.getNomeSala() +"==" + typeFilter);
+                    System.out.println(room.getEdificio() +"==" + locationFilter);
                     Object[] rowData = getRoomRowData(room).toArray();
                     tableModel.addRow(rowData);
                 }
