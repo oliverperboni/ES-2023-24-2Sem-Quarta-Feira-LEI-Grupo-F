@@ -73,12 +73,12 @@ public class RoomFilterFrame {
         filterPanel.add(edificeLabel);
         filterPanel.add(edificeTextField);
 
-        JLabel capacityLabel = new JLabel("Capacidade maxima:");
+        JLabel capacityLabel = new JLabel("Capacidade minima:");
         JTextField capacityTextField = new JTextField(10);
         filterPanel.add(capacityLabel);
         filterPanel.add(capacityTextField);
 
-        JLabel capacityLabel1 = new JLabel("Capacidade minima:");
+        JLabel capacityLabel1 = new JLabel("Capacidade maxima:");
         JTextField capacityTextField1 = new JTextField(10);
         filterPanel.add(capacityLabel1);
         filterPanel.add(capacityTextField1);
@@ -110,7 +110,7 @@ public class RoomFilterFrame {
                   if(!capacityTextField1.getText().equals("")){
                     capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
                 }
-                String locationFilter = locationTextField.getText().toLowerCase();
+                String locationFilter = edificeTextField.getText().toLowerCase();
                 Boolean select = jRadioButton1.isSelected();
 
                 filterRooms(typeFilter, capacityFilter, capacityFilter2, locationFilter, select);
@@ -182,42 +182,36 @@ public class RoomFilterFrame {
      * @param logic           The filter logic (AND or OR).
      */
     private void filterRooms(String typeFilter, int capacityFilter, int capacityFilter2, String locationFilter, Boolean logic) {
+        // Limpar tabela antes de aplicar o filtro
         tableModel.setRowCount(0);
+    
+        // Aplicar filtro para cada sala na lista
         for (Room room : roomList) {
-            // Verifique os critérios de filtro
-            // "E"
-            if (logic || logic == null) {
-
-                if (room.getNomeSala().toLowerCase().contains(typeFilter) &&
-                        room.getCapacidadeNormal() > capacityFilter && room.getCapacidadeNormal() < capacityFilter2 &&
-                        room.getEdificio().toLowerCase().contains(locationFilter)) {
-                    // Adicione lógica de filtragem para critérios temporais aqui
-                    // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
-                    // de tipo
-                    
-                    Object[] rowData = getRoomRowData(room).toArray();
-                    tableModel.addRow(rowData);
-                }
-
+            // Verificar se o nome da sala contém o filtro (ignorar caso o filtro esteja vazio)
+            boolean typeMatch = typeFilter.isEmpty() || room.getNomeSala().toLowerCase().contains(typeFilter);
+    
+            // Verificar se a capacidade da sala está dentro do intervalo definido pelos filtros
+            boolean capacityMatch = (capacityFilter == -1 || room.getCapacidadeNormal() >= capacityFilter) &&
+                                    (capacityFilter2 == -1 || room.getCapacidadeNormal() <= capacityFilter2);
+    
+            // Verificar se a localização da sala corresponde ao filtro (ignorar caso o filtro esteja vazio)
+            boolean locationMatch = locationFilter.isEmpty() || room.getEdificio().toLowerCase().contains(locationFilter);
+    
+            // Aplicar lógica de filtro (AND ou OR)
+            boolean filterResult;
+            if (logic) {
+                filterResult = typeMatch && capacityMatch && locationMatch;
             } else {
-                System.out.println("ENTREI NO OU");
-                if (room.getNomeSala().equals(typeFilter) ||
-                    //(room.getCapacidadeNormal() > capacityFilter  && room.getCapacidadeNormal() != -1) || (room.getCapacidadeNormal() < capacityFilter2  && room.getCapacidadeNormal() != -1 ) ||
-                        room.getEdificio().equals(locationFilter) ) {
-                    // Adicione lógica de filtragem para critérios temporais aqui
-                    // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
-                    // de tipo
-                        
-                    System.out.println(room.getNomeSala() +"==" + typeFilter);
-                    System.out.println(room.getEdificio() +"==" + locationFilter);
-                    Object[] rowData = getRoomRowData(room).toArray();
-                    tableModel.addRow(rowData);
-                }
+                filterResult = typeMatch || capacityMatch || locationMatch;
             }
-            // "OU"
-
+            // Se a sala atender aos critérios de filtro, adicioná-la à tabela
+            if (filterResult) {
+                Object[] rowData = getRoomRowData(room).toArray();
+                tableModel.addRow(rowData);
+            }
         }
     }
+    
 
     /**
      * Displays the GUI frame.
