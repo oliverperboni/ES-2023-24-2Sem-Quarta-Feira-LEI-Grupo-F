@@ -11,7 +11,7 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
-* TheScheduleEngine class hosts methods that drive the scheduling application's automatic operations over the
+* The ScheduleEngine class hosts methods that drive the scheduling application's automatic operations over the
 * currently loaded schedule and room entries.
 * @author António Pombeiro
 */
@@ -84,7 +84,7 @@ public class ScheduleEngine {
         auxSchedule.setHora_fim(auxInstant.getScheduleTime().getEndTime().toString());
         auxSchedule.setData_aula(auxInstant.getScheduleDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         auxSchedule.setSala(resultRoom.getNomeSala());
-        auxSchedule.setCaracteristicasSala(resultRoom.getRoomSpec());
+//        auxSchedule.setCaracteristicasSala(resultRoom.getRoomSpecs());
 
         return auxSchedule;
     }
@@ -99,7 +99,7 @@ public class ScheduleEngine {
     public List<Room> roomTypeSearch (RoomPreference roomPreference) {
         List<Room> resultRoomList = new ArrayList<>();
         for (Room room : dataModel.getRoomEntries())
-            if (room.getRoomSpec().equals(roomPreference.toString())) resultRoomList.add(room);
+            if (room.getRoomSpecs().equals(roomPreference.toString())) resultRoomList.add(room);
         return resultRoomList;
     }
 		

@@ -1,5 +1,6 @@
 package core;
 
+import filters.RoomFilterFrame;
 import filters.TableFilters;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -28,6 +29,8 @@ public class Table {
 
     public ScheduleDataModel dataModel;
     public ScheduleEngine engine;
+
+    public RoomFilterFrame roomFilterFrame;
 
     /**
      * Constructs a new core.Table object with the provided data model.
@@ -66,6 +69,15 @@ public class Table {
 
         app.getContentPane().add(scrollPane);
         app.setVisible(true);
+
+        // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
+                filterFrame.show();
+            }
+        });
     }
 
     /**

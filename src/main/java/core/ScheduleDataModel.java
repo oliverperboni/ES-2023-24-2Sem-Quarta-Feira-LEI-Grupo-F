@@ -6,6 +6,7 @@ import org.apache.commons.csv.CSVRecord;
 import structures.LineSchedule;
 import structures.Room;
 import structures.ScheduleInstant;
+import structures.Tuple2;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,6 +34,8 @@ public class ScheduleDataModel {
     private String roomsFilePath;
     private boolean roomsFileRemote;
 
+    private List<String> roomColumnHeaders;
+
     public ScheduleDataModel(String scheduleFilePath, boolean scheduleRemote,
                              String roomsFilePath, boolean roomsRemote) {
         try {
@@ -44,10 +47,14 @@ public class ScheduleDataModel {
                 this.scheduleFileRemote = false;
             }
             if (roomsRemote) {
-                this.roomEntries = readRoomsCSV(roomsFilePath);
+                Tuple2<ArrayList<Room>, List<String>> tuple = readRoomsCSV(roomsFilePath);
+                this.roomEntries = tuple.getRoomLineArray();
+                this.roomColumnHeaders = tuple.getRoomColumnHeaders();
                 this.roomsFileRemote = true;
             } else {
-                this.roomEntries = readRoomsCSV(roomsFilePath);
+                Tuple2<ArrayList<Room>, List<String>> tuple = readRoomsCSV(roomsFilePath);
+                this.roomEntries = tuple.getRoomLineArray();
+                this.roomColumnHeaders = tuple.getRoomColumnHeaders();
                 this.roomsFileRemote = false;
             }
             this.scheduleFilePath = scheduleFilePath;
@@ -85,6 +92,10 @@ public class ScheduleDataModel {
         return roomsFileRemote;
     }
 
+    public List<String> getRoomColumnHeaders() {
+        return roomColumnHeaders;
+    }
+
     /**
 	* Reads a schedule CSV file, and returns an ArrayList of LineSchedule objects representing every schedule entry
 	* present in it. 
@@ -111,10 +122,12 @@ public class ScheduleDataModel {
 	* @return ArrayList of all room entries in the file
 	* @since 1.0
 	*/
-    public static ArrayList<Room> readRoomsCSV(String csvFile) {
+    public static Tuple2<ArrayList<Room>, List<String>> readRoomsCSV(String csvFile) {
         ArrayList<Room> roomLineArray = new ArrayList<>();
+        List<String> columnHeaders = new ArrayList<>();
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
-            List<String> columnHeaders = csvParser.getHeaderNames();
+            columnHeaders = csvParser.getHeaderNames();
+
 
             for (CSVRecord csvRecord : csvParser) {
                 String edificio = csvRecord.get("Edifício");
@@ -123,18 +136,18 @@ public class ScheduleDataModel {
                 int capacidadeExame = Integer.parseInt(csvRecord.get("Capacidade Exame"));
                 String numCaracteristicas = csvRecord.get("N¼ caracterásticas");
 
-                String roomSpec = "";
-                for (int i = 5; i < columnHeaders.size(); i++)
-                    if (!csvRecord.get(i).isEmpty())
-                        roomSpec = columnHeaders.get(i);
+                List<String> roomSpecs = new ArrayList<>();
+                for (int i = 4; i < columnHeaders.size(); i++)
+                    if (csvRecord.get(i).equals("X"))
+                        roomSpecs.add(columnHeaders.get(i));
 
-                Room roomLine = new Room(edificio, nomeSala, capacidadeNormal, capacidadeExame, numCaracteristicas, roomSpec);
+                Room roomLine = new Room(edificio, nomeSala, capacidadeNormal, capacidadeExame, numCaracteristicas, roomSpecs);
                 roomLineArray.add(roomLine);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return roomLineArray;
+        return new Tuple2<>(roomLineArray, columnHeaders);
     }
 
 	/**

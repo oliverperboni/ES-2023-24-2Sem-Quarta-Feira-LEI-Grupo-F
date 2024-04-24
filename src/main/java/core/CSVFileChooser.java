@@ -28,11 +28,11 @@ public class CSVFileChooser {
         panel.setLayout(new FlowLayout());
 
         JLabel scheduleFileLabel = new JLabel("Ficheiro horários (CSV)");
-        scheduleFileField = new JTextField(30);
+        scheduleFileField = new JTextField("csv/HorarioDeExemplo.csv", 30);
         JCheckBox scheduleGitCheckbox = new JCheckBox("Carregar do Git");
 
         JLabel roomsFileLabel = new JLabel("Ficheiro salas (CSV)");
-        roomsFileField = new JTextField(30);
+        roomsFileField = new JTextField("csv/CaracterizaçãoDasSalas.csv", 30);
         JCheckBox roomsGitCheckbox = new JCheckBox("Carregar do Git");
 
         JButton button1 = new JButton("Iniciar");

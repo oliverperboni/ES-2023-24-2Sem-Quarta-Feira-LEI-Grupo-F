@@ -1,5 +1,7 @@
 package structures;
 
+import java.util.List;
+
 /**
  * The Room class represents a physical room in a building.
  */
@@ -11,7 +13,7 @@ public class Room {
     private int capacidadeExame;
     private String numCaracteristicas;
     private boolean horarioSalaVisivelPortalPublico;
-   	private String roomSpec;
+   	private List<String> roomSpecs;
 
     /**
      * Constructs a new Room object with the given parameters.
@@ -21,16 +23,16 @@ public class Room {
      * @param capacidadeNormal   The normal capacity of the room.
      * @param capacidadeExame    The exam capacity of the room.
      * @param numCaracteristicas The number of characteristics of the room.
-     * @param roomSpec           Special specifications of the room.
+     * @param roomSpecs           Special specifications of the room.
      */
     public Room(String edificio, String nomeSala, int capacidadeNormal,
-                int capacidadeExame, String numCaracteristicas, String roomSpec) {
+                int capacidadeExame, String numCaracteristicas, List<String> roomSpecs) {
         this.edificio = edificio;
         this.nomeSala = nomeSala;
         this.capacidadeNormal = capacidadeNormal;
         this.capacidadeExame = capacidadeExame;
         this.numCaracteristicas = numCaracteristicas;
-        this.roomSpec = roomSpec;
+        this.roomSpecs = roomSpecs;
     }
 
     /**
@@ -138,16 +140,16 @@ public class Room {
      *
      * @return The special specifications of the room.
      */
-    public String getRoomSpec() {
-        return roomSpec;
+    public List<String> getRoomSpecs() {
+        return roomSpecs;
     }
 
     /**
      * Sets the special specifications of the room.
      *
-     * @param newRoomSpec The special specifications of the room to set.
+     * @param newRoomSpecs The special specifications of the room to set.
      */
-    public void setRoomSpec(String newRoomSpec) {
-        this.roomSpec = newRoomSpec;
+    public void setRoomSpecs(List<String> newRoomSpecs) {
+        this.roomSpecs = newRoomSpecs;
     }
 }

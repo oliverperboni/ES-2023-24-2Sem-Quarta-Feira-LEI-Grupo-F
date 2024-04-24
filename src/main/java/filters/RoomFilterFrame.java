@@ -14,11 +14,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RoomFilterFrame {
     private JFrame frame;
     private List<Room> roomList;
+    private List<String> roomColumnHeaders;
     private JTable roomsTable;
     private DefaultTableModel tableModel;
 
@@ -27,8 +30,9 @@ public class RoomFilterFrame {
      *
      * @param roomList List of rooms to be filtered.
      */
-    public RoomFilterFrame(List<Room> roomList) {
+    public RoomFilterFrame(List<Room> roomList, List<String> roomColumnHeaders) {
         this.roomList = roomList;
+        this.roomColumnHeaders = roomColumnHeaders;
         initialize();
     }
 
@@ -47,7 +51,7 @@ public class RoomFilterFrame {
         tableModel = new DefaultTableModel(columnNames, 0);
 
         for (Room room : roomList) {
-            Object[] rowData = getRoomRowData(room);
+            Object[] rowData = getRoomRowData(room).toArray();
             tableModel.addRow(rowData);
         }
 
@@ -56,7 +60,7 @@ public class RoomFilterFrame {
         frame.add(scrollPane, BorderLayout.CENTER);
 
         JPanel filterPanel = new JPanel();
-        filterPanel.setLayout(new FlowLayout());
+        filterPanel.setLayout(new GridLayout());
 
         // Campos de filtro para características das salas
         JLabel typeLabel = new JLabel("Nome Sala:");
@@ -135,7 +139,7 @@ public class RoomFilterFrame {
         // Obtenha nomes das colunas baseados nos atributos do objeto Rooms
         return new String[] {
                 "Edifício", "Nome Sala", "Capacidade Normal", "Capacidade Exame",
-                "N¼ caracterásticas", "Anfiteatro aulas", "Apoio tcnico eventos",
+                "N¼ caracterásticas", "Anfiteatro aulas", "Apoio técnico eventos",
                 "Arq 1", "Arq 2", "Arq 3", "Arq 4", "Arq 5", "Arq 6", "Arq 9",
                 "BYOD (Bring Your Own Device)", "Focus Group", "Horário sala visível portal público",
                 "Laboratório de Arquitectura de Computadores I", "Laboratório de Arquitectura de Computadores II",
@@ -143,7 +147,7 @@ public class RoomFilterFrame {
                 "Laboratório de Jornalismo", "Laboratório de Redes de Computadores I",
                 "Laboratório de Redes de Computadores II", "Laboratório de Telecomunicações",
                 "Sala Aulas Mestrado", "Sala Aulas Mestrado Plus", "Sala NEE", "Sala Provas", "Sala Reunião",
-                "Sala de Arquitectura", "Sala de Aulas normal", "Videoconferência", "çtrio"
+                "Sala de Arquitectura", "Sala de Aulas normal", "Videoconferência", "Atrio"
         };
     }
 
@@ -153,22 +157,26 @@ public class RoomFilterFrame {
      * @param room The Room object for which row data is retrieved.
      * @return An array of row data.
      */
-    private Object[] getRoomRowData(Room room) {
-        // Obter dados da linha para o objeto structures.Room
-        return new Object[] {
-                room.getEdificio(), room.getNomeSala(), room.getCapacidadeNormal(), room.getCapacidadeExame(),
-                room.getNumCaracteristicas()
-//                room.isAnfiteatroAulas(), room.isApoioTecnicoEventos(),
-//                room.isArq1(), room.isArq2(), room.isArq3(), room.isArq4(), room.isArq5(),
-//                room.isArq6(), room.isArq9(), room.isByod(), room.isFocusGroup(),
-//                room.isHorarioSalaVisivelPortalPublico(), room.isLaboratorioArquiteturaComputadoresI(),
-//                room.isLaboratorioArquiteturaComputadoresII(), room.isLaboratorioBasesEngenharia(),
-//                room.isLaboratorioEletronica(), room.isLaboratorioInformatica(), room.isLaboratorioJornalismo(),
-//                room.isLaboratorioRedesComputadoresI(), room.isLaboratorioRedesComputadoresII(),
-//                room.isLaboratorioTelecomunicacoes(), room.isSalaAulasMestrado(), room.isSalaAulasMestradoPlus(),
-//                room.isSalaNEE(), room.isSalaProvas(), room.isSalaReuniao(), room.isSalaArquitetura(),
-//                room.isSalaAulasNormal(), room.isVideoconferencia(), room.isAtrio()
-        };
+    private List<Object> getRoomRowData(Room room) {
+        // Obter dados da linha para o objeto Room
+
+        List<Object> objectList = new ArrayList<Object>(Arrays.asList(room.getEdificio(), room.getNomeSala(),
+                room.getCapacidadeNormal(), room.getCapacidadeExame(), room.getNumCaracteristicas()));
+
+        boolean addfalse = false;
+        for (String columnHeader : roomColumnHeaders.subList(5, roomColumnHeaders.size())) {
+            for (String roomSpec : room.getRoomSpecs()) {
+                if (roomSpec.equals(columnHeader)) {
+                    objectList.add(true);
+                    addfalse = false;
+                    break;
+                }
+                addfalse = true;
+            }
+            if (addfalse) objectList.add(false);
+        }
+
+        return objectList;
     }
 
     /**
@@ -196,7 +204,7 @@ public class RoomFilterFrame {
                     // Adicione lógica de filtragem para critérios temporais aqui
                     // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
                     // de tipo
-                    Object[] rowData = getRoomRowData(room);
+                    Object[] rowData = getRoomRowData(room).toArray();
                     tableModel.addRow(rowData);
                 }
 
@@ -207,7 +215,7 @@ public class RoomFilterFrame {
                     // Adicione lógica de filtragem para critérios temporais aqui
                     // Neste exemplo, estamos apenas verificando se o nome da sala contém o filtro
                     // de tipo
-                    Object[] rowData = getRoomRowData(room);
+                    Object[] rowData = getRoomRowData(room).toArray();
                     tableModel.addRow(rowData);
                 }
             }
