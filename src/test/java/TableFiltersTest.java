@@ -1,4 +1,4 @@
-import core.ScheduleDataModel;
+import schedule.ScheduleDataModel;
 import core.Table;
 import filters.TableFilters;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ public class TableFiltersTest {
         JTable tabela = new JTable();
 
         // Chama o método addFilter
-        JFrame resultFrame = tf.addFilter(panel, tabela);
+        JFrame resultFrame = tf.addFilter(panel, tabela, model);
 
         // Verificações
 

@@ -1,4 +1,4 @@
-package core;
+package schedule;
 
 import structures.*;
 
@@ -8,6 +8,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.System.*;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
@@ -16,6 +17,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 * @author António Pombeiro
 */
 public class ScheduleEngine {
+
     private ScheduleDataModel dataModel;
 
     public ScheduleEngine(ScheduleDataModel dataModel) {
@@ -24,7 +26,7 @@ public class ScheduleEngine {
 
     public void suggestCompensation(LineSchedule classSchedule, ArrayList<SchedulePeriod> excludedPeriods,
                                     ArrayList<SchedulePeriod> allowedPeriods, ArrayList<RoomPreference> roomTypePreferences,
-                                    ArrayList<Room> roomTypeExclusions) {
+                                    ArrayList<RoomPreference> roomTypeExclusions) {
 
 //      classSchedule é uma structures.LineSchedule com a aula a remarcar
 //      Dela é calculada a duração da aula a remarcar
@@ -50,9 +52,7 @@ public class ScheduleEngine {
                     }
 
             for (LineSchedule t : possibilityList)
-                System.out.println(t.toString());
-
-
+                out.println(t.toString());
         } else {
 //          Caminho seguido para aulas com duração diferente de 90 minutos
 //          EM CONSTRUÇÃO
@@ -102,7 +102,6 @@ public class ScheduleEngine {
             if (room.getRoomSpecs().equals(roomPreference.toString())) resultRoomList.add(room);
         return resultRoomList;
     }
-		
 
     public static void main(String[] args) {
         LineSchedule reSchedule = new LineSchedule(
@@ -124,7 +123,7 @@ public class ScheduleEngine {
         roomTypePreferences.add(RoomPreference.SALA_REUNIAO);
 
         engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods,
-                roomTypePreferences, new ArrayList<Room>());
+                roomTypePreferences, new ArrayList<RoomPreference>());
     }
 
 }
