@@ -20,6 +20,8 @@ public class ScheduleEngine {
 
     private ScheduleDataModel dataModel;
 
+    private final ArrayList<LineSchedule> possibilityList = new ArrayList<>();
+
     public ScheduleEngine(ScheduleDataModel dataModel) {
         this.dataModel = dataModel;
     }
@@ -34,7 +36,6 @@ public class ScheduleEngine {
                 classSchedule.getScheduleInstant().getScheduleTime().getEndTime());
 
 //      Lista de possibilidades de "slots" para remarcação
-        ArrayList<LineSchedule> possibilityList = new ArrayList<>();
         ArrayList<LineSchedule> alreadyScheduledList = dataModel.getScheduleEntries();
 
 //      Caminho seguido para aulas padrão, de 90 minutos
@@ -48,7 +49,7 @@ public class ScheduleEngine {
                             for (SchedulePeriod sp2 : allowedPeriods)
                                 if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
-                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp));
+                                        this.possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp));
                     }
 
             for (LineSchedule t : possibilityList)
@@ -103,6 +104,10 @@ public class ScheduleEngine {
                 if (roomSpec.equals(roomPreference.toString()) && !resultRoomList.contains(room))
                     resultRoomList.add(room);
         return resultRoomList;
+    }
+
+    public ArrayList<LineSchedule> getPossibilityList() {
+        return possibilityList;
     }
 
     public static void main(String[] args) {

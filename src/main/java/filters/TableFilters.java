@@ -69,10 +69,10 @@ public class TableFilters {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)){
-                    Point point = e.getPoint();
-                    rowSelected = tabela.rowAtPoint(point);
 
-                    if(rowSelected != -1) marcSubsAula.addActionListener(e1 -> functionAulaSubsBtn(rowSelected, dataModel));
+                    rowSelected = tabela.getSelectedRow();
+
+                    if(rowSelected != -1) marcSubsAula.addActionListener(e1 -> functionAulaSubsBtn(rowSelected, dataModel, tabela));
                 }
             }
         });
@@ -213,10 +213,10 @@ public class TableFilters {
         }
     }
 
-    private void functionAulaSubsBtn(int rowSelected, ScheduleDataModel dataModel) {
+    private void functionAulaSubsBtn(int rowSelected, ScheduleDataModel dataModel, JTable table) {
 
         try {
-            new TableSubstitution(rowSelected, dataModel);
+            new TableSubstitution(rowSelected, dataModel, table);
         }catch (Exception ignored){};
     }
 

@@ -26,9 +26,10 @@ public class TableSubstitution {
     private boolean isPreference = true;
     private final int rowSelected;
     protected ScheduleDataModel dataModel;
+    protected JTable table;
 
 
-    public TableSubstitution(int rowSelected, ScheduleDataModel dataModel) {
+    public TableSubstitution(int rowSelected, ScheduleDataModel dataModel, JTable table) {
         roomPreferences = RoomPreference.getAllRoomPreference();
         weekdaysPreferences = (ArrayList<SchedulePeriod>) SchedulePeriod.getAllweekDays();
         periodsHoursPreferences = (ArrayList<SchedulePeriod>) SchedulePeriod.getAllPeriodHours();
@@ -42,11 +43,9 @@ public class TableSubstitution {
 
         this.rowSelected = rowSelected;
         this.dataModel = dataModel;
+        this.table = table;
 
         initialize();
-
-        int i = 0;
-        while(i < 3000) i++;
     }
 
     public void initialize() {
@@ -66,7 +65,7 @@ public class TableSubstitution {
 
         submitButton.addActionListener(e -> {
             try {
-                new ScheduleTableEngine(this, rowSelected);
+                new ScheduleTableEngine(this, rowSelected, table);
             }catch (Exception ignored){};
             frame.dispose();
         });
@@ -85,8 +84,6 @@ public class TableSubstitution {
         frame.add(allocationSettings, BorderLayout.NORTH);
 
         frame.setVisible(true);
-
-
 
     }
 
