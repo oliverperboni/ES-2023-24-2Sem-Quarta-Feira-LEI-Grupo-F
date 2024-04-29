@@ -1,5 +1,7 @@
 package core;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -82,6 +84,7 @@ public class CSVFileChooser {
      * @param args The command-line arguments.
      */
     public static void main(String[] args) {
+        FlatLightLaf.setup();
         new CSVFileChooser();
     }
 
