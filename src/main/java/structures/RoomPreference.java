@@ -4,6 +4,7 @@ package structures;
 * The RoomPreference class hosts a series of constant values referring to ISCTE-IUL room specifications. They are
 * used to represent a user's room specification preferences when rescheduling a class, or scheduling an entire new
 * course.
+*
 * @author António Pombeiro
 */
 public class RoomPreference {
@@ -70,6 +71,7 @@ public class RoomPreference {
 	
 	/**
 	* Constructor for the RoomPreference class.
+	*
 	* @param numCaracteristicas number of specfications of the room type represented by this preference
 	* @param stringValue name of the specfication of the room type represented by this preference
 	*/
@@ -89,6 +91,7 @@ public class RoomPreference {
 
 	/**
 	* Returns a string containing the name of the room's type/specification.
+	*
 	* @return String of the room's specification name
 	* @since 1.0
 	*/
