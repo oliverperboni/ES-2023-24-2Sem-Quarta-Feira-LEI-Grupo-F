@@ -3,14 +3,19 @@ package core;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import structures.*;
+import structures.LineSchedule;
+import structures.Room;
+import structures.ScheduleInstant;
+import structures.Tuple2;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
 * The core.ScheduleDataModel class represents the data model object associated with the scheduling application at any
@@ -23,8 +28,7 @@ public class ScheduleDataModel {
 
     private ArrayList<LineSchedule> scheduleEntries;
     private ArrayList<Room> roomEntries;
-   	private TreeMap<ScheduleInstant, List<LineSchedule>> scheduleMap;
-
+   	private TreeMap<ScheduleInstant, LineSchedule> scheduleMap;
     private String scheduleFilePath;
     private boolean scheduleFileRemote;
     private String roomsFilePath;
@@ -39,7 +43,7 @@ public class ScheduleDataModel {
                 this.scheduleEntries = readGitScheduleCSV(scheduleFilePath);
                 this.scheduleFileRemote = true;
             } else {
-                this.scheduleMap = readScheduleCSV(scheduleFilePath);
+                this.scheduleEntries = readScheduleCSV(scheduleFilePath);
                 this.scheduleFileRemote = false;
             }
             if (roomsRemote) {
@@ -59,26 +63,23 @@ public class ScheduleDataModel {
             e.printStackTrace();
         }
     }
-
-    public TreeMap<ScheduleInstant, List<LineSchedule>> getScheduleMap() {
-        return scheduleMap;
+		
+    public ArrayList<LineSchedule> getScheduleEntries() {
+        return scheduleEntries;
     }
-    public List<LineSchedule> getScheduleEntries() {
-        return scheduleMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
-    }
+		
     public ArrayList<Room> getRoomEntries() {
         return roomEntries;
-    }
-    public List<String> getRoomColumnHeaders() {
-        return roomColumnHeaders;
     }
 
     public String getScheduleFilePath() {
         return scheduleFilePath;
     }
+
     public void setScheduleFilePath(String newScheduleFilePath) {
         this.scheduleFilePath = newScheduleFilePath;
     }
+
     public boolean isScheduleFileRemote() {
         return scheduleFileRemote;
     }
@@ -86,8 +87,13 @@ public class ScheduleDataModel {
     public String getRoomsFilePath() {
         return roomsFilePath;
     }
+
     public boolean isRoomsFileRemote() {
         return roomsFileRemote;
+    }
+
+    public List<String> getRoomColumnHeaders() {
+        return roomColumnHeaders;
     }
 
     /**
@@ -97,30 +103,17 @@ public class ScheduleDataModel {
 	* @return ArrayList of all schedule entries in the file
 	* @since 1.0
 	*/
-    public static TreeMap<ScheduleInstant, List<LineSchedule>> readScheduleCSV(String csvFile) {
+    public static ArrayList<LineSchedule> readScheduleCSV(String csvFile) {
         ArrayList<LineSchedule> lineScheduleArray = new ArrayList<>();
-        TreeMap<ScheduleInstant, List<LineSchedule>> treeMap = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
-
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
             for (CSVRecord csvRecord : csvParser) {
                 LineSchedule schedule = new LineSchedule(csvRecord.get("Curso"), csvRecord.get("Unidade Curricular"), csvRecord.get("Turno"), csvRecord.get("Turma"), Integer.parseInt(csvRecord.get("Inscritos no turno")), csvRecord.get("Dia da semana"), csvRecord.get("Hora início da aula"), csvRecord.get("Hora fim da aula"), csvRecord.get("Data da aula"), csvRecord.get("Características da sala pedida para a aula"), csvRecord.get("Sala atribuída à aula"));
-                ScheduleInstant scheduleInstant = schedule.getScheduleInstant();
-
-                if (!treeMap.containsKey(scheduleInstant)) {
-                    List<LineSchedule> lineScheduleList = new ArrayList<>();
-                    lineScheduleList.add(schedule);
-                    treeMap.put(scheduleInstant, lineScheduleList);
-                } else {
-                    List<LineSchedule> lineScheduleList = treeMap.get(scheduleInstant);
-                    lineScheduleList.add(schedule);
-                }
-
                 lineScheduleArray.add(schedule);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return treeMap;
+        return lineScheduleArray;
     }
 
 	/**

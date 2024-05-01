@@ -94,15 +94,15 @@ public class TableFilters {
         addLabelAndTextField(filterPanel, "UC");
         addLabelAndTextField(filterPanel, "Turno");
         addLabelAndTextField(filterPanel, "Turma");
-        addLabelAndTextField(filterPanel, "N.º de Inscritos no Turno");
+        addLabelAndTextField(filterPanel, "N.º de inscritos no turno");
         addLabelAndTextField(filterPanel, "Dia da Semana");
         addLabelAndTextField(filterPanel, "Hora de Início");
         addLabelAndTextField(filterPanel, "Hora de Fim");
         addLabelAndTextField(filterPanel, "Data da Aula");
         addLabelAndTextField(filterPanel, "Tipo de Sala");
-        addLabelAndTextField(filterPanel, "Sala Atribuída");
-        addLabelAndTextField(filterPanel, "Semana do Semestre");
-        addLabelAndTextField(filterPanel, "Semana do Ano");
+        addLabelAndTextField(filterPanel, "Sala atribuida");
+        addLabelAndTextField(filterPanel, "Semana do semestre");
+        addLabelAndTextField(filterPanel, "Semana do ano");
     }
 
     /**
