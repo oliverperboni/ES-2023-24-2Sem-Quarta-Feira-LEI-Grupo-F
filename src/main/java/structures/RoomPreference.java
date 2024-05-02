@@ -4,7 +4,6 @@ package structures;
 * The RoomPreference class hosts a series of constant values referring to ISCTE-IUL room specifications. They are
 * used to represent a user's room specification preferences when rescheduling a class, or scheduling an entire new
 * course.
-* @author António Pombeiro
 */
 public class RoomPreference {
 	
