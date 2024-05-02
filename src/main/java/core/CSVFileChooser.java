@@ -1,5 +1,8 @@
 package core;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +10,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
- * The core.CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want to load from local files or from Git.
+ * The core.CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want
+ * to load from local files or from Git.
+ *
  */
 public class CSVFileChooser {
 
@@ -82,6 +87,7 @@ public class CSVFileChooser {
      * @param args The command-line arguments.
      */
     public static void main(String[] args) {
+        FlatLightLaf.setup();
         new CSVFileChooser();
     }
 

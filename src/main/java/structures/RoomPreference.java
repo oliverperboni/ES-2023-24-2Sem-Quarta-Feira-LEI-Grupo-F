@@ -1,8 +1,5 @@
 package structures;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
 * The RoomPreference class hosts a series of constant values referring to ISCTE-IUL room specifications. They are
 * used to represent a user's room specification preferences when rescheduling a class, or scheduling an entire new
@@ -102,39 +99,5 @@ public class RoomPreference {
     public void setStringValue(String newStringValue) {
         this.stringValue = newStringValue;
     }
-
-	public static ArrayList<RoomPreference> getAllRoomPreference(){
-		ArrayList<RoomPreference> preferences = new ArrayList<>();
-		preferences.add(ANFITEATRO_AULAS);
-		preferences.add(APOIO_TECNICO_EVENTOS);
-		preferences.add(ARQ1);
-		preferences.add(ARQ2);
-		preferences.add(ARQ3);
-		preferences.add(ARQ4);
-		preferences.add(ARQ5);
-		preferences.add(ARQ6);
-		preferences.add(ARQ9);
-		preferences.add(BYOD);
-		preferences.add(FOCUS_GROUP);
-		preferences.add(LABORATORIO_ARQUITETURA_COMPUTADORES_I);
-		preferences.add(LABORATORIO_ARQUITETURA_COMPUTADORES_II);
-		preferences.add(LABORATORIO_BASES_ENGENHARIA);
-		preferences.add(LABORATORIO_ELETRONICA);
-		preferences.add(LABORATORIO_INFORMATICA);
-		preferences.add(LABORATORIO_JORNALISMO);
-		preferences.add(LABORATORIO_REDES_COMPUTADORES_I);
-		preferences.add(LABORATORIO_REDES_COMPUTADORES_II);
-		preferences.add(LABORATORIO_TELECOMUNICACOES);
-		preferences.add(SALA_AULAS_MESTRADO);
-		preferences.add(SALA_AULAS_MESTRADO_PLUS);
-		preferences.add(SALA_NEE);
-		preferences.add(SALA_PROVAS);
-		preferences.add(SALA_REUNIAO);
-		preferences.add(SALA_ARQUITETURA);
-		preferences.add(SALA_AULAS_NORMAL);
-		preferences.add(VIDEOCONFERENCIA);
-		preferences.add(ATRIO);
-		return preferences;
-	}
 
 }
