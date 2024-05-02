@@ -5,12 +5,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 /**
- * The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
- * end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
- * represent a user's time preferences when rescheduling a class, or when scheduling an entire new course.
- * @author António Pombeiro
- */
-public class SchedulePeriod {
+* The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
+* end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
+* represent a user's time preferences when rescheduling a class, or when scheduling an entire new course.
+*/
+public class SchedulePeriod implements Comparable<SchedulePeriod> {
 
     // Time slots
     public static SchedulePeriod _08H00_09H30 =
@@ -86,10 +85,11 @@ public class SchedulePeriod {
 
 
     /**
-     * Constructor for a SchedulePeriod object representing a time slot.
-     * @param startTime LocalTime object containing the time slot's start time
-     * @param endTime LocalTime object containing the time slot's end time
-     */
+	* Constructor for a SchedulePeriod object representing a time slot.
+    *
+	* @param startTime LocalTime object containing the time slot's start time
+	* @param endTime LocalTime object containing the time slot's end time
+	*/
     public SchedulePeriod(LocalTime startTime, LocalTime endTime) {
         this.isTimeSlot = true;
         this.isTimePeriod = false;
@@ -101,11 +101,12 @@ public class SchedulePeriod {
     }
 
     /**
-     * Constructor for a SchedulePeriod object representing a time period.
-     * @param startTime LocalTime object containing the time period's start time
-     * @param endTime LocalTime object containing the time period's end time
-     * @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
-     */
+	* Constructor for a SchedulePeriod object representing a time period.
+    *
+	* @param startTime LocalTime object containing the time period's start time
+	* @param endTime LocalTime object containing the time period's end time
+	* @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
+	*/
     public SchedulePeriod(LocalTime startTime, LocalTime endTime, List<SchedulePeriod> timeSlots) {
         this.isTimeSlot = false;
         this.isTimePeriod = true;
@@ -117,9 +118,10 @@ public class SchedulePeriod {
     }
 
     /**
-     * Constructor for a SchedulePeriod object representing a week day
-     * @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
-     */
+	* Constructor for a SchedulePeriod object representing a week day
+    *
+	* @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
+	*/
     public SchedulePeriod(DayOfWeek day) {
         this.isTimeSlot = false;
         this.isTimePeriod = false;
@@ -128,15 +130,6 @@ public class SchedulePeriod {
         this.endTime = null;
         this.timeSlotList = null;
         this.preferredDay = day;
-        switch (preferredDay){
-            case MONDAY -> this.diaSemana = "Seg";
-            case TUESDAY -> this.diaSemana = "Ter";
-            case WEDNESDAY -> this.diaSemana = "Qua";
-            case THURSDAY -> this.diaSemana = "Qui";
-            case FRIDAY -> this.diaSemana = "Sex";
-        }
-
-
     }
 
 
@@ -162,17 +155,33 @@ public class SchedulePeriod {
     public DayOfWeek getPreferredDay() {
         return preferredDay;
     }
-    public String getWeekDay() {
-        return diaSemana;
+
+    @Override
+    public int compareTo(SchedulePeriod o) {
+        if (isTimeSlot) {
+            int startComparison = this.startTime.compareTo(o.startTime);
+
+            if (startComparison == 0) return this.endTime.compareTo(o.endTime);
+            else return startComparison;
+        } else if (isTimePeriod) {
+            if (this.startTime.compareTo(o.startTime) < 0 && this.endTime.compareTo(o.endTime) < 0)
+                return -1;
+            else if (this.startTime.compareTo(o.startTime) == 0 && this.endTime.compareTo(o.endTime) == 0)
+                return 0;
+            else return 1;
+        } else {
+            return this.preferredDay.compareTo(o.preferredDay);
+        }
     }
 
-    /**
-     * Returns distinct string representations depending on if the SchedulePeriod object represents a timeslot, a
-     * time period, or a week day. The week day representation matches the format found in ISCTE-IUL schedule files.
-     * @return String representing start and end time for time slots and periods, or first three letters of day name
-     * for week days
-     * @since 1.0
-     */
+	/**
+	* Returns distinct string representations depending on if the SchedulePeriod object represents a timeslot, a
+	* time period, or a week day. The week day representation matches the format found in ISCTE-IUL schedule files.
+    *
+	* @return String representing start and end time for time slots and periods, or first three letters of day name
+	* for week days
+	* @since 1.0
+	*/
     @Override
     public String toString() {
         if (this.isTimeSlot)
