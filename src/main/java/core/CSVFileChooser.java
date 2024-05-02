@@ -1,7 +1,5 @@
 package core;
 
-import schedule.ScheduleDataModel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

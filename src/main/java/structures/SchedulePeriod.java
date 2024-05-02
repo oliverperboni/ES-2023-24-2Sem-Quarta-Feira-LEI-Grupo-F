@@ -2,7 +2,6 @@ package structures;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -152,24 +151,6 @@ public class SchedulePeriod {
     }
     public DayOfWeek getPreferredDay() {
         return preferredDay;
-    }
-
-    public static List<SchedulePeriod> getAllweekDays(){
-        ArrayList<SchedulePeriod> preferences = new ArrayList<>();
-        preferences.add(SEGUNDA_FEIRA);
-        preferences.add(TERCA_FEIRA);
-        preferences.add(QUARTA_FEIRA);
-        preferences.add(QUINTA_FEIRA);
-        preferences.add(SEXTA_FEIRA);
-        return preferences;
-    }
-
-    public static List<SchedulePeriod> getAllPeriodHours(){
-        ArrayList<SchedulePeriod> preferences = new ArrayList<>();
-        preferences.add(MANHA);
-        preferences.add(TARDE);
-        preferences.add(NOITE);
-        return preferences;
     }
 
 	/**

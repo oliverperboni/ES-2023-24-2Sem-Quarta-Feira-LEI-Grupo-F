@@ -38,7 +38,10 @@ public class LineSchedule {
      * @param caracteristicas_sala The characteristics of the room.
      * @param sala               The room where the class or event takes place.
      */
-    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos, String dia_semana, String hora_inicio, String hora_fim, String data_aula, String caracteristicas_sala, String sala) {
+    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos,
+                        String dia_semana, String hora_inicio, String hora_fim, String data_aula,
+                        String caracteristicas_sala, String sala) {
+
         this.curso = curso;
         this.unidade_curricular = unidade_curricular;
         this.turno = turno;
@@ -316,6 +319,5 @@ public class LineSchedule {
         return this.curso + " " + this.unidade_curricular + " " + this.turno + " " + this.turma +
                 " " + this.inscritos + " " + this.dia_semana + " " + this.hora_inicio + " " + this.hora_fim +
                 " " + this.data_aula + " " + this.caracteristicas_sala + " " + this.sala;
-//                + " " + scheduleInstant.toString();
     }
 }

@@ -1,4 +1,4 @@
-package schedule;
+package core;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -18,7 +18,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
-* The schedule.ScheduleDataModel class represents the data model object associated with the scheduling application at any
+* The core.ScheduleDataModel class represents the data model object associated with the scheduling application at any
 * given time. It contains structures that hold information about the currently loaded schedule and list of rooms
 * and their specifications.
 * @author Daniel Ferreira
