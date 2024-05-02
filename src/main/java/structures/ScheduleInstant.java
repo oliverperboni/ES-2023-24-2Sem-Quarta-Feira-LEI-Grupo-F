@@ -23,7 +23,7 @@ public class ScheduleInstant implements Comparable<ScheduleInstant> {
 
 	/**
 	* Constructor for a ScheduleInstant object representing a time slot and date.
-    *
+  *
 	* @param scheduleDate LocalDate object containing this ScheduleInstant's date
 	* @param scheduleTime SchedulePeriod object representing this ScheduleInstant's time slot
 	*/
@@ -71,8 +71,8 @@ public class ScheduleInstant implements Comparable<ScheduleInstant> {
 
 	/**
 	* Returns a three-letter, first letter in uppercase, portuguese (Portugal) locale formatted, string
-	* representation this ScheduleInstant's date day of the week.
-    *
+	* representation of this ScheduleInstant's date day of the week.
+  *
 	* @return String first three letters of week day name in portuguese
 	* @since 1.0
 	*/

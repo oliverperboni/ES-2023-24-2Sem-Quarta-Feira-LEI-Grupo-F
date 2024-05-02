@@ -84,9 +84,9 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
     private String diaSemana="";
 
 
-    /**
+  /**
 	* Constructor for a SchedulePeriod object representing a time slot.
-    *
+  *
 	* @param startTime LocalTime object containing the time slot's start time
 	* @param endTime LocalTime object containing the time slot's end time
 	*/
@@ -100,14 +100,14 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         this.preferredDay = null;
     }
 
-    /**
+  /**
 	* Constructor for a SchedulePeriod object representing a time period.
-    *
+  *
 	* @param startTime LocalTime object containing the time period's start time
 	* @param endTime LocalTime object containing the time period's end time
 	* @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
 	*/
-    public SchedulePeriod(LocalTime startTime, LocalTime endTime, List<SchedulePeriod> timeSlots) {
+  public SchedulePeriod(LocalTime startTime, LocalTime endTime, List<SchedulePeriod> timeSlots) {
         this.isTimeSlot = false;
         this.isTimePeriod = true;
         this.isWeekDay = false;
@@ -115,11 +115,11 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         this.endTime = endTime;
         this.timeSlotList = timeSlots;
         this.preferredDay = null;
-    }
+  }
 
-    /**
+  /**
 	* Constructor for a SchedulePeriod object representing a week day
-    *
+  *
 	* @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
 	*/
     public SchedulePeriod(DayOfWeek day) {
