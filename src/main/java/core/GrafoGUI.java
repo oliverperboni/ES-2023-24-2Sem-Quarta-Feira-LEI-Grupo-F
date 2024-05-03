@@ -45,10 +45,6 @@ public class GrafoGUI extends JFrame {
                     }
                 }
 
-                // Se houver conflito, pinte em vermelho
-                // if (temConflito(lineSchedule, centerLineSchedule)) {
-                //     desenharLineSchedule(g, centerX, centerY, lineSchedule, Color.RED);
-                // }
             }
         }
 
