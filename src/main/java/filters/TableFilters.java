@@ -1,5 +1,7 @@
 package filters;
 import core.Table;
+import schedule.ScheduleDataModel;
+import schedule.TableSubstitution;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +10,8 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +24,9 @@ public class TableFilters {
     /** List to store column indexes of hidden columns */
     List<Integer> a = new ArrayList<>();
 
-    public JFrame panel;
-    private Table table;
+    private int rowSelected = -1;
+
+    private final Table table;
 
     public TableFilters(Table table) {
         this.table = table;
@@ -30,22 +35,24 @@ public class TableFilters {
     /**
      * Adds filter components to the JFrame panel.
      *
-     * @param panel  The JFrame panel.
-     * @param tabela The JTable to which filters will be added.
+     * @param panel     The JFrame panel.
+     * @param tabela    The JTable to which filters will be added.
+     * @param dataModel
      * @return The updated JFrame panel with added filters.
      */
-    public JFrame addFilter(JFrame panel, JTable tabela) {
+    public JFrame addFilter(JFrame panel, JTable tabela, ScheduleDataModel dataModel) {
         panel = new JFrame();
 
         panel.setSize(900, 800);
         panel.setLayout(new BorderLayout());
         panel.setUndecorated(false);
         panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, panel.getBackground()));
-        panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panel.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //Paneis
         JPanel filterPanel = new JPanel();
         JPanel buttonPanel = new JPanel();
+
 
         //TextField
         textFieldsCreation(filterPanel);
@@ -55,10 +62,18 @@ public class TableFilters {
         JButton esconderbtn = new JButton("Esconder coluna");
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
         JButton saveButton = new JButton("Guardar");
-        saveButton.addActionListener(new ActionListener() {
+        JButton marcSubsAula = new JButton("Marcar Aula de Substituição");
+        saveButton.addActionListener(e -> table.saveChanges());
+
+        tabela.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                table.saveChanges();
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)){
+                    Point point = e.getPoint();
+                    rowSelected = tabela.rowAtPoint(point);
+
+                    if(rowSelected != -1) marcSubsAula.addActionListener(e1 -> functionAulaSubsBtn(rowSelected, dataModel));
+                }
             }
         });
 
@@ -70,12 +85,12 @@ public class TableFilters {
         buttonPanel.add(esconderbtn);
         buttonPanel.add(revelarbtn);
         buttonPanel.add(saveButton);
+        buttonPanel.add(marcSubsAula);
 
         //Ações dos Botões
         filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
         esconderbtn.addActionListener(e -> function_esconderBtn(tabela));
         revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
-
 
         panel.add(filterPanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -196,6 +211,13 @@ public class TableFilters {
             RowFilter<Object, Object> compoundRowFilter = RowFilter.andFilter(filters);
             sorter.setRowFilter(compoundRowFilter);
         }
+    }
+
+    private void functionAulaSubsBtn(int rowSelected, ScheduleDataModel dataModel) {
+
+        try {
+            new TableSubstitution(rowSelected, dataModel);
+        }catch (Exception ignored){};
     }
 
 

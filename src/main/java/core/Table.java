@@ -4,6 +4,8 @@ import filters.RoomFilterFrame;
 import filters.TableFilters;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import schedule.ScheduleDataModel;
+import schedule.ScheduleEngine;
 import structures.LineSchedule;
 
 import javax.swing.*;
@@ -35,7 +37,7 @@ public class Table {
     /**
      * Constructs a new core.Table object with the provided data model.
      *
-     * @param dataModel The core.ScheduleDataModel containing schedule data.
+     * @param dataModel The schedule.ScheduleDataModel containing schedule data.
      * @throws IOException If an I/O error occurs.
      */
     public Table(ScheduleDataModel dataModel) throws IOException {
@@ -61,7 +63,8 @@ public class Table {
         appTable.setAutoCreateRowSorter(true); // Creates a TableRowSorter for the table
         addColumnSorting(appTable); // Method enables "sort by column" functionality for every column on the table
 
-        app = tabFilter.addFilter(app, appTable);
+
+        app = tabFilter.addFilter(app, appTable, dataModel);
         app.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         // cria a opção de scroll se necessario
@@ -92,7 +95,7 @@ public class Table {
     /**
      * Retrieves the data model.
      *
-     * @return The core.ScheduleDataModel.
+     * @return The schedule.ScheduleDataModel.
      */
     public ScheduleDataModel getDataModel() {
         return dataModel;
