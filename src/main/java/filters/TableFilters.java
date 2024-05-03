@@ -1,15 +1,14 @@
 package filters;
+
+import core.ScheduleDataModel;
 import core.Table;
-import schedule.ScheduleDataModel;
-import schedule.TableSubstitution;
+import core.TableSubstitution;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;

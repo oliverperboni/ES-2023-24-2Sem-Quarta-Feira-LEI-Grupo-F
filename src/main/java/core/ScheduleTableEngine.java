@@ -1,4 +1,4 @@
-package schedule;
+package core;
 
 import structures.LineSchedule;
 import structures.RoomPreference;
@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static java.lang.System.*;
+import static java.lang.System.out;
 
 public class ScheduleTableEngine {
 

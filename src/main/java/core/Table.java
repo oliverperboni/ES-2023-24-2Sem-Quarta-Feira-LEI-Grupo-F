@@ -4,8 +4,6 @@ import filters.RoomFilterFrame;
 import filters.TableFilters;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import schedule.ScheduleDataModel;
-import schedule.ScheduleEngine;
 import structures.LineSchedule;
 
 import javax.swing.*;
@@ -37,7 +35,7 @@ public class Table {
     /**
      * Constructs a new core.Table object with the provided data model.
      *
-     * @param dataModel The schedule.ScheduleDataModel containing schedule data.
+     * @param dataModel The core.ScheduleDataModel containing schedule data.
      * @throws IOException If an I/O error occurs.
      */
     public Table(ScheduleDataModel dataModel) throws IOException {
@@ -95,7 +93,7 @@ public class Table {
     /**
      * Retrieves the data model.
      *
-     * @return The schedule.ScheduleDataModel.
+     * @return The core.ScheduleDataModel.
      */
     public ScheduleDataModel getDataModel() {
         return dataModel;

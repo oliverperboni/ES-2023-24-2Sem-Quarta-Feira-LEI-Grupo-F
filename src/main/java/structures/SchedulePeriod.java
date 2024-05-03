@@ -2,13 +2,15 @@ package structures;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
-* The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
-* end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
-* represent a user's time preferences when rescheduling a class, or when scheduling an entire new course.
-*/
+ * The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
+ * end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
+ * represent a user's time preferences when rescheduling a class, or when scheduling an entire new course.
+ */
 public class SchedulePeriod implements Comparable<SchedulePeriod> {
 
     // Time slots
@@ -81,15 +83,15 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
      * DayOfWeek object referring to the day of the week represented by the SchedulePeriod object.
      */
     final private DayOfWeek preferredDay;
-    private String diaSemana="";
+    private String diaSemana = "";
 
 
-  /**
-	* Constructor for a SchedulePeriod object representing a time slot.
-  *
-	* @param startTime LocalTime object containing the time slot's start time
-	* @param endTime LocalTime object containing the time slot's end time
-	*/
+    /**
+     * Constructor for a SchedulePeriod object representing a time slot.
+     *
+     * @param startTime LocalTime object containing the time slot's start time
+     * @param endTime   LocalTime object containing the time slot's end time
+     */
     public SchedulePeriod(LocalTime startTime, LocalTime endTime) {
         this.isTimeSlot = true;
         this.isTimePeriod = false;
@@ -100,14 +102,14 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         this.preferredDay = null;
     }
 
-  /**
-	* Constructor for a SchedulePeriod object representing a time period.
-  *
-	* @param startTime LocalTime object containing the time period's start time
-	* @param endTime LocalTime object containing the time period's end time
-	* @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
-	*/
-  public SchedulePeriod(LocalTime startTime, LocalTime endTime, List<SchedulePeriod> timeSlots) {
+    /**
+     * Constructor for a SchedulePeriod object representing a time period.
+     *
+     * @param startTime LocalTime object containing the time period's start time
+     * @param endTime   LocalTime object containing the time period's end time
+     * @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
+     */
+    public SchedulePeriod(LocalTime startTime, LocalTime endTime, List<SchedulePeriod> timeSlots) {
         this.isTimeSlot = false;
         this.isTimePeriod = true;
         this.isWeekDay = false;
@@ -115,13 +117,13 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         this.endTime = endTime;
         this.timeSlotList = timeSlots;
         this.preferredDay = null;
-  }
+    }
 
-  /**
-	* Constructor for a SchedulePeriod object representing a week day
-  *
-	* @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
-	*/
+    /**
+     * Constructor for a SchedulePeriod object representing a week day
+     *
+     * @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
+     */
     public SchedulePeriod(DayOfWeek day) {
         this.isTimeSlot = false;
         this.isTimePeriod = false;
@@ -136,9 +138,11 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
     public boolean getIsTimeSlot() {
         return isTimeSlot;
     }
+
     public boolean getIsTimePeriod() {
         return isTimePeriod;
     }
+
     public boolean getIsWeekDay() {
         return isWeekDay;
     }
@@ -146,14 +150,30 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
     public LocalTime getStartTime() {
         return startTime;
     }
+
     public LocalTime getEndTime() {
         return endTime;
     }
+
     public List<SchedulePeriod> getTimeSlotList() {
         return timeSlotList;
     }
+
     public DayOfWeek getPreferredDay() {
         return preferredDay;
+    }
+
+    public static List<SchedulePeriod> getAllTimeSlots() {
+        return new ArrayList<>(Arrays.asList(_08H00_09H30, _09H30_11H00, _11H00_12H30, _13H00_14H30, _14H30_16H00,
+                _16H00_17H30, _18H00_19H30, _19H30_21H00, _21H00_22H30));
+    }
+
+    public static List<SchedulePeriod> getAllTimePeriods() {
+        return new ArrayList<>(Arrays.asList(MANHA, TARDE, NOITE));
+    }
+
+    public static List<SchedulePeriod> getAllWeekDays() {
+        return new ArrayList<>(Arrays.asList(SEGUNDA_FEIRA, TERCA_FEIRA, QUARTA_FEIRA, QUINTA_FEIRA, SEXTA_FEIRA));
     }
 
     @Override
@@ -174,14 +194,14 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         }
     }
 
-	/**
-	* Returns distinct string representations depending on if the SchedulePeriod object represents a timeslot, a
-	* time period, or a week day. The week day representation matches the format found in ISCTE-IUL schedule files.
-    *
-	* @return String representing start and end time for time slots and periods, or first three letters of day name
-	* for week days
-	* @since 1.0
-	*/
+    /**
+     * Returns distinct string representations depending on if the SchedulePeriod object represents a timeslot, a
+     * time period, or a week day. The week day representation matches the format found in ISCTE-IUL schedule files.
+     *
+     * @return String representing start and end time for time slots and periods, or first three letters of day name
+     * for week days
+     * @since 1.0
+     */
     @Override
     public String toString() {
         if (this.isTimeSlot)
@@ -192,5 +212,4 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
             return this.preferredDay.toString().substring(0, 2);
         return "Nenhum dos 3";
     }
-
 }

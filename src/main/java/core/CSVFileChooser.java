@@ -1,6 +1,5 @@
 package core;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
@@ -77,7 +76,8 @@ public class CSVFileChooser {
         try {
             ScheduleDataModel dataModel = new ScheduleDataModel(scheduleFile, scheduleRemote, roomsFile, roomsRemote);
             new Table(dataModel);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         fileChooserFrame.dispose(); // Fecha a janela logo depois de abrir a tabela
     }
 
@@ -96,7 +96,9 @@ public class CSVFileChooser {
      *
      * @return The file path of the schedule file.
      */
-    public String getScheduleFilePath() {return scheduleFilePath; }
+    public String getScheduleFilePath() {
+        return scheduleFilePath;
+    }
 
     /**
      * Returns the file path of the rooms file.
@@ -106,5 +108,4 @@ public class CSVFileChooser {
     public String getRoomsFilePath() {
         return roomsFilePath;
     }
-
 }

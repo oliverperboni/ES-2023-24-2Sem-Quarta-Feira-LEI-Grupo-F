@@ -1,15 +1,3 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import core.ScheduleDataModel;
-import org.junit.Test;
-import structures.LineSchedule;
-import structures.ScheduleInstant;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.TreeMap;
-
 public class ReadCSVTest {
 
 //    @Test

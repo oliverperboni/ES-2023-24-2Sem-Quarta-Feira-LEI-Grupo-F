@@ -5,8 +5,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import structures.LineSchedule;
 import structures.Room;
+import structures.RoomsTuple;
 import structures.ScheduleInstant;
-import structures.RoomTuple;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,14 +16,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
-* The ScheduleDataModel class represents the data model object associated with the scheduling application at any
-* given time. It contains structures that hold information about the currently loaded schedule and list of rooms
-* and their specifications.
-*/
+ * The ScheduleDataModel class represents the data model object associated with the scheduling application at any
+ * given time. It contains structures that hold information about the currently loaded schedule and list of rooms
+ * and their specifications.
+ */
 public class ScheduleDataModel {
 
     private ArrayList<Room> roomEntries;
-   	private TreeMap<ScheduleInstant, List<LineSchedule>> scheduleMap;
+    private TreeMap<ScheduleInstant, List<LineSchedule>> scheduleMap;
     private List<String> roomColumnHeaders;
 
     private String scheduleFilePath;
@@ -41,12 +41,12 @@ public class ScheduleDataModel {
             this.scheduleFileRemote = false;
         }
         if (roomsRemote) {
-            RoomTuple<ArrayList<Room>, List<String>> tuple = readRoomsCSV(roomsFilePath);
+            RoomsTuple<ArrayList<Room>, List<String>> tuple = readRoomsCSV(roomsFilePath);
             this.roomEntries = tuple.getRoomLineArray();
             this.roomColumnHeaders = tuple.getRoomColumnHeaders();
             this.roomsFileRemote = true;
         } else {
-            RoomTuple<ArrayList<Room>, List<String>> tuple = readRoomsCSV(roomsFilePath);
+            RoomsTuple<ArrayList<Room>, List<String>> tuple = readRoomsCSV(roomsFilePath);
             this.roomEntries = tuple.getRoomLineArray();
             this.roomColumnHeaders = tuple.getRoomColumnHeaders();
             this.roomsFileRemote = false;
@@ -58,12 +58,15 @@ public class ScheduleDataModel {
     public TreeMap<ScheduleInstant, List<LineSchedule>> getScheduleMap() {
         return scheduleMap;
     }
+
     public List<LineSchedule> getScheduleEntries() {
         return scheduleMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
     }
+
     public ArrayList<Room> getRoomEntries() {
         return roomEntries;
     }
+
     public List<String> getRoomColumnHeaders() {
         return roomColumnHeaders;
     }
@@ -89,12 +92,13 @@ public class ScheduleDataModel {
     }
 
     /**
-	* Reads a schedule CSV file, and returns an ArrayList of LineSchedule objects representing every schedule entry
-	* present in it. 
-	* @param csvFile file path to schedule CSV file
-	* @return ArrayList of all schedule entries in the file
-	* @since 1.0
-	*/
+     * Reads a schedule CSV file, and returns an ArrayList of LineSchedule objects representing every schedule entry
+     * present in it.
+     *
+     * @param csvFile file path to schedule CSV file
+     * @return ArrayList of all schedule entries in the file
+     * @since 1.0
+     */
     public static TreeMap<ScheduleInstant, List<LineSchedule>> readScheduleCSV(String csvFile) {
         ArrayList<LineSchedule> lineScheduleArray = new ArrayList<>();
         TreeMap<ScheduleInstant, List<LineSchedule>> treeMap = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
@@ -121,13 +125,14 @@ public class ScheduleDataModel {
         return treeMap;
     }
 
-	/**
-	* Reads a rooms CSV file, and returns an ArrayList of Room objects representing every room entry present in it.
-	* @param csvFile file path to rooms CSV file
-	* @return ArrayList of all room entries in the file
-	* @since 1.0
-	*/
-    public static RoomTuple<ArrayList<Room>, List<String>> readRoomsCSV(String csvFile) {
+    /**
+     * Reads a rooms CSV file, and returns an ArrayList of Room objects representing every room entry present in it.
+     *
+     * @param csvFile file path to rooms CSV file
+     * @return ArrayList of all room entries in the file
+     * @since 1.0
+     */
+    public static RoomsTuple<ArrayList<Room>, List<String>> readRoomsCSV(String csvFile) {
         ArrayList<Room> roomLineArray = new ArrayList<>();
         List<String> columnHeaders = new ArrayList<>();
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
@@ -152,16 +157,17 @@ public class ScheduleDataModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new RoomTuple<>(roomLineArray, columnHeaders);
+        return new RoomsTuple<>(roomLineArray, columnHeaders);
     }
 
-	/**
-	* Reads a schedule CSV file hosted on a GitHub repository, and returns an ArrayList of LineSchedule objects
-	* representing every schedule entry present in it. 
-	* @param fileURL schedule CSV file URL
-	* @return ArrayList of all schedule entries in the file
-	* @since 1.0
-	*/
+    /**
+     * Reads a schedule CSV file hosted on a GitHub repository, and returns an ArrayList of LineSchedule objects
+     * representing every schedule entry present in it.
+     *
+     * @param fileURL schedule CSV file URL
+     * @return ArrayList of all schedule entries in the file
+     * @since 1.0
+     */
     // Para ler ficheiros CSV do GitHub
     public static ArrayList<LineSchedule> readGitScheduleCSV(String fileURL) throws IOException {
         URL fileUrl = new URL(fileURL);
@@ -188,5 +194,4 @@ public class ScheduleDataModel {
         }
         return lineSchedules;
     }
-		
 }

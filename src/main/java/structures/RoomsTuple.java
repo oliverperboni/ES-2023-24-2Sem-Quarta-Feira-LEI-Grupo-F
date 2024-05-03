@@ -1,11 +1,11 @@
 package structures;
 
-public class Tuple2<ArrayList, List> {
+public class RoomsTuple<ArrayList, List> {
 
     ArrayList roomLineArray;
     List roomColumnHeaders;
 
-    public Tuple2(ArrayList roomLineArray, List roomColumnHeaders) {
+    public RoomsTuple(ArrayList roomLineArray, List roomColumnHeaders) {
         this.roomLineArray = roomLineArray;
         this.roomColumnHeaders = roomColumnHeaders;
     }
