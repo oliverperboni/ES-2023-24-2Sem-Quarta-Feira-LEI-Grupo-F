@@ -1,4 +1,4 @@
-import core.ScheduleDataModel;
+import schedule.ScheduleDataModel;
 import org.junit.jupiter.api.Test;
 import structures.LineSchedule;
 

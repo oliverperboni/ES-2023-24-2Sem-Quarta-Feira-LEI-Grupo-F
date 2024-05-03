@@ -1,4 +1,4 @@
-package core;
+package schedule;
 
 import structures.*;
 
@@ -8,6 +8,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.System.*;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
@@ -16,6 +17,7 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 * @author António Pombeiro
 */
 public class ScheduleEngine {
+
     private ScheduleDataModel dataModel;
 
     public ScheduleEngine(ScheduleDataModel dataModel) {
@@ -24,7 +26,7 @@ public class ScheduleEngine {
 
     public void suggestCompensation(LineSchedule classSchedule, ArrayList<SchedulePeriod> excludedPeriods,
                                     ArrayList<SchedulePeriod> allowedPeriods, ArrayList<RoomPreference> roomTypePreferences,
-                                    ArrayList<Room> roomTypeExclusions) {
+                                    ArrayList<RoomPreference> roomTypeExclusions) {
 
 //      classSchedule é uma structures.LineSchedule com a aula a remarcar
 //      Dela é calculada a duração da aula a remarcar
@@ -46,13 +48,11 @@ public class ScheduleEngine {
                             for (SchedulePeriod sp2 : allowedPeriods)
                                 if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
-                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot));
+                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp));
                     }
 
             for (LineSchedule t : possibilityList)
-                System.out.println(t.toString());
-
-
+                out.println(t.toString());
         } else {
 //          Caminho seguido para aulas com duração diferente de 90 minutos
 //          EM CONSTRUÇÃO
@@ -71,7 +71,7 @@ public class ScheduleEngine {
 	* @since 1.0
 	*/
     public LineSchedule createSchedulePossibility
-            (LineSchedule classSchedule, SchedulePeriod dayPeriod, Room resultRoom, SchedulePeriod timeSlot ) {
+            (LineSchedule classSchedule, SchedulePeriod dayPeriod, Room resultRoom, SchedulePeriod timeSlot, RoomPreference rp ) {
         LineSchedule auxSchedule = new LineSchedule(classSchedule);
         LocalDate classDate = classSchedule.getScheduleInstant().getScheduleDate();
         LocalDate auxDate = classDate.with(TemporalAdjusters.nextOrSame(dayPeriod.getPreferredDay()));
@@ -84,7 +84,7 @@ public class ScheduleEngine {
         auxSchedule.setHora_fim(auxInstant.getScheduleTime().getEndTime().toString());
         auxSchedule.setData_aula(auxInstant.getScheduleDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         auxSchedule.setSala(resultRoom.getNomeSala());
-//        auxSchedule.setCaracteristicasSala(resultRoom.getRoomSpecs());
+        auxSchedule.setCaracteristicasSala(rp.toString());
 
         return auxSchedule;
     }
@@ -99,10 +99,11 @@ public class ScheduleEngine {
     public List<Room> roomTypeSearch (RoomPreference roomPreference) {
         List<Room> resultRoomList = new ArrayList<>();
         for (Room room : dataModel.getRoomEntries())
-            if (room.getRoomSpecs().equals(roomPreference.toString())) resultRoomList.add(room);
+            for (String roomSpec : room.getRoomSpecs())
+                if (roomSpec.equals(roomPreference.toString()) && !resultRoomList.contains(room))
+                    resultRoomList.add(room);
         return resultRoomList;
     }
-		
 
     public static void main(String[] args) {
         LineSchedule reSchedule = new LineSchedule(
@@ -121,10 +122,10 @@ public class ScheduleEngine {
         allowedPeriods.add(SchedulePeriod.TERCA_FEIRA);
 
         ArrayList<RoomPreference> roomTypePreferences = new ArrayList<RoomPreference>();
-        roomTypePreferences.add(RoomPreference.SALA_REUNIAO);
+        roomTypePreferences.add(RoomPreference.ANFITEATRO_AULAS);
 
         engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods,
-                roomTypePreferences, new ArrayList<Room>());
+                roomTypePreferences, new ArrayList<RoomPreference>());
     }
 
 }
