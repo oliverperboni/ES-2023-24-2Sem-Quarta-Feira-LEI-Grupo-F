@@ -9,9 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
- * The core.CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want
- * to load from local files or from Git.
- *
+ * The core.CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want to load from local files or from Git.
  */
 public class CSVFileChooser {
 
@@ -76,8 +74,7 @@ public class CSVFileChooser {
         try {
             ScheduleDataModel dataModel = new ScheduleDataModel(scheduleFile, scheduleRemote, roomsFile, roomsRemote);
             new Table(dataModel);
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
         fileChooserFrame.dispose(); // Fecha a janela logo depois de abrir a tabela
     }
 
@@ -96,9 +93,7 @@ public class CSVFileChooser {
      *
      * @return The file path of the schedule file.
      */
-    public String getScheduleFilePath() {
-        return scheduleFilePath;
-    }
+    public String getScheduleFilePath() {return scheduleFilePath; }
 
     /**
      * Returns the file path of the rooms file.
@@ -108,4 +103,5 @@ public class CSVFileChooser {
     public String getRoomsFilePath() {
         return roomsFilePath;
     }
+
 }
