@@ -92,11 +92,10 @@ public class ScheduleDataModel {
     }
 
     /**
-     * Reads a schedule CSV file, and returns an ArrayList of LineSchedule objects representing every schedule entry
-     * present in it.
+     * Reads a schedule CSV file, and returns a TreeMap...
      *
      * @param csvFile file path to schedule CSV file
-     * @return ArrayList of all schedule entries in the file
+     * @return TreeMap<ScheduleInstant, List<LineSchedule>> of...
      * @since 1.0
      */
     public static TreeMap<ScheduleInstant, List<LineSchedule>> readScheduleCSV(String csvFile) {

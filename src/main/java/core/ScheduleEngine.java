@@ -34,6 +34,7 @@ public class ScheduleEngine {
      * @param roomTypePreferences
      * @param roomTypeExclusions
      * @return ArrayList<LineSchedule> list of schedule suggestions, based on user defined rules
+     * @since 1.0
      */
     public ArrayList<LineSchedule>
     suggestCompensation(LineSchedule classSchedule, ArrayList<SchedulePeriod> excludedPeriods,
@@ -41,33 +42,24 @@ public class ScheduleEngine {
                         ArrayList<RoomPreference> roomTypeExclusions) {
 
 //      classSchedule é uma structures.LineSchedule com a aula a remarcar
-
-//      Dela é calculada a duração da aula a remarcar
-//        int classDuration = (int) MINUTES.between(classSchedule.getScheduleInstant().getScheduleTime().getStartTime(),
-//                classSchedule.getScheduleInstant().getScheduleTime().getEndTime());
-
 //      Lista de possibilidades de "slots" para remarcação
         ArrayList<LineSchedule> possibilityList = new ArrayList<>();
         TreeMap<ScheduleInstant, List<LineSchedule>> scheduleMap = dataModel.getScheduleMap();
 
 //      Por cada preferência indicada
         if (!allowedPeriods.isEmpty()) {
-            for (SchedulePeriod sp1 : allowedPeriods) {
+            for (SchedulePeriod sp1 : allowedPeriods)
                 if (sp1.getIsWeekDay()) // Por cada preferência do tipo "dia da semana"
                     for (RoomPreference rp : roomTypePreferences) { // Por cada preferência de tipo de sala
-                        List<Room> resultRoomList = roomsByPreference(rp);
-                        for (Room resultRoom : resultRoomList)
+                        List<Room> resultRoomList = roomsByPreference(rp); // Salas com o tipo procurado
+                        for (Room resultRoom : resultRoomList) // Por cada sala do tipo procurado encontrada
                             for (SchedulePeriod sp2 : allowedPeriods)
                                 if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
-                                    for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) { // Por cada horário desse "período do dia"
-                                        if (createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions) != null) {
+                                    for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
                                             possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
-                                        }
-                                    }
 
 
                     }
-            }
         }
 
         List<LineSchedule> removeList = new ArrayList<>();
@@ -89,13 +81,18 @@ public class ScheduleEngine {
     }
 
     /**
+     * Given a schedule entry that's to be rescheduled, a list of allowed time periods for its compensation, as well as
+     * a list of allowed room types, this function returns a list of possible schedules, with different start time,
+     * end time, and room, as suggestions for the user to choose, and reschedule.
+     *
      * @param courseName
      * @param classCount
      * @param excludedPeriods
      * @param allowedPeriods
      * @param roomTypePreferences
      * @param roomTypeExclusions
-     * @return
+     * @return ArrayList<LineSchedule> list of schedule suggestions, based on user defined rules
+     * @since 1.0
      */
     public ArrayList<LineSchedule>
     suggestNewCourse(String courseName, int classCount, ArrayList<SchedulePeriod> excludedPeriods,
@@ -174,9 +171,6 @@ public class ScheduleEngine {
         ScheduleInstant auxInstant = new ScheduleInstant(auxDate, timeSlot);
         auxSchedule.setScheduleInstant(auxInstant);
 
-//        for (SchedulePeriod a : ExcludedTime)
-//            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString()))
-//                return null;
         /*for(String b : ExcludedRooms){
             System.out.println(b);
             System.out.println(resultRoom.getNomeSala());

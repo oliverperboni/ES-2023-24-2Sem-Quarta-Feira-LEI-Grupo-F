@@ -167,7 +167,7 @@ public class RoomOccupancyMap extends JFrame {
 
     public static void main(String[] args) {
         // Specify the path to your CSV file
-        String csvFile = "csv/HorarioDeExemplo.csv";
+        String csvFile = "C:\\Users\\danie\\IdeaProjects\\ES-2023-24-2Sem-Quarta-Feira-LEI-Grupo-F\\csv\\HorarioDeExemplo.csv";
 
         // Display the chart
         RoomOccupancyMap.displayChart(csvFile);
