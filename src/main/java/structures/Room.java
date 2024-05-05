@@ -12,7 +12,6 @@ public class Room {
     private int capacidadeNormal;
     private int capacidadeExame;
     private String numCaracteristicas;
-    private boolean horarioSalaVisivelPortalPublico;
    	private List<String> roomSpecs;
 
     /**

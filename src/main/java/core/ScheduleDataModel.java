@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The ScheduleDataModel class represents the data model object associated with the scheduling application at any
@@ -34,7 +33,6 @@ public class ScheduleDataModel {
     public ScheduleDataModel(String scheduleFilePath, boolean scheduleRemote,
                              String roomsFilePath, boolean roomsRemote) {
         if (scheduleRemote) {
-//                this.scheduleEntries = readGitScheduleCSV(scheduleFilePath);
             this.scheduleFileRemote = true;
         } else {
             this.scheduleMap = readScheduleCSV(scheduleFilePath);
@@ -60,10 +58,10 @@ public class ScheduleDataModel {
     }
 
     public List<LineSchedule> getScheduleEntries() {
-        return scheduleMap.values().stream().flatMap(List::stream).collect(Collectors.toList());
+        return scheduleMap.values().stream().flatMap(List::stream).toList();
     }
 
-    public ArrayList<Room> getRoomEntries() {
+    public List<Room> getRoomEntries() {
         return roomEntries;
     }
 
@@ -168,7 +166,7 @@ public class ScheduleDataModel {
      * @since 1.0
      */
     // Para ler ficheiros CSV do GitHub
-    public static ArrayList<LineSchedule> readGitScheduleCSV(String fileURL) throws IOException {
+    public static List<LineSchedule> readGitScheduleCSV(String fileURL) throws IOException {
         URL fileUrl = new URL(fileURL);
         InputStream inputStream = fileUrl.openStream();
 

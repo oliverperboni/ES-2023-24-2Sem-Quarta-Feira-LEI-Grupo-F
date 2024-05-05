@@ -83,8 +83,6 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
      * DayOfWeek object referring to the day of the week represented by the SchedulePeriod object.
      */
     final private DayOfWeek preferredDay;
-    private String diaSemana = "";
-
 
     /**
      * Constructor for a SchedulePeriod object representing a time slot.

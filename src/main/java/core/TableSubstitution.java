@@ -68,7 +68,9 @@ public class TableSubstitution {
         submitButton.addActionListener(e -> {
             try {
                 new ScheduleTableEngine(this, rowSelected);
-            }catch (Exception ignored){};
+            }catch (Exception ignored){
+                // Skip
+            }
             frame.dispose();
         });
 
