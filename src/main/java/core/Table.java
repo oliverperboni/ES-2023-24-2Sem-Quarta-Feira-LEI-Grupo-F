@@ -18,19 +18,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.Frame.MAXIMIZED_BOTH;
+
 /**
  * The core.Table class represents a table view of schedule data with filtering and sorting functionality.
  */
 public class Table {
 
-    private static JFrame app;
+    private  JFrame app;
     private JTable appTable;
-    private static DefaultTableModel model;
+    private  DefaultTableModel model;
 
     public ScheduleDataModel dataModel;
-    public ScheduleEngine engine;
-
-    public RoomFilterFrame roomFilterFrame;
 
     /**
      * Constructs a new core.Table object with the provided data model.
@@ -61,8 +60,9 @@ public class Table {
         appTable.setAutoCreateRowSorter(true); // Creates a TableRowSorter for the table
         addColumnSorting(appTable); // Method enables "sort by column" functionality for every column on the table
 
-        app = tabFilter.addFilter(app, appTable);
-        app.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
+        app = tabFilter.addFilter(app, appTable, dataModel);
+        app.setExtendedState(MAXIMIZED_BOTH);
 
         // cria a opção de scroll se necessario
         JScrollPane scrollPane = new JScrollPane(appTable);
@@ -71,12 +71,9 @@ public class Table {
         app.setVisible(true);
 
         // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
-                filterFrame.show();
-            }
+        SwingUtilities.invokeLater(() -> {
+            RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
+            filterFrame.show();
         });
     }
 
@@ -125,20 +122,24 @@ public class Table {
      * @param table The JTable.
      */
     void addColumnSorting(JTable table) {
-        // Gets the table's sorter and casts it to a DefaultRowSorter
-        DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
-        // Enables immediate sorting after an insert operation
-        sorter.setSortsOnUpdates(true);
+        // Gets the table's sorter
+        RowSorter<DefaultTableModel> sorter = (RowSorter<DefaultTableModel>) table.getRowSorter();
+        if (sorter instanceof DefaultRowSorter) {
+            DefaultRowSorter<DefaultTableModel, Integer> defaultSorter = (DefaultRowSorter<DefaultTableModel, Integer>) sorter;
+            // Enables immediate sorting after an insert operation
+            defaultSorter.setSortsOnUpdates(true);
 
-        // ArrayList to store SortKeys for the every column in the table
-        ArrayList<RowSorter.SortKey> sortKeyList = new ArrayList<>();
-        for (int i = 0; i < table.getColumnCount(); i++)
-            // Creates a SortKey for every column, ascending order
-            sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
+            // ArrayList to store SortKeys for every column in the table
+            ArrayList<RowSorter.SortKey> sortKeyList = new ArrayList<>();
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                // Creates a SortKey for every column, ascending order
+                sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
+            }
 
-        // Adds SortKeys to sorter, and sorts
-        sorter.setSortKeys(sortKeyList);
-        sorter.sort();
+            // Adds SortKeys to sorter, and sorts
+            defaultSorter.setSortKeys(sortKeyList);
+            defaultSorter.sort();
+        }
     }
 
     /**

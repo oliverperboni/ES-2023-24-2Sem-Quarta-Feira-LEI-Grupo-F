@@ -12,7 +12,6 @@ public class Room {
     private int capacidadeNormal;
     private int capacidadeExame;
     private String numCaracteristicas;
-    private boolean horarioSalaVisivelPortalPublico;
    	private List<String> roomSpecs;
 
     /**
@@ -33,16 +32,6 @@ public class Room {
         this.capacidadeExame = capacidadeExame;
         this.numCaracteristicas = numCaracteristicas;
         this.roomSpecs = roomSpecs;
-    }
-
-    /**
-     * Parses the given string to a Boolean value.
-     *
-     * @param bool The string to parse.
-     * @return The Boolean value.
-     */
-    public Boolean parseBoolean(String bool){
-        return "X".equals(bool);
     }
 
     /**
@@ -136,20 +125,21 @@ public class Room {
     }
 
     /**
-     * Returns the special specifications of the room.
+     * Returns the characteristics of the room.
      *
-     * @return The special specifications of the room.
+     * @return The characteristics of the room.
      */
     public List<String> getRoomSpecs() {
         return roomSpecs;
     }
 
     /**
-     * Sets the special specifications of the room.
+     * Sets the characteristics of the room.
      *
-     * @param newRoomSpecs The special specifications of the room to set.
+     * @param newRoomSpecs The characteristics of the room to set.
      */
     public void setRoomSpecs(List<String> newRoomSpecs) {
         this.roomSpecs = newRoomSpecs;
     }
+
 }

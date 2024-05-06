@@ -1,4 +1,6 @@
 package filters;
+
+import core.ScheduleDataModel;
 import core.Table;
 
 import javax.swing.*;
@@ -6,10 +8,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  * The TableFilters class provides functionality to add filters to a JTable and perform various operations like hiding columns, revealing hidden columns, and saving changes.
@@ -34,14 +36,14 @@ public class TableFilters {
      * @param tabela The JTable to which filters will be added.
      * @return The updated JFrame panel with added filters.
      */
-    public JFrame addFilter(JFrame panel, JTable tabela) {
+    public JFrame addFilter(JFrame panel, JTable tabela, ScheduleDataModel dataModel) {
         panel = new JFrame();
 
         panel.setSize(900, 800);
         panel.setLayout(new BorderLayout());
         panel.setUndecorated(false);
         panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, panel.getBackground()));
-        panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        panel.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         //Paneis
         JPanel filterPanel = new JPanel();
@@ -55,12 +57,7 @@ public class TableFilters {
         JButton esconderbtn = new JButton("Esconder coluna");
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
         JButton saveButton = new JButton("Guardar");
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                table.saveChanges();
-            }
-        });
+        saveButton.addActionListener(e -> table.saveChanges());
 
         btnCreation(filtrarbtn, tabela, filterPanel);
         btnCreation(esconderbtn, tabela, filterPanel);

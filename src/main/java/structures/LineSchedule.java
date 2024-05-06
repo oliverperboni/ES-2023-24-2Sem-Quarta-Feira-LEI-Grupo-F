@@ -26,19 +26,22 @@ public class LineSchedule {
     /**
      * Constructs a new LineSchedule object with the provided parameters.
      *
-     * @param curso              The course name.
-     * @param unidade_curricular The name of the course unit.
-     * @param turno              The class or event shift.
-     * @param turma              The class group.
-     * @param inscritos          The number of participants or enrolled students.
-     * @param dia_semana         The day of the week.
-     * @param hora_inicio        The start time of the class or event.
-     * @param hora_fim           The end time of the class or event.
-     * @param data_aula          The date of the class or event.
+     * @param curso                The course name.
+     * @param unidade_curricular   The name of the course unit.
+     * @param turno                The class or event shift.
+     * @param turma                The class group.
+     * @param inscritos            The number of participants or enrolled students.
+     * @param dia_semana           The day of the week.
+     * @param hora_inicio          The start time of the class or event.
+     * @param hora_fim             The end time of the class or event.
+     * @param data_aula            The date of the class or event.
      * @param caracteristicas_sala The characteristics of the room.
-     * @param sala               The room where the class or event takes place.
+     * @param sala                 The room where the class or event takes place.
      */
-    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos, String dia_semana, String hora_inicio, String hora_fim, String data_aula, String caracteristicas_sala, String sala) {
+    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos,
+                        String dia_semana, String hora_inicio, String hora_fim, String data_aula,
+                        String caracteristicas_sala, String sala) {
+
         this.curso = curso;
         this.unidade_curricular = unidade_curricular;
         this.turno = turno;
@@ -65,7 +68,7 @@ public class LineSchedule {
      *
      * @param schedule The LineSchedule object to be copied.
      */
-    public LineSchedule (LineSchedule schedule) {
+    public LineSchedule(LineSchedule schedule) {
         this.curso = schedule.curso;
         this.unidade_curricular = schedule.unidade_curricular;
         this.turno = schedule.turno;
@@ -316,6 +319,5 @@ public class LineSchedule {
         return this.curso + " " + this.unidade_curricular + " " + this.turno + " " + this.turma +
                 " " + this.inscritos + " " + this.dia_semana + " " + this.hora_inicio + " " + this.hora_fim +
                 " " + this.data_aula + " " + this.caracteristicas_sala + " " + this.sala;
-//                + " " + scheduleInstant.toString();
     }
 }

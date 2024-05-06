@@ -12,11 +12,11 @@ import structures.Room;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 public class RoomFilterFrame {
     private JFrame frame;
@@ -41,7 +41,7 @@ public class RoomFilterFrame {
      */
     private void initialize() {
         frame = new JFrame("Filtrar Salas");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.setSize(800, 400);
         frame.setLocationRelativeTo(null); // Centralizar na tela
 
@@ -98,23 +98,20 @@ public class RoomFilterFrame {
         G1.add(jRadioButton2);
 
         JButton filterButton = new JButton("Aplicar Filtro");
-        filterButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String typeFilter = typeTextField.getText().toLowerCase();
-                int capacityFilter = -1;
-                if(!capacityTextField.getText().equals("") ){
-                    capacityFilter = Integer.parseInt(capacityTextField.getText());
-                }
-                int capacityFilter2 = -1;
-                  if(!capacityTextField1.getText().equals("")){
-                    capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
-                }
-                String locationFilter = edificeTextField.getText().toLowerCase();
-                Boolean select = jRadioButton1.isSelected();
-
-                filterRooms(typeFilter, capacityFilter, capacityFilter2, locationFilter, select);
+        filterButton.addActionListener(e -> {
+            String typeFilter = typeTextField.getText().toLowerCase();
+            int capacityFilter = -1;
+            if (!capacityTextField.getText().isEmpty()) {
+                capacityFilter = Integer.parseInt(capacityTextField.getText());
             }
+            int capacityFilter2 = -1;
+            if (!capacityTextField1.getText().isEmpty()) {
+                capacityFilter2 = Integer.parseInt(capacityTextField1.getText());
+            }
+            String locationFilter = edificeTextField.getText().toLowerCase();
+            boolean select = jRadioButton1.isSelected();
+
+            filterRooms(typeFilter, capacityFilter, capacityFilter2, locationFilter, select);
         });
         filterPanel.add(filterButton);
         filterPanel.add(jRadioButton1);

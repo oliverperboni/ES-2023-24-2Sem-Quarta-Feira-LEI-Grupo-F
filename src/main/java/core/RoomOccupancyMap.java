@@ -25,14 +25,18 @@ public class RoomOccupancyMap extends JFrame {
     private JTextField endDateField;
     private JTextField minOccupancyField;
     private JButton filterButton;
-    private DefaultCategoryDataset dataset;
+    private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
     private JFreeChart chart;
     private ChartPanel chartPanel;
+    private static final String CHART_TITLE = "Room Occupancy";
+    private static final String X_AXIS_LABEL = "Date";
+    private static final String Y_AXIS_LABEL = "Occupied Rooms";
+    private static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy";
 
     public RoomOccupancyMap(Map<String, Integer> roomOccupancyData) {
         setTitle("Room Occupancy Chart");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         // Initialize components
         startDateLabel = new JLabel("Start Date:");
@@ -57,31 +61,29 @@ public class RoomOccupancyMap extends JFrame {
 
         // Create dataset and chart
         dataset = createDataset(roomOccupancyData);
-        chart = ChartFactory.createBarChart("Room Occupancy", "Date", "Occupied Rooms", dataset);
+        chart = ChartFactory.createBarChart(CHART_TITLE, X_AXIS_LABEL, Y_AXIS_LABEL, dataset);
         chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(800, 500));
         getContentPane().add(chartPanel, BorderLayout.CENTER);
     }
 
     private DefaultCategoryDataset createDataset(Map<String, Integer> roomOccupancyData) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
         // Ordenar o mapa por chaves (datas) em ordem crescente
         TreeMap<LocalDate, Integer> sortedData = new TreeMap<>();
         roomOccupancyData.forEach((key, value) -> {
             if (!key.isEmpty()) {
-                LocalDate date = LocalDate.parse(key, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                LocalDate date = LocalDate.parse(key, DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
                 sortedData.put(date, value);
             }
         });
 
         // Adicionar os valores ordenados ao conjunto de dados
-        sortedData.forEach((key, value) -> {
-            dataset.addValue(value, "Occupied Rooms", key.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        });
+        sortedData.forEach((key, value) ->
+                dataset.addValue(value, Y_AXIS_LABEL, key.format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN))));
 
         return dataset;
     }
+
 
     private static Map<String, Integer> readCSVAndGetOccupancy(String csvFile) {
         String line;
@@ -110,7 +112,7 @@ public class RoomOccupancyMap extends JFrame {
         String minOccupancyStr = minOccupancyField.getText();
 
         try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
             LocalDate startDate = LocalDate.parse(startDateStr, dateFormatter);
             LocalDate endDate = LocalDate.parse(endDateStr, dateFormatter);
             Integer minOccupancy = Integer.parseInt(minOccupancyStr);
@@ -125,7 +127,7 @@ public class RoomOccupancyMap extends JFrame {
     }
 
     private Map<String, Integer> readCSVAndGetOccupancy(String csvFile, LocalDate startDate, LocalDate endDate, Integer minOccupancy) {
-        String line;
+        String line = null;
         String cvsSplitBy = ";";
         Map<String, Integer> roomOccupancyData = new HashMap<>();
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -136,7 +138,7 @@ public class RoomOccupancyMap extends JFrame {
                 String[] data = line.split(cvsSplitBy);
                 // Extract the date of the class (index 8 in the data array)
                 String dateStr = data[8];
-                LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
                 if (date.isAfter(startDate.minusDays(1)) && date.isBefore(endDate.plusDays(1))) {
                     int occupancy = Integer.parseInt(data[9]); // Assuming occupancy is in the 9th column
                     if (occupancy >= minOccupancy) {
@@ -153,7 +155,7 @@ public class RoomOccupancyMap extends JFrame {
     private void updateChart(Map<String, Integer> roomOccupancyData) {
         dataset.clear();
         for (Map.Entry<String, Integer> entry : roomOccupancyData.entrySet()) {
-            dataset.addValue(entry.getValue(), "Occupied Rooms", entry.getKey());
+            dataset.addValue(entry.getValue(), Y_AXIS_LABEL, entry.getKey());
         }
     }
 

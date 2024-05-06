@@ -29,7 +29,7 @@ public class TableFiltersTest {
         JTable tabela = new JTable();
 
         // Chama o método addFilter
-        JFrame resultFrame = tf.addFilter(panel, tabela);
+        JFrame resultFrame = tf.addFilter(panel, tabela, model);
 
         // Verificações
 
