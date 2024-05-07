@@ -13,7 +13,6 @@ public class GrafoGUI extends JFrame {
 
     private Grafo grafo;
     private List<LineSchedule> lineSchedules;
-    private LineSchedule centerLineSchedule;
     public String sala;
     public String HoraFim;
     public String HoraInicio;
@@ -28,7 +27,7 @@ public class GrafoGUI extends JFrame {
      * @param HoraFim       the end time
      * @param Data          the date of the class
      */
-    public GrafoGUI(List<LineSchedule> lineSchedules, String sala, String HoraInicio, String HoraFim,String Data) {
+    public GrafoGUI(List<LineSchedule> lineSchedules, String sala, String HoraInicio, String HoraFim, String Data) {
         super("Grafo GUI");
         setSize(900, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,8 +53,8 @@ public class GrafoGUI extends JFrame {
             // Define the coordinates of the center for drawing the given LineSchedule
             int centerX = getWidth() / 2;
             int centerY = getHeight() / 2;
-
-            // Draw the given LineSchedule at the center 
+            int incrment = 1;
+            // Draw the given LineSchedule at the center
             g.setColor(Color.GREEN);
             g.fillOval(centerX, centerY, 20, 20);
             g.drawString("Sua Sala", centerX + 25, centerY - 10);
@@ -63,26 +62,71 @@ public class GrafoGUI extends JFrame {
             // Iterate over the list of LineSchedules
             for (LineSchedule lineSchedule : lineSchedules) {
                 if (lineSchedule.getSala().equals(sala) && lineSchedule.getDataAula().equals(Data)) {
-                    if (!compararHoras(lineSchedule.getHoraInicio(), HoraFim) || compararHoras(lineSchedule.getHoraInicio(), HoraInicio)) {
-                        desenharLineSchedule(g, centerX, centerY, lineSchedule, Color.RED);
+                    if (!compararHoras(lineSchedule.getHoraInicio(), HoraFim)
+                            || compararHoras(lineSchedule.getHoraInicio(), HoraInicio)) {
+                        drawLineSchedule(g, centerX, centerY, lineSchedule, Color.RED, incrment);
+                        System.out.println(lineSchedule);
+                        incrment++;
                     }
                 }
             }
         }
 
+        // /**
+        // * Draws a LineSchedule at a specific position.
+        // *
+        // * @param g the Graphics context
+        // * @param x the x-coordinate of the position
+        // * @param y the y-coordinate of the position
+        // * @param lineSchedule the LineSchedule to be drawn
+        // * @param color the color to be used for drawing
+        // */
+        // private void desenharLineSchedule(Graphics g, int x, int y, LineSchedule
+        // lineSchedule, Color color) {
+        // g.setColor(color);
+        // g.fillOval(x+30, y+20, 20, 20);
+        // g.drawString("Teste",x+30, y+20);
+        // }
         /**
-         * Draws a LineSchedule at a specific position.
-         *
-         * @param g            the Graphics context
-         * @param x            the x-coordinate of the position
-         * @param y            the y-coordinate of the position
-         * @param lineSchedule the LineSchedule to be drawn
-         * @param color        the color to be used for drawing
+         * This method draws a LineSchedule on the specified Graphics object.
+         * 
+         * @param g            The Graphics object to draw on.
+         * @param x            The x-coordinate of the position to draw.
+         * @param y            The y-coordinate of the position to draw.
+         * @param lineSchedule The LineSchedule object to draw.
+         * @param color        The Color to use for drawing.
          */
-        private void desenharLineSchedule(Graphics g, int x, int y, LineSchedule lineSchedule, Color color) {
+        private void drawLineSchedule(Graphics g, int x, int y, LineSchedule lineSchedule, Color color, int i) {
             g.setColor(color);
-            g.fillOval(x, y, 20, 20);
-            g.drawString(lineSchedule.getCurso() + " - " + lineSchedule.getUnidadeCurricular(), x + 25, y - 10);
+
+            // Calculate the radius of the circle based on the index 'i'
+            int radius = 40 + i * 30; // Adjust this value as needed
+
+            // Calculate the angle increment based on the number of circles 'i'
+            double angleIncrement = 2 * Math.PI / i;
+
+            // Draw each circle along the circumference
+            for (int j = 0; j < i; j++) {
+                // Calculate the angle for this circle
+                double angle = j * angleIncrement;
+
+                // Calculate the position of the circle on the circumference
+                int circleX = x + (int) (radius * Math.cos(angle));
+                int circleY = y + (int) (radius * Math.sin(angle));
+
+                // Draw the circle
+                g.fillOval(circleX - 10, circleY - 10, 20, 20); // Adjust the size as needed
+
+                // Draw text
+                g.setColor(Color.BLACK);
+                g.drawString(lineSchedule.getSala() + " - " + lineSchedule.getUnidadeCurricular(), circleX - 10,
+                        circleY - 10);
+
+                // Draw line from center to circle
+                g.drawLine(x, y, circleX, circleY);
+                g.setColor(color);
+
+            }
         }
 
         /**
@@ -149,7 +193,7 @@ class Grafo {
  * Represents a vertex in a graph.
  */
 class Vertice {
-    
+
     private int x;
     private int y;
     private String nome;
