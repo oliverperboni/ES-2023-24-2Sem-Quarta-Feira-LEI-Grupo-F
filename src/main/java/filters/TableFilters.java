@@ -1,12 +1,17 @@
 package filters;
 
+import core.ConflitosGUI;
+import core.GrafoGUI;
 import core.ScheduleDataModel;
 import core.Table;
+import structures.LineSchedule;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
+import javax.xml.crypto.Data;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +59,7 @@ public class TableFilters {
 
         //Botoes
         JButton filtrarbtn = new JButton("Filtrar");
+        JButton conflitosbtn = new JButton("Ver conflitos");
         JButton esconderbtn = new JButton("Esconder coluna");
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
         JButton saveButton = new JButton("Guardar");
@@ -64,11 +70,13 @@ public class TableFilters {
         btnCreation(revelarbtn, tabela, filterPanel);
 
         buttonPanel.add(filtrarbtn);
+        buttonPanel.add(conflitosbtn);
         buttonPanel.add(esconderbtn);
         buttonPanel.add(revelarbtn);
         buttonPanel.add(saveButton);
 
         //Ações dos Botões
+        conflitosbtn.addActionListener(e -> function_conflitos(dataModel.getScheduleEntries()));
         filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
         esconderbtn.addActionListener(e -> function_esconderBtn(tabela));
         revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
@@ -78,6 +86,14 @@ public class TableFilters {
         panel.add(buttonPanel, BorderLayout.SOUTH);
         return panel;
     }
+
+
+    private void function_conflitos(List<LineSchedule> list) {
+
+        ConflitosGUI gui = new ConflitosGUI(list);
+     
+    }
+
 
 
     /**
