@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static java.lang.System.out;
@@ -17,19 +18,20 @@ public class ScheduleTableEngine {
     private final TableSubstitution scheduleData;
     private final ScheduleEngine engine;
     private final int rowSelected;
-    private final JTable table;
 
     public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table){
         this.scheduleData = scheduleData;
         this.engine = new ScheduleEngine(scheduleData.dataModel);
         this.rowSelected = table.convertRowIndexToModel(rowSelected);
-        this.table = table;
 
-        setupInform();
+
         initialize();
     }
 
     public void initialize() {
+
+        List<LineSchedule> possibilityList = setupInform();
+
         JFrame frame = new JFrame();
         frame.setSize(900, 800);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -48,11 +50,11 @@ public class ScheduleTableEngine {
         ButtonGroup teste = new ButtonGroup();
 
         int initialElementsToShow = 5; // Número inicial de elementos a serem mostrados
-        int totalElements = engine.getPossibilityList().size(); // Número total de elementos
+        int totalElements = possibilityList.size(); // Número total de elementos
 
         // Adicione os elementos iniciais ao sugestionallocation
         for (int i = 0; i < Math.min(initialElementsToShow, totalElements); i++) {
-            JRadioButton radioButton = new JRadioButton(engine.getPossibilityList().get(i).toString());
+            JRadioButton radioButton = new JRadioButton(possibilityList.get(i).toString());
             teste.add(radioButton);
             sugestionallocation.add(radioButton);
         }
@@ -74,7 +76,7 @@ public class ScheduleTableEngine {
 
                 // Adicione mais elementos ao sugestionallocation conforme necessário
                 for (int i = currentCount; i < Math.min(currentCount + 5, totalElements); i++) {
-                    JRadioButton radioButton = new JRadioButton(engine.getPossibilityList().get(i).toString());
+                    JRadioButton radioButton = new JRadioButton(possibilityList.get(i).toString());
                     teste.add(radioButton);
                     sugestionallocation.add(radioButton);
                 }
@@ -103,7 +105,7 @@ public class ScheduleTableEngine {
         frame.setVisible(true);
     }
 
-    private void setupInform(){
+    private List<LineSchedule> setupInform(){
         ArrayList<SchedulePeriod> allowedPeriods = extratedSchedulePeriodAllowed();
         ArrayList<SchedulePeriod> excludePeriods = extratedSchedulePeriodExclude();
         ArrayList<RoomPreference> roomIChoose = extratedRoomPreference();
@@ -113,7 +115,8 @@ public class ScheduleTableEngine {
         out.println(excludePeriods);
         out.println(roomIChoose);
         out.println(excludeRoom);
-        engine.suggestCompensation(possibilidadeHorario(), excludePeriods, allowedPeriods, roomIChoose, excludeRoom);
+
+        return engine.suggestCompensation(possibilidadeHorario(), excludePeriods, allowedPeriods, roomIChoose, excludeRoom);
 
     }
 

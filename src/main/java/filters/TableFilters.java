@@ -1,12 +1,11 @@
 package filters;
 
-import core.ConflitosGUI;
-import core.GrafoGUI;
-import core.ScheduleDataModel;
-import core.Table;
+import core.*;
 import structures.LineSchedule;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
@@ -63,6 +62,9 @@ public class TableFilters {
         JButton esconderbtn = new JButton("Esconder coluna");
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
         JButton saveButton = new JButton("Guardar");
+        JButton substituitionButton = new JButton("Marcar Aula Sunstituição");
+
+
         saveButton.addActionListener(e -> table.saveChanges());
 
         btnCreation(filtrarbtn, tabela, filterPanel);
@@ -74,12 +76,14 @@ public class TableFilters {
         buttonPanel.add(esconderbtn);
         buttonPanel.add(revelarbtn);
         buttonPanel.add(saveButton);
+        buttonPanel.add(substituitionButton);
 
         //Ações dos Botões
         conflitosbtn.addActionListener(e -> function_conflitos(dataModel.getScheduleEntries()));
         filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
         esconderbtn.addActionListener(e -> function_esconderBtn(tabela));
         revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
+        substituitionButton.addActionListener(e -> function_MarcarSubs(tabela));
 
 
         panel.add(filterPanel, BorderLayout.NORTH);
@@ -146,6 +150,29 @@ public class TableFilters {
 //        btn.setFocusPainted(false); // Remove a borda de foco
 //        btn.setFont(new Font("Arial", Font.BOLD, 14));
 
+    }
+
+    public void function_MarcarSubs(JTable tabela) {
+        ListSelectionModel selectionModel = tabela.getSelectionModel();
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = tabela.getSelectedRow();
+                    // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
+                    if (selectedRow != -1) {
+                        // Verifica se uma linha está selecionada
+
+                        TableSubstitution tableSubstitution = new TableSubstitution(selectedRow,table.getDataModel(),table.getJTable());
+
+                        /*for (int i = 0; i < tabela.getColumnCount(); i++) {
+                            System.out.print(tabela.getValueAt(selectedRow, i) + " ");
+                        }*/
+                        //System.out.println();
+                    }
+                }
+            }
+        });
     }
 
     /**
