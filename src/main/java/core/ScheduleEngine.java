@@ -54,10 +54,12 @@ public class ScheduleEngine {
                         List<Room> resultRoomList = roomsByPreference(rp); // Salas com o tipo procurado
                         for (Room resultRoom : resultRoomList) // Por cada sala do tipo procurado encontrada
                             for (SchedulePeriod sp2 : allowedPeriods)
-                                if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
+                                if (sp2.getIsTimePeriod()) { // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
-                                            possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
-
+                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
+                                } else if (sp2.getIsTimeSlot()) {
+                                    possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, sp2, rp, excludedPeriods, roomTypeExclusions));
+                                }
 
                     }
         }
@@ -253,10 +255,10 @@ public class ScheduleEngine {
 
     public static void main(String[] args) {
         LineSchedule reSchedule = new LineSchedule(
-                "Curso", "UnidadeCurricular",
-                "Turno", "Turma", 0, "Seg",
-                "13:00:00", "14:30:00", "01/12/2022",
-                "CaracterísticasSala", "Sala");
+                "LCD, LCD-PL", "ANALISE DE REDES (1CICLO)",
+                "03604TP01", "CDC1", 27, "Sáb",
+                "09:30:00", "11:00:00", "03/12/2022",
+                "BYOD (Bring Your Own Device)", "D1.07");
 
         ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv", false,
                 "csv/CaracterizaçãoDasSalas.csv", false);
@@ -267,7 +269,9 @@ public class ScheduleEngine {
 //        ArrayList<SchedulePeriod> excludedPeriods = new ArrayList<SchedulePeriod>();
 //        ArrayList<Room> excludedRoom = new ArrayList<Room>();
 
-        allowedPeriods1.add(SchedulePeriod.NOITE);
+        allowedPeriods1.add(SchedulePeriod._18H00_19H30);
+        allowedPeriods1.add(SchedulePeriod._19H30_21H00);
+        allowedPeriods1.add(SchedulePeriod._21H00_22H30);
         allowedPeriods1.add(SchedulePeriod.SEGUNDA_FEIRA);
         allowedPeriods1.add(SchedulePeriod.TERCA_FEIRA);
 
@@ -287,10 +291,9 @@ public class ScheduleEngine {
         roomTypePreferences2.add(RoomPreference.SALA_AULAS_NORMAL);
         roomTypePreferences2.add(RoomPreference.SALA_AULAS_MESTRADO);
 
-//        engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods1,
-//                roomTypePreferences1, new ArrayList<RoomPreference>());
-        engine.suggestNewCourse("Unidade curricular de teste", 7, new ArrayList<SchedulePeriod>(), allowedPeriods2,
-                roomTypePreferences2, new ArrayList<RoomPreference>());
+        engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods1, roomTypePreferences1, new ArrayList<RoomPreference>());
+//        engine.suggestNewCourse("Unidade curricular de teste", 7, new ArrayList<SchedulePeriod>(), allowedPeriods2,
+//                roomTypePreferences2, new ArrayList<RoomPreference>());
 
     }
 }
