@@ -1,19 +1,22 @@
 package filters;
+
+import core.ConflitosGUI;
+import core.GrafoGUI;
+import core.ScheduleDataModel;
 import core.Table;
-import schedule.ScheduleDataModel;
-import schedule.TableSubstitution;
+import structures.LineSchedule;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
+import javax.xml.crypto.Data;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  * The TableFilters class provides functionality to add filters to a JTable and perform various operations like hiding columns, revealing hidden columns, and saving changes.
@@ -24,9 +27,8 @@ public class TableFilters {
     /** List to store column indexes of hidden columns */
     List<Integer> a = new ArrayList<>();
 
-    private int rowSelected = -1;
-
-    private final Table table;
+    public JFrame panel;
+    private Table table;
 
     public TableFilters(Table table) {
         this.table = table;
@@ -35,9 +37,8 @@ public class TableFilters {
     /**
      * Adds filter components to the JFrame panel.
      *
-     * @param panel     The JFrame panel.
-     * @param tabela    The JTable to which filters will be added.
-     * @param dataModel
+     * @param panel  The JFrame panel.
+     * @param tabela The JTable to which filters will be added.
      * @return The updated JFrame panel with added filters.
      */
     public JFrame addFilter(JFrame panel, JTable tabela, ScheduleDataModel dataModel) {
@@ -47,55 +48,52 @@ public class TableFilters {
         panel.setLayout(new BorderLayout());
         panel.setUndecorated(false);
         panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, panel.getBackground()));
-        panel.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        panel.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         //Paneis
         JPanel filterPanel = new JPanel();
         JPanel buttonPanel = new JPanel();
-
 
         //TextField
         textFieldsCreation(filterPanel);
 
         //Botoes
         JButton filtrarbtn = new JButton("Filtrar");
+        JButton conflitosbtn = new JButton("Ver conflitos");
         JButton esconderbtn = new JButton("Esconder coluna");
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
         JButton saveButton = new JButton("Guardar");
-        JButton marcSubsAula = new JButton("Marcar Aula de Substituição");
         saveButton.addActionListener(e -> table.saveChanges());
-
-        tabela.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)){
-
-                    rowSelected = tabela.getSelectedRow();
-
-                    if(rowSelected != -1) marcSubsAula.addActionListener(e1 -> functionAulaSubsBtn(rowSelected, dataModel, tabela));
-                }
-            }
-        });
 
         btnCreation(filtrarbtn, tabela, filterPanel);
         btnCreation(esconderbtn, tabela, filterPanel);
         btnCreation(revelarbtn, tabela, filterPanel);
 
         buttonPanel.add(filtrarbtn);
+        buttonPanel.add(conflitosbtn);
         buttonPanel.add(esconderbtn);
         buttonPanel.add(revelarbtn);
         buttonPanel.add(saveButton);
-        buttonPanel.add(marcSubsAula);
 
         //Ações dos Botões
+        conflitosbtn.addActionListener(e -> function_conflitos(dataModel.getScheduleEntries()));
         filtrarbtn.addActionListener(e -> function_filtrarBtn(tabela, filterPanel));
         esconderbtn.addActionListener(e -> function_esconderBtn(tabela));
         revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
+
 
         panel.add(filterPanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.SOUTH);
         return panel;
     }
+
+
+    private void function_conflitos(List<LineSchedule> list) {
+
+        ConflitosGUI gui = new ConflitosGUI(list);
+     
+    }
+
 
 
     /**
@@ -211,13 +209,6 @@ public class TableFilters {
             RowFilter<Object, Object> compoundRowFilter = RowFilter.andFilter(filters);
             sorter.setRowFilter(compoundRowFilter);
         }
-    }
-
-    private void functionAulaSubsBtn(int rowSelected, ScheduleDataModel dataModel, JTable table) {
-
-        try {
-            new TableSubstitution(rowSelected, dataModel, table);
-        }catch (Exception ignored){};
     }
 
 

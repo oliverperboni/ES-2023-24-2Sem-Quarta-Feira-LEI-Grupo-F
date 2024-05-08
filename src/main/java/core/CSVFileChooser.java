@@ -1,12 +1,12 @@
 package core;
 
-import schedule.ScheduleDataModel;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
+
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  * The core.CSVFileChooser class represents the initial window of the JFrame where we indicate whether we want to load from local files or from Git.
@@ -24,7 +24,7 @@ public class CSVFileChooser {
      */
     public CSVFileChooser() {
         fileChooserFrame = new JFrame("Escolher ficheiros CSV");
-        fileChooserFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        fileChooserFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
@@ -39,14 +39,11 @@ public class CSVFileChooser {
 
         JButton button1 = new JButton("Iniciar");
 
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                scheduleFilePath = scheduleFileField.getText();
-                roomsFilePath = roomsFileField.getText();
-                openTableWindow(scheduleFilePath, scheduleGitCheckbox.isSelected(),
-                        roomsFilePath, roomsGitCheckbox.isSelected());
-            }
+        button1.addActionListener(e -> {
+            scheduleFilePath = scheduleFileField.getText();
+            roomsFilePath = roomsFileField.getText();
+            openTableWindow(scheduleFilePath, scheduleGitCheckbox.isSelected(),
+                    roomsFilePath, roomsGitCheckbox.isSelected());
         });
 
         panel.add(scheduleFileLabel);
@@ -74,7 +71,9 @@ public class CSVFileChooser {
         try {
             ScheduleDataModel dataModel = new ScheduleDataModel(scheduleFile, scheduleRemote, roomsFile, roomsRemote);
             new Table(dataModel);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            // Skip
+        }
         fileChooserFrame.dispose(); // Fecha a janela logo depois de abrir a tabela
     }
 
@@ -84,6 +83,7 @@ public class CSVFileChooser {
      * @param args The command-line arguments.
      */
     public static void main(String[] args) {
+        FlatLightLaf.setup();
         new CSVFileChooser();
     }
 

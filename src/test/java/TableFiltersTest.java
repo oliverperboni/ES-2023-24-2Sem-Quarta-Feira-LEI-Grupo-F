@@ -1,4 +1,4 @@
-import schedule.ScheduleDataModel;
+import core.ScheduleDataModel;
 import core.Table;
 import filters.TableFilters;
 import org.junit.jupiter.api.Test;

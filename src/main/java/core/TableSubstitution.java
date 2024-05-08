@@ -1,20 +1,21 @@
-package schedule;
+package core;
 
 import structures.RoomPreference;
 import structures.SchedulePeriod;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TableSubstitution {
 
-    private final ArrayList<RoomPreference> roomPreferences;
-    private final ArrayList<SchedulePeriod> weekdaysPreferences;
-    private final ArrayList<SchedulePeriod> periodsHoursPreferences;
+    private List<RoomPreference> roomPreferences;
+    private final List<SchedulePeriod> weekdayPreferences;
+    private final List<SchedulePeriod> timeSlotPreferences;
 
     private final Map<RoomPreference, JCheckBox> checkBoxMapRoomPreference;
     private final Map<RoomPreference, JCheckBox> checkBoxMapRoomExclude;
@@ -26,13 +27,12 @@ public class TableSubstitution {
     private boolean isPreference = true;
     private final int rowSelected;
     protected ScheduleDataModel dataModel;
-    protected JTable table;
 
 
-    public TableSubstitution(int rowSelected, ScheduleDataModel dataModel, JTable table) {
-        roomPreferences = RoomPreference.getAllRoomPreference();
-        weekdaysPreferences = (ArrayList<SchedulePeriod>) SchedulePeriod.getAllweekDays();
-        periodsHoursPreferences = (ArrayList<SchedulePeriod>) SchedulePeriod.getAllPeriodHours();
+    public TableSubstitution(int rowSelected, ScheduleDataModel dataModel) {
+        roomPreferences = Arrays.asList(RoomPreference.values());
+        weekdayPreferences = SchedulePeriod.getAllWeekDays();
+        timeSlotPreferences = SchedulePeriod.getAllTimeSlots();
 
         checkBoxMapRoomPreference = new HashMap<>();
         checkBoxMapRoomExclude = new HashMap<>();
@@ -43,9 +43,11 @@ public class TableSubstitution {
 
         this.rowSelected = rowSelected;
         this.dataModel = dataModel;
-        this.table = table;
 
         initialize();
+
+        int i = 0;
+        while(i < 3000) i++;
     }
 
     public void initialize() {
@@ -65,8 +67,10 @@ public class TableSubstitution {
 
         submitButton.addActionListener(e -> {
             try {
-                new ScheduleTableEngine(this, rowSelected, table);
-            }catch (Exception ignored){};
+                new ScheduleTableEngine(this, rowSelected);
+            }catch (Exception ignored){
+                // Skip
+            }
             frame.dispose();
         });
 
@@ -84,6 +88,8 @@ public class TableSubstitution {
         frame.add(allocationSettings, BorderLayout.NORTH);
 
         frame.setVisible(true);
+
+
 
     }
 
@@ -108,7 +114,7 @@ public class TableSubstitution {
         horarioPanel.setBorder(new TitledBorder("Horário"));
 
 
-        for (SchedulePeriod period : periodsHoursPreferences){
+        for (SchedulePeriod period : timeSlotPreferences){
             JCheckBox checkbox = new JCheckBox(period.toString());
             horarioPanel.add(checkbox);
             if(isPreference) {
@@ -124,15 +130,15 @@ public class TableSubstitution {
         JPanel dayPanel = new JPanel(new GridLayout(4, 1));
         dayPanel.setBorder(new TitledBorder("Dia da Semana"));
 
-        for (SchedulePeriod day : weekdaysPreferences) {
-            JCheckBox radioButton = new JCheckBox(day.toString());
-            dayPanel.add(radioButton);
-            if(isPreference) {
-                checkBoxMapDaysPreference.put(day,radioButton);
-            }else{
-                checkBoxMapDaysExclude.put(day,radioButton);
-            }
-        }
+//        for (SchedulePeriod day : weekdaysPreferences) {
+//            JCheckBox radioButton = new JCheckBox(day.toString());
+//            dayPanel.add(radioButton);
+//            if(isPreference) {
+//                checkBoxMapDaysPreference.put(day,radioButton);
+//            }else{
+//                checkBoxMapDaysExclude.put(day,radioButton);
+//            }
+//        }
 
         return dayPanel;
     }
@@ -142,15 +148,15 @@ public class TableSubstitution {
 
         salaTypePanel.setBorder(new TitledBorder("Tipos de Sala"));
 
-        for (RoomPreference roomPreference : roomPreferences) {
-            JCheckBox checkBox = new JCheckBox(roomPreference.toString());
-            salaTypePanel.add(checkBox);
-            if(isPreference) {
-                checkBoxMapRoomPreference.put(roomPreference, checkBox);
-            }else{
-                checkBoxMapRoomExclude.put(roomPreference, checkBox);
-            }
-        }
+//        for (RoomPreference roomPreference : roomPreferences) {
+//            JCheckBox checkBox = new JCheckBox(roomPreference.toString());
+//            salaTypePanel.add(checkBox);
+//            if(isPreference) {
+//                checkBoxMapRoomPreference.put(roomPreference, checkBox);
+//            }else{
+//                checkBoxMapRoomExclude.put(roomPreference, checkBox);
+//            }
+//        }
 
         return salaTypePanel;
     }

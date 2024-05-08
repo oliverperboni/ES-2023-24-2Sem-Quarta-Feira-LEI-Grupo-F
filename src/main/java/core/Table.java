@@ -4,8 +4,6 @@ import filters.RoomFilterFrame;
 import filters.TableFilters;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import schedule.ScheduleDataModel;
-import schedule.ScheduleEngine;
 import structures.LineSchedule;
 
 import javax.swing.*;
@@ -20,24 +18,23 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.awt.Frame.MAXIMIZED_BOTH;
+
 /**
  * The core.Table class represents a table view of schedule data with filtering and sorting functionality.
  */
 public class Table {
 
-    private static JFrame app;
+    private  JFrame app;
     private JTable appTable;
-    private static DefaultTableModel model;
+    private  DefaultTableModel model;
 
     public ScheduleDataModel dataModel;
-    public ScheduleEngine engine;
-
-    public RoomFilterFrame roomFilterFrame;
 
     /**
      * Constructs a new core.Table object with the provided data model.
      *
-     * @param dataModel The schedule.ScheduleDataModel containing schedule data.
+     * @param dataModel The core.ScheduleDataModel containing schedule data.
      * @throws IOException If an I/O error occurs.
      */
     public Table(ScheduleDataModel dataModel) throws IOException {
@@ -65,21 +62,20 @@ public class Table {
 
 
         app = tabFilter.addFilter(app, appTable, dataModel);
-        app.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        app.setExtendedState(MAXIMIZED_BOTH);
 
         // cria a opção de scroll se necessario
         JScrollPane scrollPane = new JScrollPane(appTable);
 
         app.getContentPane().add(scrollPane);
+        GrafoGUI g = new GrafoGUI(dataModel.getScheduleEntries(),"D1.14", "14:00", "16:00", "27/09/2022");
+        g.setVisible(true);
         app.setVisible(true);
 
         // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
-                filterFrame.show();
-            }
+        SwingUtilities.invokeLater(() -> {
+            RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
+            filterFrame.show();
         });
     }
 
@@ -95,7 +91,7 @@ public class Table {
     /**
      * Retrieves the data model.
      *
-     * @return The schedule.ScheduleDataModel.
+     * @return The core.ScheduleDataModel.
      */
     public ScheduleDataModel getDataModel() {
         return dataModel;
@@ -128,20 +124,24 @@ public class Table {
      * @param table The JTable.
      */
     void addColumnSorting(JTable table) {
-        // Gets the table's sorter and casts it to a DefaultRowSorter
-        DefaultRowSorter sorter = ((DefaultRowSorter) table.getRowSorter());
-        // Enables immediate sorting after an insert operation
-        sorter.setSortsOnUpdates(true);
+        // Gets the table's sorter
+        RowSorter<DefaultTableModel> sorter = (RowSorter<DefaultTableModel>) table.getRowSorter();
+        if (sorter instanceof DefaultRowSorter) {
+            DefaultRowSorter<DefaultTableModel, Integer> defaultSorter = (DefaultRowSorter<DefaultTableModel, Integer>) sorter;
+            // Enables immediate sorting after an insert operation
+            defaultSorter.setSortsOnUpdates(true);
 
-        // ArrayList to store SortKeys for the every column in the table
-        ArrayList<RowSorter.SortKey> sortKeyList = new ArrayList<>();
-        for (int i = 0; i < table.getColumnCount(); i++)
-            // Creates a SortKey for every column, ascending order
-            sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
+            // ArrayList to store SortKeys for every column in the table
+            ArrayList<RowSorter.SortKey> sortKeyList = new ArrayList<>();
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                // Creates a SortKey for every column, ascending order
+                sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING));
+            }
 
-        // Adds SortKeys to sorter, and sorts
-        sorter.setSortKeys(sortKeyList);
-        sorter.sort();
+            // Adds SortKeys to sorter, and sorts
+            defaultSorter.setSortKeys(sortKeyList);
+            defaultSorter.sort();
+        }
     }
 
     /**
