@@ -33,7 +33,7 @@ public class TableSubstitution {
     public TableSubstitution(int rowSelected, ScheduleDataModel dataModel, JTable table) {
         roomPreferences = Arrays.asList(RoomPreference.values());
         weekdayPreferences = SchedulePeriod.getAllWeekDays();
-        timeSlotPreferences = SchedulePeriod.getAllTimePeriods();
+        timeSlotPreferences = SchedulePeriod.getAllTimeSlots();
 
         checkBoxMapRoomPreference = new HashMap<>();
         checkBoxMapRoomExclude = new HashMap<>();
