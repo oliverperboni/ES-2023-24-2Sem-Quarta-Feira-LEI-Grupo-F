@@ -1,177 +1,168 @@
 package core;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.knowm.xchart.HeatMapChart;
+import org.knowm.xchart.HeatMapChartBuilder;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.style.Styler;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
-public class RoomOccupancyMap extends JFrame {
-    private JLabel startDateLabel;
-    private JLabel endDateLabel;
-    private JLabel minOccupancyLabel;
-    private JTextField startDateField;
-    private JTextField endDateField;
-    private JTextField minOccupancyField;
-    private JButton filterButton;
-    private DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-    private JFreeChart chart;
-    private ChartPanel chartPanel;
-    private static final String CHART_TITLE = "Room Occupancy";
-    private static final String X_AXIS_LABEL = "Date";
-    private static final String Y_AXIS_LABEL = "Occupied Rooms";
-    private static final String DATE_FORMAT_PATTERN = "dd/MM/yyyy";
+import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-    public RoomOccupancyMap(Map<String, Integer> roomOccupancyData) {
-        setTitle("Room Occupancy Chart");
-        setSize(800, 600);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-        // Initialize components
-        startDateLabel = new JLabel("Start Date:");
-        startDateField = new JTextField(10);
-        endDateLabel = new JLabel("End Date:");
-        endDateField = new JTextField(10);
-        minOccupancyLabel = new JLabel("Min Occupancy:");
-        minOccupancyField = new JTextField(5);
-        filterButton = new JButton("Filter");
-        filterButton.addActionListener(e -> filterData());
-
-        JPanel controlPanel = new JPanel(new FlowLayout());
-        controlPanel.add(startDateLabel);
-        controlPanel.add(startDateField);
-        controlPanel.add(endDateLabel);
-        controlPanel.add(endDateField);
-        controlPanel.add(minOccupancyLabel);
-        controlPanel.add(minOccupancyField);
-        controlPanel.add(filterButton);
-
-        getContentPane().add(controlPanel, BorderLayout.NORTH);
-
-        // Create dataset and chart
-        dataset = createDataset(roomOccupancyData);
-        chart = ChartFactory.createBarChart(CHART_TITLE, X_AXIS_LABEL, Y_AXIS_LABEL, dataset);
-        chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(800, 500));
-        getContentPane().add(chartPanel, BorderLayout.CENTER);
-    }
-
-    private DefaultCategoryDataset createDataset(Map<String, Integer> roomOccupancyData) {
-        // Ordenar o mapa por chaves (datas) em ordem crescente
-        TreeMap<LocalDate, Integer> sortedData = new TreeMap<>();
-        roomOccupancyData.forEach((key, value) -> {
-            if (!key.isEmpty()) {
-                LocalDate date = LocalDate.parse(key, DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
-                sortedData.put(date, value);
-            }
-        });
-
-        // Adicionar os valores ordenados ao conjunto de dados
-        sortedData.forEach((key, value) ->
-                dataset.addValue(value, Y_AXIS_LABEL, key.format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN))));
-
-        return dataset;
-    }
-
-
-    private static Map<String, Integer> readCSVAndGetOccupancy(String csvFile) {
-        String line;
-        String cvsSplitBy = ";";
-        Map<String, Integer> roomOccupancyData = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            // Skip header line
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                // Split the line into fields using the separator ";"
-                String[] data = line.split(cvsSplitBy);
-                // Extract the date of the class (index 8 in the data array)
-                String date = data[8];
-                // Increment the room occupancy count for the corresponding date
-                roomOccupancyData.put(date, roomOccupancyData.getOrDefault(date, 0) + 1);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return roomOccupancyData;
-    }
-
-    private void filterData() {
-        String startDateStr = startDateField.getText();
-        String endDateStr = endDateField.getText();
-        String minOccupancyStr = minOccupancyField.getText();
-
-        try {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
-            LocalDate startDate = LocalDate.parse(startDateStr, dateFormatter);
-            LocalDate endDate = LocalDate.parse(endDateStr, dateFormatter);
-            Integer minOccupancy = Integer.parseInt(minOccupancyStr);
-
-            Map<String, Integer> filteredData = readCSVAndGetOccupancy("C:\\Users\\danie\\IdeaProjects\\ES-2023-24-2Sem-Quarta-Feira-LEI-Grupo-F\\csv\\HorarioDeExemplo.csv", startDate, endDate, minOccupancy);
-            updateChart(filteredData);
-        } catch (DateTimeParseException e) {
-            JOptionPane.showMessageDialog(this, "Invalid date format. Please use dd/MM/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid occupancy value. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private Map<String, Integer> readCSVAndGetOccupancy(String csvFile, LocalDate startDate, LocalDate endDate, Integer minOccupancy) {
-        String line = null;
-        String cvsSplitBy = ";";
-        Map<String, Integer> roomOccupancyData = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            // Skip header line
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                // Split the line into fields using the separator ";"
-                String[] data = line.split(cvsSplitBy);
-                // Extract the date of the class (index 8 in the data array)
-                String dateStr = data[8];
-                LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN));
-                if (date.isAfter(startDate.minusDays(1)) && date.isBefore(endDate.plusDays(1))) {
-                    int occupancy = Integer.parseInt(data[9]); // Assuming occupancy is in the 9th column
-                    if (occupancy >= minOccupancy) {
-                        roomOccupancyData.put(dateStr, roomOccupancyData.getOrDefault(dateStr, 0) + 1);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return roomOccupancyData;
-    }
-
-    private void updateChart(Map<String, Integer> roomOccupancyData) {
-        dataset.clear();
-        for (Map.Entry<String, Integer> entry : roomOccupancyData.entrySet()) {
-            dataset.addValue(entry.getValue(), Y_AXIS_LABEL, entry.getKey());
-        }
-    }
-
-    public static void displayChart(String csvFile) {
-        SwingUtilities.invokeLater(() -> {
-            Map<String, Integer> roomOccupancyData = readCSVAndGetOccupancy(csvFile);
-            RoomOccupancyMap chart = new RoomOccupancyMap(roomOccupancyData);
-            chart.setVisible(true);
-        });
-    }
+public class RoomOccupancyMap {
 
     public static void main(String[] args) {
-        // Specify the path to your CSV file
-        String csvFile = "C:\\Users\\danie\\IdeaProjects\\ES-2023-24-2Sem-Quarta-Feira-LEI-Grupo-F\\csv\\HorarioDeExemplo.csv";
+        JFrame frame = new JFrame("Heatmap");
 
-        // Display the chart
-        RoomOccupancyMap.displayChart(csvFile);
+        HeatMapChart chart =
+                new HeatMapChartBuilder().xAxisTitle("Dia da Semana").yAxisTitle("Hora de Início").theme(Styler.ChartTheme.Matlab).build();
+
+        chart.getStyler().setShowWithinAreaPoint(true);
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);
+        chart.getStyler().setLegendLayout(Styler.LegendLayout.Horizontal);
+
+        chart.getStyler().setPlotContentSize(1);
+        chart.getStyler().setShowValue(true);
+        // Lê os dados do arquivo CSV
+        List<String[]> data = readCSV("csv/HorarioDeExemplo.csv");
+
+        // Prepara os dados para o gráfico de mapa de calor
+        int[] xData = {1, 2, 3, 4, 5, 6, 7}; // Dias da semana
+        int[] yData = {800, 830, 900, 930, 1000, 1030, 1100, 1130, 1200, 1230, 1300, 1330, 1400, 1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800, 1830, 1900, 1930, 2000, 2030, 2100, 2130}; // Horas de início
+        int[][] heatData = new int[xData.length][yData.length];
+
+        for (int i = 0; i < xData.length; i++) {
+            for(int y = 0; y < yData.length; y++) {
+                heatData[i][y] = countOccurrences(data, i, y);
+            }
+        }
+
+        // Cria o gráfico de mapa de calor
+        chart.addSeries("Basic HeatMap", xData, yData, heatData);
+
+        // Adiciona o gráfico a um painel
+        JPanel chartPanel = new XChartPanel<>(chart);
+        frame.getContentPane().add(chartPanel);
+
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private static List<String[]> readCSV(String filename) {
+        List<String[]> data = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            // Ignorar a primeira linha (cabeçalhos das colunas)
+            br.readLine();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(";");
+                data.add(values);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    private static int convertDayOfWeekToInt(String dayOfWeek) {
+        switch (dayOfWeek) {
+            case "Dom":
+                return 0;
+            case "Seg":
+                return 1;
+            case "Ter":
+                return 2;
+            case "Qua":
+                return 3;
+            case "Qui":
+                return 4;
+            case "Sex":
+                return 5;
+            case "Sáb":
+                return 6;
+            default:
+                throw new IllegalArgumentException("Dia da semana inválido: " + dayOfWeek);
+        }
+    }
+
+    private static int countOccurrences(List<String[]> data, int dayOfWeek, int startTime) {
+        int count = 0;
+        for (String[] row : data) {
+            int rowDayOfWeek = convertDayOfWeekToInt(row[5]);
+            int rowStartTime =  convertDateOfDayToInt(row[6]);
+            if (rowDayOfWeek == dayOfWeek && rowStartTime == startTime) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int convertDateOfDayToInt(String dateOfDay) {
+        switch (dateOfDay) {
+            case "08:00:00":
+                return 0;
+            case "08:30:00":
+                return 1;
+            case "09:00:00":
+                return 2;
+            case "09:30:00":
+                return 3;
+            case "10:00:00":
+                return 4;
+            case "10:30:00":
+                return 5;
+            case "11:00:00":
+                return 6;
+            case "11:30:00":
+                return 7;
+            case "12:00:00":
+                return 8;
+            case "12:30:00":
+                return 9;
+            case "13:00:00":
+                return 10;
+            case "13:30:00":
+                return 11;
+            case "14:00:00":
+                return 12;
+            case "14:30:00":
+                return 13;
+            case "15:00:00":
+                return 14;
+            case "15:30:00":
+                return 15;
+            case "16:00:00":
+                return 16;
+            case "16:30:00":
+                return 17;
+            case "17:00:00":
+                return 18;
+            case "17:30:00":
+                return 19;
+            case "18:00:00":
+                return 20;
+            case "18:30:00":
+                return 21;
+            case "19:00:00":
+                return 22;
+            case "19:30:00":
+                return 23;
+            case "20:00:00":
+                return 24;
+            case "20:30:00":
+                return 25;
+            case "21:00:00":
+                return 26;
+            case "21:30:00":
+                return 27;
+            default:
+                throw new IllegalArgumentException("Dia da semana inválido: " + dateOfDay);
+        }
     }
 }
