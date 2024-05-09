@@ -1,7 +1,8 @@
 package core;
 
-import javax.swing.*;
 import structures.LineSchedule;
+
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class GrafoGUI extends JFrame {
                     if (!compararHoras(lineSchedule.getHoraInicio(), HoraFim)
                             || compararHoras(lineSchedule.getHoraInicio(), HoraInicio)) {
                         drawLineSchedule(g, centerX, centerY, lineSchedule, Color.RED, incrment);
-                        System.out.println(lineSchedule);
+//                        System.out.println(lineSchedule);
                         incrment++;
                     }
                 }

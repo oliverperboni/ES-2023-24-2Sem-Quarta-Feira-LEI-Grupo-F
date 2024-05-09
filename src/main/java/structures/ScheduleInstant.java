@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 /**
  * The ScheduleInstant class represents an ISCTE-IUL time slot and date, a schedule time slot at a precise point in
  * time.
+ * @since 1.0
  */
 public class ScheduleInstant implements Comparable<ScheduleInstant> {
 
@@ -62,7 +63,6 @@ public class ScheduleInstant implements Comparable<ScheduleInstant> {
      * Returns a customized string representation for the ScheduleInstant object.
      *
      * @return String with string representations of SchedulePeriod time slot object and LocalDate object
-     * @since 1.0
      */
     @Override
     public String toString() {
@@ -74,7 +74,6 @@ public class ScheduleInstant implements Comparable<ScheduleInstant> {
      * representation of this ScheduleInstant's date day of the week.
      *
      * @return String first three letters of week day name in portuguese
-     * @since 1.0
      */
     public String weekDayToString() {
         Locale prtLocal = new Locale.Builder().setLanguage("pt").setScript("Latn").setRegion("PT").build();

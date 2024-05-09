@@ -90,14 +90,16 @@ public class ScheduleDataModel {
     }
 
     /**
-     * Reads a schedule CSV file, and returns a TreeMap...
+     * Reads a schedule CSV file, and returns a TreeMap with keys of type ScheduleInstant and values of type List<LineSchedule>.
+     * ScheduleInstant keys correspond to a time slot and date pair. List<LineSchedule> values correspond to lists
+     * of all classes scheduled on that day and time slot.
      *
      * @param csvFile file path to schedule CSV file
-     * @return TreeMap<ScheduleInstant, List<LineSchedule>> of...
+     * @return TreeMap<ScheduleInstant, List<LineSchedule>> with all ScheduleInstants as keys, and lists of all classes
+     * scheduled for each ScheduleInstant as values
      * @since 1.0
      */
     public static TreeMap<ScheduleInstant, List<LineSchedule>> readScheduleCSV(String csvFile) {
-        ArrayList<LineSchedule> lineScheduleArray = new ArrayList<>();
         TreeMap<ScheduleInstant, List<LineSchedule>> treeMap = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
 
         try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {
@@ -113,8 +115,6 @@ public class ScheduleDataModel {
                     List<LineSchedule> lineScheduleList = treeMap.get(scheduleInstant);
                     lineScheduleList.add(schedule);
                 }
-
-                lineScheduleArray.add(schedule);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -158,37 +158,44 @@ public class ScheduleDataModel {
     }
 
     /**
-     * Reads a schedule CSV file hosted on a GitHub repository, and returns an ArrayList of LineSchedule objects
-     * representing every schedule entry present in it.
+     * Reads a schedule CSV file, and returns a TreeMap with keys of type ScheduleInstant and values of type List<LineSchedule>.
+     * ScheduleInstant keys correspond to a time slot and date pair. List<LineSchedule> values correspond to lists
+     * of all classes scheduled on that day and time slot.
      *
      * @param fileURL schedule CSV file URL
-     * @return ArrayList of all schedule entries in the file
+     * @return TreeMap<ScheduleInstant, List < LineSchedule>> with all ScheduleInstants as keys, and lists of all classes
+     * scheduled for each ScheduleInstant as values
      * @since 1.0
      */
-    // Para ler ficheiros CSV do GitHub
-    public static List<LineSchedule> readGitScheduleCSV(String fileURL) throws IOException {
+    public static TreeMap<ScheduleInstant, List<LineSchedule>> readGitScheduleCSV(String fileURL) throws IOException {
         URL fileUrl = new URL(fileURL);
         InputStream inputStream = fileUrl.openStream();
 
-        ArrayList<LineSchedule> lineSchedules = new ArrayList<>();
+        TreeMap<ScheduleInstant, List<LineSchedule>> treeMap = new TreeMap<>(Comparator.nullsFirst(Comparator.naturalOrder()));
         try (Scanner scanner = new Scanner(inputStream)) {
             if (scanner.hasNextLine()) {
                 scanner.nextLine();
             }
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                // Process each line as needed
-                String[] fields = line.split(";"); // Assumindo que os campos no CSV são separados por ponto e vírgula
-                if (fields.length >= 11) { // Certifique-se de que há pelo menos 11 campos
-                    LineSchedule schedule = new LineSchedule(
-                            fields[0], fields[1], fields[2], fields[3],
-                            Integer.parseInt(fields[4]), fields[5], fields[6],
-                            fields[7], fields[8], fields[9], fields[10]
+                String[] fields = line.split(";");
+                if (fields.length >= 11) { // Verificar que existem pelo menos 11 campos
+                    LineSchedule schedule = new LineSchedule(fields[0], fields[1], fields[2], fields[3], Integer.parseInt(fields[4]),
+                            fields[5], fields[6], fields[7], fields[8], fields[9], fields[10]
                     );
-                    lineSchedules.add(schedule);
+                    ScheduleInstant scheduleInstant = schedule.getScheduleInstant();
+
+                    if (!treeMap.containsKey(scheduleInstant)) {
+                        List<LineSchedule> lineScheduleList = new ArrayList<>();
+                        lineScheduleList.add(schedule);
+                        treeMap.put(scheduleInstant, lineScheduleList);
+                    } else {
+                        List<LineSchedule> lineScheduleList = treeMap.get(scheduleInstant);
+                        lineScheduleList.add(schedule);
+                    }
                 }
             }
         }
-        return lineSchedules;
+        return treeMap;
     }
 }
