@@ -1,13 +1,19 @@
 package core;
-import javax.swing.*;
 
+import javax.swing.*;
 import structures.LineSchedule;
+
 import java.util.List;
+import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
+/**
+ * A graphical user interface for viewing schedule conflicts.
+ */
 public class ConflitosGUI extends JFrame {
     private JTextField salaField;
     private JTextField horaInicioField;
@@ -15,7 +21,11 @@ public class ConflitosGUI extends JFrame {
     private JTextField dataField;
     private List<LineSchedule> lineSchedules;
 
-
+    /**
+     * Constructs a ConflitosGUI with the given list of LineSchedules.
+     *
+     * @param list the list of LineSchedules to be used for checking conflicts
+     */
     public ConflitosGUI(List<LineSchedule> list) {
         this.lineSchedules = list;
         setTitle("Ver Conflitos");
@@ -49,10 +59,9 @@ public class ConflitosGUI extends JFrame {
                     return;
                 }
 
-                // Criar o objeto GrafoGui com os parâmetros fornecidos
-                GrafoGUI grafo = new GrafoGUI(list,sala, horaInicio, horaFim, data);
+                // Create the GrafoGUI object with the provided parameters
+                GrafoGUI grafo = new GrafoGUI(list, sala, horaInicio, horaFim, data);
                 grafo.setVisible(true);
-                
             }
         });
 
@@ -69,7 +78,4 @@ public class ConflitosGUI extends JFrame {
         add(panel);
         setVisible(true);
     }
-
-   
 }
-

@@ -2,14 +2,18 @@ package structures;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
  * end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
  * represent a user's time preferences when rescheduling a class, or when scheduling an entire new course.
+ * @since 1.0
  */
 public class SchedulePeriod implements Comparable<SchedulePeriod> {
 
@@ -132,7 +136,6 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         this.preferredDay = day;
     }
 
-
     public boolean getIsTimeSlot() {
         return isTimeSlot;
     }
@@ -174,6 +177,19 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         return new ArrayList<>(Arrays.asList(SEGUNDA_FEIRA, TERCA_FEIRA, QUARTA_FEIRA, QUINTA_FEIRA, SEXTA_FEIRA));
     }
 
+    /**
+     * Compares this SchedulePeriod with the specified SchedulePeriod for order.
+     * Returns a negative integer, zero, or a positive integer as this SchedulePeriod is less than, equal to,
+     * or greater than the specified SchedulePeriod. Comparison is based on the attributes of SchedulePeriod objects:
+     * - For time slots: compares based on start time. If start times are equal, compares based on end time.
+     * - For time periods: compares based on start time and end time. If both start and end times are less than
+     *   the corresponding times in the specified SchedulePeriod, returns -1. If both are equal, returns 0. Otherwise, returns 1.
+     * - For days of the week: compares based on the DayOfWeek object.
+     *
+     * @param o the SchedulePeriod to be compared
+     * @return a negative integer, zero, or a positive integer as this SchedulePeriod is less than, equal to,
+     * or greater than the specified SchedulePeriod
+     */
     @Override
     public int compareTo(SchedulePeriod o) {
         if (isTimeSlot) {
@@ -198,16 +214,18 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
      *
      * @return String representing start and end time for time slots and periods, or first three letters of day name
      * for week days
-     * @since 1.0
      */
     @Override
     public String toString() {
         if (this.isTimeSlot)
             return this.startTime + " " + this.endTime;
         if (this.isTimePeriod)
-            return "Período:" + this.startTime + " " + this.endTime;
-        if (this.isWeekDay)
-            return this.preferredDay.toString().substring(0, 2);
-        return "Nenhum dos 3";
+            return "Período: " + this.startTime + " - " + this.endTime;
+        if (this.isWeekDay) {
+            Locale prtLocal = new Locale.Builder().setLanguage("pt").setScript("Latn").setRegion("PT").build();
+            String smallDisplayName = preferredDay.getDisplayName(TextStyle.SHORT_STANDALONE, prtLocal).substring(0, 3);
+            return Pattern.compile("^.").matcher(smallDisplayName).replaceFirst(m -> m.group().toUpperCase());
+        }
+        return null;
     }
 }
