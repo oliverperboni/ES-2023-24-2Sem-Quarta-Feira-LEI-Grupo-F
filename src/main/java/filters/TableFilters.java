@@ -27,6 +27,7 @@ public class TableFilters {
     List<Integer> a = new ArrayList<>();
 
     public JFrame panel;
+
     private Table table;
 
     public TableFilters(Table table) {
@@ -154,22 +155,13 @@ public class TableFilters {
 
     public void function_MarcarSubs(JTable tabela) {
         ListSelectionModel selectionModel = tabela.getSelectionModel();
-        selectionModel.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    int selectedRow = tabela.getSelectedRow();
-                    // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
-                    if (selectedRow != -1) {
-                        // Verifica se uma linha está selecionada
-
-                        TableSubstitution tableSubstitution = new TableSubstitution(selectedRow,table.getDataModel(),table.getJTable());
-
-                        /*for (int i = 0; i < tabela.getColumnCount(); i++) {
-                            System.out.print(tabela.getValueAt(selectedRow, i) + " ");
-                        }*/
-                        //System.out.println();
-                    }
+        selectionModel.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = tabela.getSelectedRow();
+                // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
+                if (selectedRow != -1) {
+                    // Verifica se uma linha está selecionada
+                    new TableSubstitution(selectedRow,table);
                 }
             }
         });
@@ -238,5 +230,8 @@ public class TableFilters {
         }
     }
 
+    public Table getTable() {
+        return table;
+    }
 
 }

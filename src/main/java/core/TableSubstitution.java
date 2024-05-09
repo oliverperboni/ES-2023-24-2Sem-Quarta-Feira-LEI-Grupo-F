@@ -27,10 +27,11 @@ public class TableSubstitution {
     private boolean isPreference = true;
     private final int rowSelected;
     protected ScheduleDataModel dataModel;
-    private JTable table;
+    private final JTable table;
+    private final Table tabela;
+    private JFrame frame;
 
-
-    public TableSubstitution(int rowSelected, ScheduleDataModel dataModel, JTable table) {
+    public TableSubstitution(int rowSelected, Table tabela) {
         roomPreferences = Arrays.asList(RoomPreference.values());
         weekdayPreferences = SchedulePeriod.getAllWeekDays();
         timeSlotPreferences = SchedulePeriod.getAllTimeSlots();
@@ -43,18 +44,18 @@ public class TableSubstitution {
         checkBoxMapPeriodExclude = new HashMap<>();
 
         this.rowSelected = rowSelected;
-        this.dataModel = dataModel;
-        this.table = table;
+        this.dataModel = tabela.getDataModel();
+        this.table = tabela.getJTable();
+        this.tabela = tabela;
 
         initialize();
     }
 
     public void initialize() {
-        JFrame frame;
-        frame = new JFrame();
-        frame.setSize(900, 800);
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        this.frame = new JFrame();
+        this.frame.setSize(900, 800);
+        this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.frame.setLayout(new BorderLayout());
 
         JPanel allocationSettings = new JPanel(new GridLayout(1,2));
         JPanel buttonAllocation = new JPanel();
@@ -70,7 +71,7 @@ public class TableSubstitution {
             }catch (Exception ignored){
                 // Skip
             }
-            frame.dispose();
+            this.frame.dispose();
         });
 
         JPanel preferencePanel = createPreferencePanel();
@@ -83,13 +84,10 @@ public class TableSubstitution {
         allocationSettings.add(preferencePanel);
         allocationSettings.add(excludePanel);
 
-        frame.add(buttonAllocation, BorderLayout.SOUTH);
-        frame.add(allocationSettings, BorderLayout.NORTH);
+        this.frame.add(buttonAllocation, BorderLayout.SOUTH);
+        this.frame.add(allocationSettings, BorderLayout.NORTH);
 
-        frame.setVisible(true);
-
-
-
+        this.frame.setVisible(true);
     }
 
     private JPanel createPreferencePanel() {
@@ -193,5 +191,17 @@ public class TableSubstitution {
 
     public Map<SchedulePeriod, JCheckBox> getCheckBoxMapPeriodExclude() {
         return checkBoxMapPeriodExclude;
+    }
+
+    public JTable getJTable() {
+        return table;
+    }
+
+    public Table getTable() {
+        return tabela;
+    }
+
+    public JFrame getFrame(){
+        return frame;
     }
 }

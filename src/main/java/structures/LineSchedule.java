@@ -316,8 +316,8 @@ public class LineSchedule {
      */
     @Override
     public String toString() {
-        return this.curso + " " + this.unidade_curricular + " " + this.turno + " " + this.turma +
-                " " + this.inscritos + " " + this.dia_semana + " " + this.hora_inicio + " " + this.hora_fim +
-                " " + this.data_aula + " " + this.caracteristicas_sala + " " + this.sala;
+        return this.curso + "-" + this.unidade_curricular + "-" + this.turno + "-" + this.turma +
+                "-" + this.inscritos + "-" + this.dia_semana + "-" + this.hora_inicio + "-" + this.hora_fim +
+                "-" + this.data_aula + "-" + this.caracteristicas_sala + "-" + this.sala;
     }
 }
