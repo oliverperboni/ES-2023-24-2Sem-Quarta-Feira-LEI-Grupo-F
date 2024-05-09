@@ -13,7 +13,6 @@ import java.util.TreeMap;
  * The ScheduleEngine class hosts methods that drive the scheduling application's automatic operations over the
  * currently loaded schedule and room entries.
  *
- * @author António Pombeiro
  */
 public class ScheduleEngine {
 
@@ -28,11 +27,11 @@ public class ScheduleEngine {
      * a list of allowed room types, this function returns a list of possible schedules, with different start time,
      * end time, and room, as suggestions for the user to choose, and reschedule.
      *
-     * @param classSchedule
-     * @param excludedPeriods
-     * @param allowedPeriods
-     * @param roomTypePreferences
-     * @param roomTypeExclusions
+     * @param classSchedule LineSchedule of class to reschedule
+     * @param excludedPeriods (remove)
+     * @param allowedPeriods list of SchedulePeriod objects describing the user's prefered time periods for rescheduling
+     * @param roomTypePreferences list of RoomPreference objects describing the user's prefered room types for rescheduling
+     * @param roomTypeExclusions (remove)
      * @return ArrayList<LineSchedule> list of schedule suggestions, based on user defined rules
      * @since 1.0
      */
@@ -54,10 +53,12 @@ public class ScheduleEngine {
                         List<Room> resultRoomList = roomsByPreference(rp); // Salas com o tipo procurado
                         for (Room resultRoom : resultRoomList) // Por cada sala do tipo procurado encontrada
                             for (SchedulePeriod sp2 : allowedPeriods)
-                                if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
+                                if (sp2.getIsTimePeriod()) { // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
-                                            possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
-
+                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
+                                } else if (sp2.getIsTimeSlot()) {
+                                    possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, sp2, rp, excludedPeriods, roomTypeExclusions));
+                                }
 
                     }
         }
@@ -85,12 +86,12 @@ public class ScheduleEngine {
      * a list of allowed room types, this function returns a list of possible schedules, with different start time,
      * end time, and room, as suggestions for the user to choose, and reschedule.
      *
-     * @param courseName
-     * @param classCount
-     * @param excludedPeriods
-     * @param allowedPeriods
-     * @param roomTypePreferences
-     * @param roomTypeExclusions
+     * @param courseName (change)
+     * @param classCount (change)
+     * @param excludedPeriods (change)
+     * @param allowedPeriods (change)
+     * @param roomTypePreferences (change)
+     * @param roomTypeExclusions (change)
      * @return ArrayList<LineSchedule> list of schedule suggestions, based on user defined rules
      * @since 1.0
      */
@@ -151,17 +152,17 @@ public class ScheduleEngine {
      * Given a schedule entry that's to be rescheduled, this method creates a copy of it, and then replaces its
      * date, start and end times, week day, room and room type.
      *
-     * @param classSchedule LineSchedule object of the schedule entry to be rescheduled
-     * @param dayPeriod     SchedulePeriod object for the new day of the week for the schedule entry
-     * @param resultRoom    Room object for the new room
-     * @param timeSlot      SchedulePeriod object for the new time slot, and start and end times
-     * @param rp            RoomPreference object to obtain the new room's specfication
+     * @param classSchedule  LineSchedule object of the schedule entry to be rescheduled
+     * @param dayPeriod      SchedulePeriod object for the new day of the week for the schedule entry
+     * @param resultRoom     Room object for the new room
+     * @param timeSlot       SchedulePeriod object for the new time slot, and start and end times
+     * @param roomPreference RoomPreference object to obtain the new room's specfication
      * @return LineSchedule object representing a copy of the original, but with schedule and room altered
      * @since 1.0
      */
     public LineSchedule
     createSchedulePossibility(LineSchedule classSchedule, SchedulePeriod dayPeriod, Room resultRoom,
-                              SchedulePeriod timeSlot, RoomPreference rp, ArrayList<SchedulePeriod> ExcludedTime,
+                              SchedulePeriod timeSlot, RoomPreference roomPreference, ArrayList<SchedulePeriod> ExcludedTime,
                               ArrayList<RoomPreference> ExcludedRooms) {
 
         LineSchedule auxSchedule = new LineSchedule(classSchedule);
@@ -184,7 +185,7 @@ public class ScheduleEngine {
         auxSchedule.setHora_fim(auxInstant.getScheduleTime().getEndTime().toString());
         auxSchedule.setData_aula(auxInstant.getScheduleDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         auxSchedule.setSala(resultRoom.getNomeSala());
-        auxSchedule.setCaracteristicasSala(rp.toString());
+        auxSchedule.setCaracteristicasSala(roomPreference.toString());
 
         return auxSchedule;
     }
@@ -251,46 +252,47 @@ public class ScheduleEngine {
         return resultRoomList;
     }
 
-    public static void main(String[] args) {
-        LineSchedule reSchedule = new LineSchedule(
-                "Curso", "UnidadeCurricular",
-                "Turno", "Turma", 0, "Seg",
-                "13:00:00", "14:30:00", "01/12/2022",
-                "CaracterísticasSala", "Sala");
-
-        ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv", false,
-                "csv/CaracterizaçãoDasSalas.csv", false);
-        ScheduleEngine engine = new ScheduleEngine(dataModel);
-
-        ArrayList<SchedulePeriod> allowedPeriods1 = new ArrayList<SchedulePeriod>();
-        ArrayList<SchedulePeriod> allowedPeriods2 = new ArrayList<SchedulePeriod>();
-//        ArrayList<SchedulePeriod> excludedPeriods = new ArrayList<SchedulePeriod>();
-//        ArrayList<Room> excludedRoom = new ArrayList<Room>();
-
-        allowedPeriods1.add(SchedulePeriod.NOITE);
-        allowedPeriods1.add(SchedulePeriod.SEGUNDA_FEIRA);
-        allowedPeriods1.add(SchedulePeriod.TERCA_FEIRA);
-
-        allowedPeriods2.add(SchedulePeriod.QUARTA_FEIRA);
-        allowedPeriods2.add(SchedulePeriod.QUINTA_FEIRA);
-        allowedPeriods2.add(SchedulePeriod.SEXTA_FEIRA);
-
-        //excludedPeriods.add(SchedulePeriod.SEGUNDA_FEIRA);
-        //excludedPeriods.add(SchedulePeriod._21H00_22H30);
-        //excludedRoom.add("B1.04");
-
-        ArrayList<RoomPreference> roomTypePreferences1 = new ArrayList<RoomPreference>();
-        roomTypePreferences1.add(RoomPreference.SALA_AULAS_NORMAL);
-        roomTypePreferences1.add(RoomPreference.SALA_AULAS_MESTRADO);
-
-        ArrayList<RoomPreference> roomTypePreferences2 = new ArrayList<RoomPreference>();
-        roomTypePreferences2.add(RoomPreference.SALA_AULAS_NORMAL);
-        roomTypePreferences2.add(RoomPreference.SALA_AULAS_MESTRADO);
-
-//        engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods1,
-//                roomTypePreferences1, new ArrayList<RoomPreference>());
-        engine.suggestNewCourse("Unidade curricular de teste", 7, new ArrayList<SchedulePeriod>(), allowedPeriods2,
-                roomTypePreferences2, new ArrayList<RoomPreference>());
-
-    }
+//    public static void main(String[] args) {
+//        LineSchedule reSchedule = new LineSchedule(
+//                "LCD, LCD-PL", "ANALISE DE REDES (1CICLO)",
+//                "03604TP01", "CDC1", 27, "Sáb",
+//                "09:30:00", "11:00:00", "03/12/2022",
+//                "BYOD (Bring Your Own Device)", "D1.07");
+//
+//        ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv", false,
+//                "csv/CaracterizaçãoDasSalas.csv", false);
+//        ScheduleEngine engine = new ScheduleEngine(dataModel);
+//
+//        ArrayList<SchedulePeriod> allowedPeriods1 = new ArrayList<SchedulePeriod>();
+//        ArrayList<SchedulePeriod> allowedPeriods2 = new ArrayList<SchedulePeriod>();
+////        ArrayList<SchedulePeriod> excludedPeriods = new ArrayList<SchedulePeriod>();
+////        ArrayList<Room> excludedRoom = new ArrayList<Room>();
+//
+//        allowedPeriods1.add(SchedulePeriod._18H00_19H30);
+//        allowedPeriods1.add(SchedulePeriod._19H30_21H00);
+//        allowedPeriods1.add(SchedulePeriod._21H00_22H30);
+//        allowedPeriods1.add(SchedulePeriod.SEGUNDA_FEIRA);
+//        allowedPeriods1.add(SchedulePeriod.TERCA_FEIRA);
+//
+//        allowedPeriods2.add(SchedulePeriod.QUARTA_FEIRA);
+//        allowedPeriods2.add(SchedulePeriod.QUINTA_FEIRA);
+//        allowedPeriods2.add(SchedulePeriod.SEXTA_FEIRA);
+//
+//        //excludedPeriods.add(SchedulePeriod.SEGUNDA_FEIRA);
+//        //excludedPeriods.add(SchedulePeriod._21H00_22H30);
+//        //excludedRoom.add("B1.04");
+//
+//        ArrayList<RoomPreference> roomTypePreferences1 = new ArrayList<RoomPreference>();
+//        roomTypePreferences1.add(RoomPreference.SALA_AULAS_NORMAL);
+//        roomTypePreferences1.add(RoomPreference.SALA_AULAS_MESTRADO);
+//
+//        ArrayList<RoomPreference> roomTypePreferences2 = new ArrayList<RoomPreference>();
+//        roomTypePreferences2.add(RoomPreference.SALA_AULAS_NORMAL);
+//        roomTypePreferences2.add(RoomPreference.SALA_AULAS_MESTRADO);
+//
+//        engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods1, roomTypePreferences1, new ArrayList<RoomPreference>());
+////        engine.suggestNewCourse("Unidade curricular de teste", 7, new ArrayList<SchedulePeriod>(), allowedPeriods2,
+////                roomTypePreferences2, new ArrayList<RoomPreference>());
+//
+//    }
 }

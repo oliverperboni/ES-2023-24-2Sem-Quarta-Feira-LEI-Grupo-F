@@ -1,7 +1,6 @@
 package filters;
 
 import core.ConflitosGUI;
-import core.GrafoGUI;
 import core.ScheduleDataModel;
 import core.Table;
 import structures.LineSchedule;
@@ -10,8 +9,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
-import javax.xml.crypto.Data;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;

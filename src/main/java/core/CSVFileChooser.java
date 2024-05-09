@@ -23,7 +23,7 @@ public class CSVFileChooser {
      * Constructs a new core.CSVFileChooser object and initializes the GUI components.
      */
     public CSVFileChooser() {
-        fileChooserFrame = new JFrame("Escolher ficheiros CSV");
+        fileChooserFrame = new JFrame("GestHor");
         fileChooserFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();
