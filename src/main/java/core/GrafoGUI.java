@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class GrafoGUI extends JFrame {
 
-    private Grafo grafo;
-    private List<LineSchedule> lineSchedules;
+    public Grafo grafo;
+    public List<LineSchedule> lineSchedules;
     public String sala;
     public String HoraFim;
     public String HoraInicio;
@@ -44,7 +44,7 @@ public class GrafoGUI extends JFrame {
     /**
      * Inner class representing the panel for drawing LineSchedules.
      */
-    class GrafoPanel extends JPanel {
+    public class GrafoPanel extends JPanel {
 
         @Override
         protected void paintComponent(Graphics g) {
@@ -72,24 +72,9 @@ public class GrafoGUI extends JFrame {
             }
         }
 
-        // /**
-        // * Draws a LineSchedule at a specific position.
-        // *
-        // * @param g the Graphics context
-        // * @param x the x-coordinate of the position
-        // * @param y the y-coordinate of the position
-        // * @param lineSchedule the LineSchedule to be drawn
-        // * @param color the color to be used for drawing
-        // */
-        // private void desenharLineSchedule(Graphics g, int x, int y, LineSchedule
-        // lineSchedule, Color color) {
-        // g.setColor(color);
-        // g.fillOval(x+30, y+20, 20, 20);
-        // g.drawString("Teste",x+30, y+20);
-        // }
         /**
          * This method draws a LineSchedule on the specified Graphics object.
-         * 
+         *
          * @param g            The Graphics object to draw on.
          * @param x            The x-coordinate of the position to draw.
          * @param y            The y-coordinate of the position to draw.
@@ -159,6 +144,7 @@ public class GrafoGUI extends JFrame {
         }
     }
 }
+
 
 /**
  * Represents a graph composed of vertices and edges.
