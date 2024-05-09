@@ -71,6 +71,7 @@ public class TableSubstitution {
             }catch (Exception ignored){
                 // Skip
             }
+            System.out.println("Teste");
             this.frame.dispose();
         });
 
@@ -202,6 +203,7 @@ public class TableSubstitution {
     }
 
     public JFrame getFrame(){
+
         return frame;
     }
 }
