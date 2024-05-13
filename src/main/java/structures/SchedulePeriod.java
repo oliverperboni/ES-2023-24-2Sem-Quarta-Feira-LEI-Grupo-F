@@ -88,6 +88,8 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
      */
     final private DayOfWeek preferredDay;
 
+    private String diaSemana="";
+
     /**
      * Constructor for a SchedulePeriod object representing a time slot.
      *
@@ -134,6 +136,15 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
         this.endTime = null;
         this.timeSlotList = null;
         this.preferredDay = day;
+        switch (preferredDay){
+            case MONDAY -> this.diaSemana = "Seg";
+            case TUESDAY -> this.diaSemana = "Ter";
+            case WEDNESDAY -> this.diaSemana = "Qua";
+            case THURSDAY -> this.diaSemana = "Qui";
+            case FRIDAY -> this.diaSemana = "Sex";
+        }
+
+
     }
 
     public boolean getIsTimeSlot() {
@@ -162,6 +173,9 @@ public class SchedulePeriod implements Comparable<SchedulePeriod> {
 
     public DayOfWeek getPreferredDay() {
         return preferredDay;
+    }
+    public String getWeekDay() {
+        return diaSemana;
     }
 
     public static List<SchedulePeriod> getAllTimeSlots() {
