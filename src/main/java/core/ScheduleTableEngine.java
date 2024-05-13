@@ -9,10 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.System.out;
 
@@ -22,12 +20,14 @@ public class ScheduleTableEngine {
     private final ScheduleEngine engine;
     private final int rowSelected;
     private String aulaSelecionada;
+    private Boolean modify;
 
-    public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table){
+    public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table){//, boolean modify){
         this.scheduleData = scheduleData;
         this.engine = new ScheduleEngine(scheduleData.dataModel);
         this.rowSelected = table.convertRowIndexToModel(rowSelected);
         this.aulaSelecionada = "";
+        this.modify=modify;
 
         initialize();
     }
@@ -149,17 +149,32 @@ public class ScheduleTableEngine {
     }
 
     private List<LineSchedule> setupInform(){
+
+        String courseName= scheduleData.getCursoSelec().toString();
+        String curricularUnit=scheduleData.getUcSelec().toString();
+        String classTurn= scheduleData.getTurnoSelec().toString();
+        String className= scheduleData.getTurmaSelec().toString();
+        String studentCount = scheduleData.getInscritosSelec().toString();
+        //out.println(classTurn);
+
+        Date startDate = scheduleData.getDateI();
+        int weekCount =Integer.parseInt(scheduleData.getWeekCount());
+
+
         ArrayList<SchedulePeriod> allowedPeriods = extratedSchedulePeriodAllowed();
         ArrayList<SchedulePeriod> excludePeriods = extratedSchedulePeriodExclude();
         ArrayList<RoomPreference> roomIChoose = extratedRoomPreference();
         ArrayList<RoomPreference> excludeRoom = extratedRoomExclude();
-
         out.println(allowedPeriods);
         out.println(excludePeriods);
         out.println(roomIChoose);
         out.println(excludeRoom);
 
-        return engine.suggestCompensation(possibilidadeHorario(), excludePeriods, allowedPeriods, roomIChoose, excludeRoom);
+        if(true){
+            return engine.suggestNewCourse(courseName,curricularUnit,classTurn,className, 30,weekCount,excludePeriods,allowedPeriods,roomIChoose, excludeRoom,startDate);
+        }else{
+            return engine.suggestCompensation(possibilidadeHorario(), excludePeriods, allowedPeriods, roomIChoose, excludeRoom);
+        }
 
     }
 

@@ -64,6 +64,7 @@ public class TableFilters {
         JButton revelarbtn = new JButton("Revelar colunas escondidas");
         JButton saveButton = new JButton("Guardar");
         JButton substituitionButton = new JButton("Marcar Aula Sunstituição");
+        JButton aulaButton = new JButton("Marcar Aulas");
 
 
         saveButton.addActionListener(e -> table.saveChanges());
@@ -78,6 +79,7 @@ public class TableFilters {
         buttonPanel.add(revelarbtn);
         buttonPanel.add(saveButton);
         buttonPanel.add(substituitionButton);
+        buttonPanel.add(aulaButton);
 
         //Ações dos Botões
         conflitosbtn.addActionListener(e -> function_conflitos(dataModel.getScheduleEntries()));
@@ -85,7 +87,7 @@ public class TableFilters {
         esconderbtn.addActionListener(e -> function_esconderBtn(tabela));
         revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
         substituitionButton.addActionListener(e -> function_MarcarSubs(tabela));
-
+        aulaButton.addActionListener(e -> function_MarcarAulas(tabela));
 
         panel.add(filterPanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -154,17 +156,27 @@ public class TableFilters {
     }
 
     public void function_MarcarSubs(JTable tabela) {
-        ListSelectionModel selectionModel = tabela.getSelectionModel();
+        /*ListSelectionModel selectionModel = tabela.getSelectionModel();
         selectionModel.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
+            if (!e.getValueIsAdjusting()) {*/
                 int selectedRow = tabela.getSelectedRow();
                 // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
                 if (selectedRow != -1) {
                     // Verifica se uma linha está selecionada
-                    new TableSubstitution(selectedRow,table);
+                    new TableSubstitution(selectedRow,table,false);
                 }
-            }
-        });
+            //}
+        /*});*/
+    }
+    public void function_MarcarAulas(JTable tabela) {
+
+        int selectedRow = tabela.getSelectedRow();
+        // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
+        if (selectedRow != -1) {
+            // Verifica se uma linha está selecionada
+            new TableSubstitution(selectedRow,table,true);
+        }
+
     }
 
     /**
