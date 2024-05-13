@@ -63,8 +63,8 @@ public class GrafoGUI extends JFrame {
             // Iterate over the list of LineSchedules
             for (LineSchedule lineSchedule : lineSchedules) {
                 if (lineSchedule.getSala().equals(sala) && lineSchedule.getDataAula().equals(Data)) {
-                    if (!compararHoras(lineSchedule.getHoraInicio(), HoraFim)
-                            || compararHoras(lineSchedule.getHoraInicio(), HoraInicio)) {
+                    if (compararHoras(lineSchedule.getHoraInicio(), HoraFim)
+                            || !compararHoras(lineSchedule.getHoraInicio(), HoraInicio)) {
                         drawLineSchedule(g, centerX, centerY, lineSchedule, Color.RED, incrment);
 //                        System.out.println(lineSchedule);
                         incrment++;
