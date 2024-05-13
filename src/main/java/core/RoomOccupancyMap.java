@@ -1,11 +1,12 @@
+/**
+ * A class representing a room occupancy heatmap with filtering capabilities.
+ */
 package core;
-
 import com.formdev.flatlaf.FlatLightLaf;
 import org.knowm.xchart.HeatMapChart;
 import org.knowm.xchart.HeatMapChartBuilder;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.style.Styler;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
@@ -30,6 +31,11 @@ public class RoomOccupancyMap {
     private static String filterDayOfYear; // 20/10/2022
     private static String filterWeekOfYear; // 1, 10, 13
 
+    /**
+     * Main method to initiate the room occupancy map GUI and functionalities.
+     *
+     * @param args Command-line arguments
+     */
     public static void main(String[] args) {
         FlatLightLaf.setup();
         // Criar JFrame para selecionar filtro
@@ -113,7 +119,13 @@ public class RoomOccupancyMap {
         });
     }
 
-    private static List<String[]> readCSV(String filename) {
+    /**
+     * Read CSV file and return data as a list of arrays of strings.
+     *
+     * @param filename The filename of the CSV file
+     * @return List of arrays of strings representing data from the CSV file
+     */
+    public static List<String[]> readCSV(String filename) {
         List<String[]> data = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             // Ignora primeira linha (cabeçalhos das colunas)
@@ -141,7 +153,14 @@ public class RoomOccupancyMap {
         DAY_OF_WEEK_MAP.put("Sáb", 6);
     }
 
-    private static int convertDayOfWeekToInt(String dayOfWeek) {
+    /**
+     * Convert a day of the week string to an integer.
+     *
+     * @param dayOfWeek The day of the week string (Abbreviated)
+     * @return Integer representing the day of the week
+     * @throws IllegalArgumentException if the input day of the week is invalid
+     */
+    public static int convertDayOfWeekToInt(String dayOfWeek) {
         if (DAY_OF_WEEK_MAP.containsKey(dayOfWeek)) {
             return DAY_OF_WEEK_MAP.get(dayOfWeek);
         } else {
@@ -149,7 +168,15 @@ public class RoomOccupancyMap {
         }
     }
 
-    private static int countOccurrences(List<String[]> data, int dayOfWeek, int startTime) {
+    /**
+     * Count occurrences of a particular day of the week and start time combination.
+     *
+     * @param data       The data from the CSV file
+     * @param dayOfWeek  The day of the week index
+     * @param startTime  The start time index
+     * @return Number of occurrences
+     */
+    public static int countOccurrences(List<String[]> data, int dayOfWeek, int startTime) {
         int count = 0;
         for (String[] row : data) {
             int rowDayOfWeek = convertDayOfWeekToInt(row[5]);
@@ -161,7 +188,15 @@ public class RoomOccupancyMap {
         return count;
     }
 
-    private static int haveFilter(List<String[]> data, int dayOfWeek, int startTime) {
+    /**
+     * Check if a particular combination meets the applied filter criteria.
+     *
+     * @param data       The data from the CSV file
+     * @param dayOfWeek  The day of the week index
+     * @param startTime  The start time index
+     * @return Number of occurrences meeting the criteria
+     */
+    public static int haveFilter(List<String[]> data, int dayOfWeek, int startTime) {
         int count = 0;
         for (String[] row : data) {
             int rowDayOfWeek = convertDayOfWeekToInt(row[5]);
@@ -177,20 +212,22 @@ public class RoomOccupancyMap {
                     meetsCriteria = false;
                 }
             }
+
             if (!filterHour.isBlank()) {
                 int filtroHoraInt = convertDateOfDayToInt(filterHour);
                 if (rowStartTime != filtroHoraInt) {
                     meetsCriteria = false;
                 }
             }
+
             if (!filterRoom.isBlank() && !room.equals(filterRoom)) {
                 meetsCriteria = false;
             }
-            if (!filterDayOfYear.isBlank()) {
-                if (!day.equals(filterDayOfYear)) {
-                    meetsCriteria = false;
-                }
+
+            if (!filterDayOfYear.isBlank() && !day.equals(filterDayOfYear)) {
+                meetsCriteria = false;
             }
+
             if (!filterWeekOfYear.isBlank() && week != Integer.parseInt(filterWeekOfYear)) {
                 meetsCriteria = false;
             }
@@ -233,14 +270,26 @@ public class RoomOccupancyMap {
         DATE_OF_DAY_MAP.put("21:30:00", 27);
     }
 
-    private static int convertDateOfDayToInt(String dateOfDay) {
+    /**
+     * Convert a time of day string to an integer.
+     *
+     * @param dateOfDay The time of day string (HH:MM:SS Format)
+     * @return Integer representing the time of day
+     */
+    public static int convertDateOfDayToInt(String dateOfDay) {
         if (DATE_OF_DAY_MAP.containsKey(dateOfDay)) {
             return DATE_OF_DAY_MAP.get(dateOfDay);
         } else {
-            throw new IllegalArgumentException("Hora do dia inválida: " + dateOfDay);
+            return -1;
         }
     }
 
+    /**
+     * Get the week of the year from a given date string.
+     *
+     * @param dateString The date string (dd/MM/yyyy Format)
+     * @return The week of the year
+     */
     public static int getWeekOfYear(String dateString) {
         if (!dateString.isEmpty()) {
             try {
