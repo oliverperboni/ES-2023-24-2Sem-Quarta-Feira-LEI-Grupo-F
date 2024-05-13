@@ -68,8 +68,6 @@ public class Table {
         JScrollPane scrollPane = new JScrollPane(appTable);
 
         app.getContentPane().add(scrollPane);
-        GrafoGUI g = new GrafoGUI(dataModel.getScheduleEntries(),"D1.14", "14:00", "16:00", "27/09/2022");
-        g.setVisible(true);
         app.setVisible(true);
 
         // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem

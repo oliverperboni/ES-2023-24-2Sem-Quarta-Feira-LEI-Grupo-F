@@ -5,7 +5,10 @@ import structures.LineSchedule;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A graphical user interface for displaying LineSchedules on a graph.
@@ -32,6 +35,8 @@ public class GrafoGUI extends JFrame {
         super("Grafo GUI");
         setSize(900, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+
 
         this.lineSchedules = lineSchedules;
         this.HoraFim = HoraFim;
@@ -60,14 +65,27 @@ public class GrafoGUI extends JFrame {
             g.fillOval(centerX, centerY, 20, 20);
             g.drawString("Sua Sala", centerX + 25, centerY - 10);
 
+            // Sua lista com elementos duplicados
+           List<LineSchedule> listaSemDuplicados = new ArrayList<>();
+           for (LineSchedule elemento : lineSchedules) {
+               if (listaSemDuplicados.contains(elemento)) {
+                   listaSemDuplicados.add(elemento);
+               }
+           }   
             // Iterate over the list of LineSchedules
-            for (LineSchedule lineSchedule : lineSchedules) {
+            for (LineSchedule lineSchedule : listaSemDuplicados) {
                 if (lineSchedule.getSala().equals(sala) && lineSchedule.getDataAula().equals(Data)) {
-                    if (compararHoras(lineSchedule.getHoraInicio(), HoraFim)
-                            || !compararHoras(lineSchedule.getHoraInicio(), HoraInicio)) {
+                    Boolean comecaDepois = compararHoras(HoraInicio,lineSchedule.getHoraFim());
+                    Boolean comecaAntes = compararHoras(lineSchedule.getHoraInicio(),HoraFim);
+                 
+
+                    
+                    if (!((comecaAntes ) || (comecaDepois))) {
+                        System.out.println("-----------------------"+lineSchedule.getHoraInicio() +" "+ lineSchedule.getHoraFim()+"-----------------------");
+                        System.out.println(lineSchedule.getUnidadeCurricular()+" "+lineSchedule.getDataAula()+" "+ lineSchedule.getSala());
                         drawLineSchedule(g, centerX, centerY, lineSchedule, Color.RED, incrment);
 //                        System.out.println(lineSchedule);
-                        incrment++;
+                        incrment= (int)(Math.random()*10);
                     }
                 }
             }
@@ -138,7 +156,7 @@ public class GrafoGUI extends JFrame {
                 return true;
             } else if (horaAInt == horaBInt) {
                 // If hours are equal, compare the minutes
-                return minutoAInt > minutoBInt;
+                return minutoAInt >= minutoBInt;
             } else {
                 return false;
             }
