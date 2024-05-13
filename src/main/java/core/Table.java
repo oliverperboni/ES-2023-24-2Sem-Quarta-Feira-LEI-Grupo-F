@@ -17,6 +17,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
@@ -219,6 +220,21 @@ public class Table {
             JOptionPane.showMessageDialog(app, "Erro ao salvar as alterações.", "Erro", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+    }
+
+    public List<Object> getColuna(JTable table, int index){
+        List<Object> instances = new ArrayList<>();
+        int rowCount = table.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            Object value = table.getValueAt(i, index);
+            if (!instances.contains(value)) {
+                instances.add(value);
+                System.out.println("oi");
+            }
+        }
+
+
+        return instances;
     }
 
 }
