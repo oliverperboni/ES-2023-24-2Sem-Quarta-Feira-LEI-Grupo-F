@@ -11,19 +11,24 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.WeekFields;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class RoomOccupancyMap {
 
-    private static String filterDayOfWeek;
-    private static String filterHour;
-    private static String filterRoom;
+    private static String filterDayOfWeek; // Seg, Ter, Qua, Qui, Sex, Sáb, Dom
+    private static String filterHour; // 08:00:00
+    private static String filterRoom; // D1.09
+
+    private static String filterDayOfYear; // 20/10/2022
+    private static String filterWeekOfYear; // 1, 10, 13
 
     public static void main(String[] args) {
         FlatLightLaf.setup();
@@ -37,6 +42,10 @@ public class RoomOccupancyMap {
         JTextField hourField = new JTextField(8);
         JLabel roomLabel = new JLabel("Nome da Sala: ");
         JTextField roomField = new JTextField(5);
+        JLabel dayOfYearLabel = new JLabel("Dia (Formato dd/MM/yyyy): ");
+        JTextField dayOfYearField = new JTextField(10);
+        JLabel weekOfYearLabel = new JLabel("Número da Semana do Ano: ");
+        JTextField weekOfYearField = new JTextField(5);
         JButton showChartButton = new JButton("Mostrar Gráfico");
 
         filterFrame.add(applyFilterCheckbox);
@@ -46,6 +55,10 @@ public class RoomOccupancyMap {
         filterFrame.add(hourField);
         filterFrame.add(roomLabel);
         filterFrame.add(roomField);
+        filterFrame.add(dayOfYearLabel);
+        filterFrame.add(dayOfYearField);
+        filterFrame.add(weekOfYearLabel);
+        filterFrame.add(weekOfYearField);
         filterFrame.add(showChartButton);
         filterFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         filterFrame.pack();
@@ -56,6 +69,8 @@ public class RoomOccupancyMap {
             filterDayOfWeek = dayOfWeekField.getText().trim();
             filterHour = hourField.getText().trim();
             filterRoom = roomField.getText().trim();
+            filterDayOfYear = dayOfYearField.getText().trim();
+            filterWeekOfYear = weekOfYearField.getText().trim();
 
             HeatMapChart chart =
                     new HeatMapChartBuilder().xAxisTitle("Dia da Semana").yAxisTitle("Hora de Início").theme(Styler.ChartTheme.Matlab).build();
@@ -152,18 +167,36 @@ public class RoomOccupancyMap {
             int rowDayOfWeek = convertDayOfWeekToInt(row[5]);
             int rowStartTime = convertDateOfDayToInt(row[6]);
             String room = row[10];
+            String day = row[8];
+            int week = getWeekOfYear(day);
 
             boolean meetsCriteria = true;
             if (!filterDayOfWeek.isBlank()) {
                 int filtroDataInt = convertDayOfWeekToInt(filterDayOfWeek);
-                if (rowDayOfWeek != filtroDataInt) {meetsCriteria = false;}
+                if (rowDayOfWeek != filtroDataInt) {
+                    meetsCriteria = false;
+                }
             }
             if (!filterHour.isBlank()) {
                 int filtroHoraInt = convertDateOfDayToInt(filterHour);
-                if (rowStartTime != filtroHoraInt) {meetsCriteria = false;}
+                if (rowStartTime != filtroHoraInt) {
+                    meetsCriteria = false;
+                }
             }
-            if (!filterRoom.isBlank() && !room.equals(filterRoom)) {meetsCriteria = false;}
-            if (meetsCriteria && rowDayOfWeek == dayOfWeek && rowStartTime == startTime) {count++;}
+            if (!filterRoom.isBlank() && !room.equals(filterRoom)) {
+                meetsCriteria = false;
+            }
+            if (!filterDayOfYear.isBlank()) {
+                if (!day.equals(filterDayOfYear)) {
+                    meetsCriteria = false;
+                }
+            }
+            if (!filterWeekOfYear.isBlank() && week != Integer.parseInt(filterWeekOfYear)) {
+                meetsCriteria = false;
+            }
+            if (meetsCriteria && rowDayOfWeek == dayOfWeek && rowStartTime == startTime) {
+                count++;
+            }
         }
         return count;
     }
@@ -206,5 +239,19 @@ public class RoomOccupancyMap {
         } else {
             throw new IllegalArgumentException("Hora do dia inválida: " + dateOfDay);
         }
+    }
+
+    public static int getWeekOfYear(String dateString) {
+        if (!dateString.isEmpty()) {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate date = LocalDate.parse(dateString, formatter);
+                WeekFields weekFields = WeekFields.of(Locale.getDefault());
+                return date.get(weekFields.weekOfWeekBasedYear());
+            } catch (DateTimeParseException e) {
+                return -1;
+            }
+        }
+        return -1;
     }
 }
