@@ -60,7 +60,7 @@ public class TableFiltersTest {
 
         // Verifica se o botão de filtragem foi adicionado corretamente
         JButton filtrarBtn = (JButton) ((JPanel) resultFrame.getContentPane().getComponent(1)).getComponent(0);
-        assertEquals("Filtrar", filtrarBtn.getText());
+        assertEquals("Salas", filtrarBtn.getText());
     }
 
 

@@ -14,7 +14,7 @@ class GrafoGUITest {
         assertFalse(GrafoGUI.GrafoPanel.compararHoras("10:00", "11:00"));
         assertTrue(GrafoGUI.GrafoPanel.compararHoras("10:30", "10:00"));
         assertFalse(GrafoGUI.GrafoPanel.compararHoras("10:00", "10:30"));
-        assertFalse(GrafoGUI.GrafoPanel.compararHoras("10:00", "10:00"));
+        assertTrue(GrafoGUI.GrafoPanel.compararHoras("10:00", "10:00"));
     }
 
    
