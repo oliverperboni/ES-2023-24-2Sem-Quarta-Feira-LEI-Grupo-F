@@ -1,12 +1,8 @@
-package core;
+package structures;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import structures.LineSchedule;
-import structures.Room;
-import structures.RoomsTuple;
-import structures.ScheduleInstant;
 
 import java.io.FileReader;
 import java.io.IOException;

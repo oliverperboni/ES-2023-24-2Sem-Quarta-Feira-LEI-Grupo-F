@@ -1,5 +1,5 @@
 import org.junit.jupiter.api.Test;
-import core.RoomOccupancyMap;
+import visualize.RoomOccupancyMap;
 import java.util.Arrays;
 import java.util.List;
 

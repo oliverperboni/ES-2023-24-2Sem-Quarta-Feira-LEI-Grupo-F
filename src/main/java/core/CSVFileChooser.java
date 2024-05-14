@@ -1,6 +1,8 @@
 package core;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import structures.ScheduleDataModel;
+import visualize.Table;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +25,7 @@ public class CSVFileChooser {
      * Constructs a new core.CSVFileChooser object and initializes the GUI components.
      */
     public CSVFileChooser() {
-        fileChooserFrame = new JFrame("GestHor");
+        fileChooserFrame = new JFrame("GestHor - carregar ficheiros");
         fileChooserFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JPanel panel = new JPanel();

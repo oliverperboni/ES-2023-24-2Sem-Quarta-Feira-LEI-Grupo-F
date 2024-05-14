@@ -1,4 +1,4 @@
-import core.ScheduleDataModel;
+import structures.ScheduleDataModel;
 import org.junit.Test;
 import structures.Room;
 import structures.RoomsTuple;

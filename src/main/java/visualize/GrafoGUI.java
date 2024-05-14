@@ -1,4 +1,4 @@
-package core;
+package visualize;
 
 import structures.LineSchedule;
 

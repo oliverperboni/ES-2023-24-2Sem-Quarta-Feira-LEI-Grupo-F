@@ -1,15 +1,16 @@
 package filters;
 
-import core.*;
+import visualize.RoomOccupancyMap;
 import structures.LineSchedule;
+import structures.ScheduleDataModel;
+import visualize.ConflitosGUI;
+import visualize.Table;
+import visualize.TableSubstitution;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
-import javax.xml.crypto.Data;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -58,14 +59,15 @@ public class TableFilters {
         textFieldsCreation(filterPanel);
 
         //Botoes
+        JButton salasbtn = new JButton("Salas");
+        JButton conflitosbtn = new JButton("Conflitos");
+        JButton heatmapbtn = new JButton("Mapa Ocupação");
         JButton filtrarbtn = new JButton("Filtrar");
-        JButton conflitosbtn = new JButton("Ver conflitos");
-        JButton esconderbtn = new JButton("Esconder coluna");
-        JButton revelarbtn = new JButton("Revelar colunas escondidas");
+        JButton esconderbtn = new JButton("Esconder Coluna");
+        JButton revelarbtn = new JButton("Revelar Colunas");
+        JButton substituitionButton = new JButton("Marcar Substituição");
+        JButton aulaButton = new JButton("Marcar Nova UC");
         JButton saveButton = new JButton("Guardar");
-        JButton substituitionButton = new JButton("Marcar Aula Sunstituição");
-        JButton aulaButton = new JButton("Marcar Aulas");
-
 
         saveButton.addActionListener(e -> table.saveChanges());
 
@@ -73,13 +75,15 @@ public class TableFilters {
         btnCreation(esconderbtn, tabela, filterPanel);
         btnCreation(revelarbtn, tabela, filterPanel);
 
-        buttonPanel.add(filtrarbtn);
+        buttonPanel.add(salasbtn);
         buttonPanel.add(conflitosbtn);
+        buttonPanel.add(heatmapbtn);
+        buttonPanel.add(filtrarbtn);
         buttonPanel.add(esconderbtn);
         buttonPanel.add(revelarbtn);
-        buttonPanel.add(saveButton);
         buttonPanel.add(substituitionButton);
         buttonPanel.add(aulaButton);
+        buttonPanel.add(saveButton);
 
         //Ações dos Botões
         conflitosbtn.addActionListener(e -> function_conflitos(dataModel.getScheduleEntries()));
@@ -88,6 +92,8 @@ public class TableFilters {
         revelarbtn.addActionListener(e -> function_revelarBtn(tabela));
         substituitionButton.addActionListener(e -> function_MarcarSubs(tabela));
         aulaButton.addActionListener(e -> function_MarcarAulas(tabela));
+        salasbtn.addActionListener(e -> function_listaSalas());
+        heatmapbtn.addActionListener(e -> function_heatMap());
 
         panel.add(filterPanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.SOUTH);
@@ -203,6 +209,22 @@ public class TableFilters {
                 tabela.moveColumn(tabela.getColumnCount()-1,x);
             }
         a.clear();
+    }
+
+    /**
+     * Creates an instance of the RoomFilterFrame class and displays its window.
+     */
+    public void function_listaSalas() {
+        RoomFilterFrame filterFrame = new RoomFilterFrame(table.getDataModel().getRoomEntries(),
+                table.getDataModel().getRoomColumnHeaders());
+        filterFrame.show();
+    }
+
+    /**
+     * Creates an instance of the RoomOccupancyMap class and displays its window.
+     */
+    public void function_heatMap() {
+        RoomOccupancyMap.main(new String[0]);
     }
 
     /**

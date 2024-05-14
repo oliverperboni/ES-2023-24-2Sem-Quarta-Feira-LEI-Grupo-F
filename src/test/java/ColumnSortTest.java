@@ -1,5 +1,5 @@
-import core.ScheduleDataModel;
-import core.Table;
+import structures.ScheduleDataModel;
+import visualize.Table;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -14,12 +14,12 @@ public class ColumnSortTest {
 
     @Test
     public void addColumnSortingTest() throws IOException {
-        // core.Table instance using a schedule .csv file
+        // visualize.Table instance using a schedule .csv file
         ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv",
                 false, "csv/CaracterizaçãoDasSalas.csv", false);
         Table table = new Table(dataModel);
 
-        // Sorter associated with the core.Table instance's JTable
+        // Sorter associated with the visualize.Table instance's JTable
         TableRowSorter<DefaultTableModel> sorter = (TableRowSorter<DefaultTableModel>) table.getJTable().getRowSorter();
 
         // Get the current sort keys

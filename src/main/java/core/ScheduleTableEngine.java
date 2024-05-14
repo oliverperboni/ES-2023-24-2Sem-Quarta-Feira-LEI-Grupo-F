@@ -3,6 +3,7 @@ package core;
 import structures.LineSchedule;
 import structures.RoomPreference;
 import structures.SchedulePeriod;
+import visualize.TableSubstitution;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class ScheduleTableEngine {
 
     public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table){//, boolean modify){
         this.scheduleData = scheduleData;
-        this.engine = new ScheduleEngine(scheduleData.dataModel);
+        this.engine = new ScheduleEngine(scheduleData.getDataModel());
         this.rowSelected = table.convertRowIndexToModel(rowSelected);
         this.aulaSelecionada = "";
         this.modify=modify;
@@ -115,7 +116,7 @@ public class ScheduleTableEngine {
                     LineSchedule newLineSchedule = new LineSchedule(arrays[0], arrays[1], arrays[2], arrays[3], Integer.parseInt(arrays[4]), arrays[5], arrays[6], arrays[7], arrays[8], arrays[9], arrays[10]);
 
 
-                    out.println("Aula Selecionada Removida: " + scheduleData.dataModel.getScheduleEntries().get(rowSelected));
+                    out.println("Aula Selecionada Removida: " + scheduleData.getDataModel().getScheduleEntries().get(rowSelected));
 
                     scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getCurso(), rowSelected, 0);
                     scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getUnidadeCurricular(), rowSelected, 1);
@@ -180,7 +181,7 @@ public class ScheduleTableEngine {
 
     private LineSchedule possibilidadeHorario(){
 
-        return scheduleData.dataModel.getScheduleEntries().get(rowSelected);
+        return scheduleData.getDataModel().getScheduleEntries().get(rowSelected);
     }
 
     private ArrayList<SchedulePeriod> extratedSchedulePeriodAllowed(){

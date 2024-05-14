@@ -1,7 +1,7 @@
 /**
  * A class representing a room occupancy heatmap with filtering capabilities.
  */
-package core;
+package visualize;
 import com.formdev.flatlaf.FlatLightLaf;
 import org.knowm.xchart.HeatMapChart;
 import org.knowm.xchart.HeatMapChartBuilder;
@@ -66,7 +66,6 @@ public class RoomOccupancyMap {
         filterFrame.add(weekOfYearLabel);
         filterFrame.add(weekOfYearField);
         filterFrame.add(showChartButton);
-        filterFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         filterFrame.pack();
         filterFrame.setVisible(true);
 

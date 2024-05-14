@@ -1,5 +1,6 @@
-package core;
+package visualize;
 
+import structures.ScheduleDataModel;
 import filters.RoomFilterFrame;
 import filters.TableFilters;
 import org.apache.commons.csv.CSVFormat;
@@ -22,7 +23,7 @@ import java.util.Vector;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 
 /**
- * The core.Table class represents a table view of schedule data with filtering and sorting functionality.
+ * The visualize.Table class represents a table view of schedule data with filtering and sorting functionality.
  */
 public class Table {
 
@@ -33,9 +34,9 @@ public class Table {
     public ScheduleDataModel dataModel;
 
     /**
-     * Constructs a new core.Table object with the provided data model.
+     * Constructs a new visualize.Table object with the provided data model.
      *
-     * @param dataModel The core.ScheduleDataModel containing schedule data.
+     * @param dataModel The structures.ScheduleDataModel containing schedule data.
      * @throws IOException If an I/O error occurs.
      */
     public Table(ScheduleDataModel dataModel) throws IOException {
@@ -64,6 +65,7 @@ public class Table {
 
         app = tabFilter.addFilter(app, appTable, dataModel);
         app.setExtendedState(MAXIMIZED_BOTH);
+        app.setTitle("GestHor - horário");
 
         // cria a opção de scroll se necessario
         JScrollPane scrollPane = new JScrollPane(appTable);
@@ -71,11 +73,11 @@ public class Table {
         app.getContentPane().add(scrollPane);
         app.setVisible(true);
 
-        // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem
-        SwingUtilities.invokeLater(() -> {
-            RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
-            filterFrame.show();
-        });
+//        // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem
+//        SwingUtilities.invokeLater(() -> {
+//            RoomFilterFrame filterFrame = new RoomFilterFrame(dataModel.getRoomEntries(), dataModel.getRoomColumnHeaders());
+//            filterFrame.show();
+//        });
     }
 
     /**
@@ -90,7 +92,7 @@ public class Table {
     /**
      * Retrieves the data model.
      *
-     * @return The core.ScheduleDataModel.
+     * @return The structures.ScheduleDataModel.
      */
     public ScheduleDataModel getDataModel() {
         return dataModel;

@@ -1,15 +1,13 @@
-package core;
+package visualize;
 
 import javax.swing.*;
 import structures.LineSchedule;
 
 import java.util.List;
-import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 /**
  * A graphical user interface for viewing schedule conflicts.
@@ -30,7 +28,6 @@ public class ConflitosGUI extends JFrame {
         this.lineSchedules = list;
         setTitle("Ver Conflitos");
         setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();

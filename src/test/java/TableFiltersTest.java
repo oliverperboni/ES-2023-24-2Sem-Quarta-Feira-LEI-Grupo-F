@@ -1,5 +1,5 @@
-import core.ScheduleDataModel;
-import core.Table;
+import structures.ScheduleDataModel;
+import visualize.Table;
 import filters.TableFilters;
 import org.junit.jupiter.api.Test;
 

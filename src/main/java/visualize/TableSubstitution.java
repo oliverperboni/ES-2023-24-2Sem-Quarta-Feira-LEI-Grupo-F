@@ -1,9 +1,11 @@
-package core;
+package visualize;
 
+import core.ScheduleTableEngine;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import structures.RoomPreference;
+import structures.ScheduleDataModel;
 import structures.SchedulePeriod;
 
 import javax.swing.*;
@@ -460,6 +462,9 @@ public class TableSubstitution {
         return weekCount;
     }
 
+    public ScheduleDataModel getDataModel() {
+        return dataModel;
+    }
 
     public JTable getJTable() {
         return table;

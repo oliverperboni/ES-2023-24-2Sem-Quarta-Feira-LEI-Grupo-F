@@ -40,7 +40,7 @@ public class RoomFilterFrame {
      * Initializes the graphical user interface and configures the components.
      */
     private void initialize() {
-        frame = new JFrame("Filtrar Salas");
+        frame = new JFrame("GestHor - salas");
         frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         frame.setSize(800, 400);
         frame.setLocationRelativeTo(null); // Centralizar na tela

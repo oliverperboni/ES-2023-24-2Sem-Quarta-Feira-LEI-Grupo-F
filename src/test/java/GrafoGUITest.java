@@ -2,13 +2,7 @@
 
 import org.junit.jupiter.api.Test;
 
-import core.GrafoGUI;
-import structures.LineSchedule;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import visualize.GrafoGUI;
 
 import static org.junit.jupiter.api.Assertions.*;
 
