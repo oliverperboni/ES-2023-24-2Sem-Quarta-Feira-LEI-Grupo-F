@@ -34,9 +34,6 @@ public class GrafoGUI extends JFrame {
     public GrafoGUI(List<LineSchedule> lineSchedules, String sala, String HoraInicio, String HoraFim, String Data) {
         super("Grafo GUI");
         setSize(900, 900);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-
 
         this.lineSchedules = lineSchedules;
         this.HoraFim = HoraFim;
