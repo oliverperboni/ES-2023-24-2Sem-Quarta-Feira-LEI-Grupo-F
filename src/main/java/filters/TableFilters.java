@@ -161,19 +161,25 @@ public class TableFilters {
 
     }
 
+    /**
+     * Opens a dialog for marking substitution classes based on the selected row in the table.
+     *
+     * @param tabela The table containing the schedule data.
+     */
     public void function_MarcarSubs(JTable tabela) {
-        /*ListSelectionModel selectionModel = tabela.getSelectionModel();
-        selectionModel.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {*/
                 int selectedRow = tabela.getSelectedRow();
                 // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
                 if (selectedRow != -1) {
                     // Verifica se uma linha está selecionada
                     new TableSubstitution(selectedRow,table,false);
                 }
-            //}
-        /*});*/
+
     }
+    /**
+     * Opens a dialog for marking regular classes based on the selected row in the table.
+     *
+     * @param tabela The table containing the schedule data.
+     */
     public void function_MarcarAulas(JTable tabela) {
 
         int selectedRow = tabela.getSelectedRow();

@@ -86,46 +86,48 @@ public class ScheduleEngine {
     }
 
     /**
-     * Given a schedule entry that's to be rescheduled, a list of allowed time periods for its compensation, as well as
-     * a list of allowed room types, this function returns a list of possible schedules, with different start time,
-     * end time, and room, as suggestions for the user to choose, and reschedule.
+     * Generates a list of potential schedules for a new course based on provided constraints and preferences.
      *
-     * @param courseName (change)
-     * @param weekCount (change)
-     * @param excludedPeriods (change)
-     * @param allowedPeriods (change)
-     * @param roomTypePreferences (change)
-
-     * @return ArrayList<LineSchedule> list of schedule suggestions, based on user defined rules
-     * @since 1.0
+     * @param courseName           The name of the course.
+     * @param curricularUnit       The curricular unit associated with the course.
+     * @param classTurn            The turn of the class (e.g., morning, afternoon, evening).
+     * @param className            The name of the class.
+     * @param studentCount         The number of students enrolled in the course.
+     * @param weekCount            The number of weeks to generate schedules for.
+     * @param excludedPeriods      List of periods to be excluded from scheduling.
+     * @param allowedPeriods       List of periods allowed for scheduling.
+     * @param roomTypePreferences List of preferences for room types.
+     * @param roomTypeExclusions  List of room types to be excluded from scheduling.
+     * @param startDate            The start date for scheduling.
+     * @return                     An ArrayList of LineSchedule objects representing potential schedules.
      */
-    public ArrayList<LineSchedule>
-    suggestNewCourse(String courseName, String curricularUnit, String classTurn, String className, int studentCount, int weekCount, ArrayList<SchedulePeriod> excludedPeriods,
-                     ArrayList<SchedulePeriod> allowedPeriods, ArrayList<RoomPreference> roomTypePreferences, ArrayList<RoomPreference> roomTypeExclusions, Date startDate) {
+    public ArrayList<LineSchedule> suggestNewCourse(String courseName, String curricularUnit, String classTurn, String className, int studentCount, int weekCount, ArrayList<SchedulePeriod> excludedPeriods,
+                                                    ArrayList<SchedulePeriod> allowedPeriods, ArrayList<RoomPreference> roomTypePreferences, ArrayList<RoomPreference> roomTypeExclusions, Date startDate) {
 
+        // Get the day of the week for the start date
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate x = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         String day = workDate(x);
 
-
+        // Create a base class schedule
         LineSchedule classSchedule = new LineSchedule(courseName, curricularUnit, classTurn, className,
                 studentCount, day, "08:00:00", "09:30:00", dtf.format(x),
                 "", "");
+
+        // Initialize possibility list and schedule map
         ArrayList<LineSchedule> possibilityList = new ArrayList<>();
         TreeMap<ScheduleInstant, List<LineSchedule>> scheduleMap = dataModel.getScheduleMap();
 
-
-
+        // Generate schedules for each week
         for (int i = 1; i <= weekCount; i++) {
             for (SchedulePeriod sp1 : allowedPeriods) {
-                if (sp1.getIsWeekDay()) { // Por cada preferência do tipo "dia da semana"
-
-                    for (RoomPreference rp : roomTypePreferences) { // Por cada preferência de tipo de sala
+                if (sp1.getIsWeekDay()) { // For each weekday preference
+                    for (RoomPreference rp : roomTypePreferences) { // For each room type preference
                         List<Room> resultRoomList = roomsByPreference(rp);
                         for (Room resultRoom : resultRoomList)
                             for (SchedulePeriod sp2 : allowedPeriods){
-                                if (sp2.getIsTimePeriod()) // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
-                                    for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
+                                if (sp2.getIsTimePeriod()) // For each time period preference (morning, afternoon, evening)
+                                    for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // For each time slot in the period
                                         if (createSchedulePossibility2(classSchedule, sp1, resultRoom, timeSlot, excludedPeriods, roomTypeExclusions,rp, i) != null)
                                             possibilityList.add(createSchedulePossibility2(classSchedule, sp1, resultRoom, timeSlot, excludedPeriods, roomTypeExclusions,rp, i));
                             }}
@@ -133,6 +135,7 @@ public class ScheduleEngine {
             }
         }
 
+        // Remove schedules that conflict with existing schedules
         List<LineSchedule> removeList = new ArrayList<>();
         for (LineSchedule possibility : possibilityList) {
             if (scheduleMap.containsKey(possibility.getScheduleInstant()))
@@ -141,9 +144,9 @@ public class ScheduleEngine {
                             scheduled.getSala().equals(possibility.getSala()))
                         removeList.add(possibility);
         }
-
         possibilityList.removeAll(removeList);
 
+        // Print the size and details of the possibility list
         System.out.println(possibilityList.size());
         for (LineSchedule possibility : possibilityList)
             System.out.println(possibility.toString());
@@ -152,16 +155,16 @@ public class ScheduleEngine {
     }
 
     /**
-     * Given a schedule entry that's to be rescheduled, this method creates a copy of it, and then replaces its
-     * date, start and end times, week day, room and room type.
+     * Creates a new LineSchedule object representing a possible schedule option based on provided parameters.
      *
-     * @param classSchedule  LineSchedule object of the schedule entry to be rescheduled
-     * @param dayPeriod      SchedulePeriod object for the new day of the week for the schedule entry
-     * @param resultRoom     Room object for the new room
-     * @param timeSlot       SchedulePeriod object for the new time slot, and start and end times
-     * @param roomPreference RoomPreference object to obtain the new room's specfication
-     * @return LineSchedule object representing a copy of the original, but with schedule and room altered
-     * @since 1.0
+     * @param classSchedule   The base LineSchedule object representing the original class schedule.
+     * @param dayPeriod       The preferred day period (e.g., Monday, Tuesday) for scheduling.
+     * @param resultRoom      The selected room for scheduling.
+     * @param timeSlot        The preferred time slot for scheduling.
+     * @param roomPreference  The room preference for the scheduling.
+     * @param ExcludedTime    List of time periods to be excluded from scheduling.
+     * @param ExcludedRooms   List of rooms to be excluded from scheduling.
+     * @return                A LineSchedule object representing the possible schedule option, or null if not possible.
      */
     public LineSchedule
     createSchedulePossibility(LineSchedule classSchedule, SchedulePeriod dayPeriod, Room resultRoom,
@@ -191,16 +194,17 @@ public class ScheduleEngine {
     }
 
     /**
-     * Given a schedule entry that's to be rescheduled, this method creates a copy of it, and then replaces its
-     * date, start and end times, week day, room and room type.
+     * Creates a new LineSchedule object representing a possible schedule option based on provided parameters.
      *
-     * @param classSchedule LineSchedule object of the schedule entry to be rescheduled
-     * @param dayPeriod     SchedulePeriod object for the new day of the week for the schedule entry
-     * @param resultRoom    Room object for the new room
-     * @param timeSlot      SchedulePeriod object for the new time slot, and start and end times
-     * @param rp            RoomPreference object to obtain the new room's specfication
-     * @return LineSchedule object representing a copy of the original, but with schedule and room altered
-     * @since 1.0
+     * @param classSchedule   The base LineSchedule object representing the original class schedule.
+     * @param dayPeriod       The preferred day period (e.g., Monday, Tuesday) for scheduling.
+     * @param resultRoom      The selected room for scheduling.
+     * @param timeSlot        The preferred time slot for scheduling.
+     * @param ExcludedTime    List of time periods to be excluded from scheduling.
+     * @param ExcludedRooms   List of rooms to be excluded from scheduling.
+     * @param rp              The room preference for the scheduling.
+     * @param i               The week index for scheduling.
+     * @return                A LineSchedule object representing the possible schedule option, or null if not possible.
      */
     public LineSchedule
     createSchedulePossibility2(LineSchedule classSchedule, SchedulePeriod dayPeriod, Room resultRoom,
@@ -253,18 +257,32 @@ public class ScheduleEngine {
                     resultRoomList.add(room);
         return resultRoomList;
     }
-    public String workDate(LocalDate d){
-
-        String day="";
-        switch(d.getDayOfWeek()){
-            case MONDAY -> day="Seg";
-            case TUESDAY -> day="Ter";
-            case WEDNESDAY -> day="Qua";
-            case THURSDAY -> day="Qui";
-            case FRIDAY -> day="Sex";
+    /**
+     * Determines the abbreviated Portuguese day of the week for the given date.
+     *
+     * @param d The LocalDate object representing the date for which the day of the week is to be determined.
+     * @return A String representing the abbreviated Portuguese day of the week (Seg, Ter, Qua, Qui, Sex).
+     */
+    public String workDate(LocalDate d) {
+        String day = "";
+        switch(d.getDayOfWeek()) {
+            case MONDAY:
+                day = "Seg";
+                break;
+            case TUESDAY:
+                day = "Ter";
+                break;
+            case WEDNESDAY:
+                day = "Qua";
+                break;
+            case THURSDAY:
+                day = "Qui";
+                break;
+            case FRIDAY:
+                day = "Sex";
+                break;
         }
         return day;
-
     }
 
     public static void main(String[] args) {
