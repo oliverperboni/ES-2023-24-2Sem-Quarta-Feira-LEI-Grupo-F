@@ -58,10 +58,11 @@ public class ScheduleEngine {
                             for (SchedulePeriod sp2 : allowedPeriods)
                                 if (sp2.getIsTimePeriod()) { // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
-                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
-                                } else if (sp2.getIsTimeSlot()) {
+                                        if(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions)!=null)
+                                            possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
+                                /*} else if (sp2.getIsTimeSlot()) {
                                     possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, sp2, rp, excludedPeriods, roomTypeExclusions));
-                                }
+                                }*/}
 
                     }
         }
@@ -127,7 +128,7 @@ public class ScheduleEngine {
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
                                         if (createSchedulePossibility2(classSchedule, sp1, resultRoom, timeSlot, excludedPeriods, roomTypeExclusions,rp, i) != null)
                                             possibilityList.add(createSchedulePossibility2(classSchedule, sp1, resultRoom, timeSlot, excludedPeriods, roomTypeExclusions,rp, i));
-                    }}
+                            }}
                 }
             }
         }
@@ -174,13 +175,10 @@ public class ScheduleEngine {
         ScheduleInstant auxInstant = new ScheduleInstant(auxDate, timeSlot);
         auxSchedule.setScheduleInstant(auxInstant);
 
-        /*for(String b : ExcludedRooms){
-            System.out.println(b);
-            System.out.println(resultRoom.getNomeSala());
-            if (b.equals(auxSchedule.getSala())) {
+        for (SchedulePeriod a : ExcludedTime)
+            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString())) {
                 return null;
             }
-        }*/
 
         auxSchedule.setDia_semana(auxInstant.weekDayToString());
         auxSchedule.setHora_inicio(auxInstant.getScheduleTime().getStartTime().toString());
@@ -216,7 +214,7 @@ public class ScheduleEngine {
         auxSchedule.setScheduleInstant(auxInstant);
 
         for (SchedulePeriod a : ExcludedTime)
-            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString())) {//a.getPreferredDay().equals(auxInstant.getScheduleDate().getDayOfWeek()))
+            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString())) {
                 return null;
             }
         for(RoomPreference b: ExcludedRooms){

@@ -3,6 +3,7 @@ package core;
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
+import structures.Room;
 import structures.RoomPreference;
 import structures.SchedulePeriod;
 
@@ -26,6 +27,9 @@ public class TableSubstitution {
     private  Object turmaSelec;
     private  Object turnoSelec;
     private Object inscritosSelec;
+    private Room salaSelec;
+    private Room salaSelec2;
+    private Room salaSelec3;
 
     private  Date dataInic;
     private  Date dataFim;
@@ -41,6 +45,10 @@ public class TableSubstitution {
     private final JComboBox<Object> curso;
     private final JComboBox<Object> UC;
     private final JComboBox<Object> turma;
+    private final JComboBox<Object> sala;
+    private final JComboBox<Object> sala2;
+    private final JComboBox<Object> sala3;
+    private final ArrayList<Room> rExcluded = new ArrayList<>();
 
     private boolean isPreference = true;
     private boolean modify = false;
@@ -74,6 +82,9 @@ public class TableSubstitution {
         curso = new JComboBox<>();
         UC = new JComboBox<>();
         turma = new JComboBox<>();
+        sala = new JComboBox<>();
+        sala2 = new JComboBox<>();
+        sala3 = new JComboBox<>();
 
 
 
@@ -103,7 +114,7 @@ public class TableSubstitution {
 
         submitButton.addActionListener(e -> {
             try {
-                new ScheduleTableEngine(this, rowSelected, table);//, modify);
+                new ScheduleTableEngine(this, rowSelected, table, modify);
             }catch (Exception ignored){
                 System.out.println("boas");
             }
@@ -348,22 +359,7 @@ public class TableSubstitution {
 
         return timePeriodsPanel;
     }
-    private JPanel createHorarioPanel() {
-        JPanel horarioPanel = new JPanel(new GridLayout(3, 1));
-        horarioPanel.setBorder(new TitledBorder("Horário"));
 
-
-        for (SchedulePeriod period : timeSlotPreferences){
-            JCheckBox checkbox = new JCheckBox(period.toString());
-            horarioPanel.add(checkbox);
-            if(isPreference) {
-                checkBoxMapPeriodPreference.put(period, checkbox);
-            }else{
-                checkBoxMapPeriodExclude.put(period, checkbox);
-            }
-        }
-        return horarioPanel;
-    }
 
     private JPanel createDayPanel() {
         JPanel dayPanel = new JPanel(new GridLayout(4, 1));
@@ -374,8 +370,6 @@ public class TableSubstitution {
             dayPanel.add(radioButton);
             if(isPreference) {
                 checkBoxMapDaysPreference.put(day,radioButton);
-            }else{
-                checkBoxMapDaysExclude.put(day,radioButton);
             }
         }
 
@@ -392,20 +386,64 @@ public class TableSubstitution {
             salaTypePanel.add(checkBox);
             if(isPreference) {
                 checkBoxMapRoomPreference.put(roomPreference, checkBox);
-            }else{
-                checkBoxMapRoomExclude.put(roomPreference, checkBox);
             }
         }
 
         return salaTypePanel;
+    }
+    private JPanel createSalaExcludePanel() {
+        JPanel salaExcludePanel = new JPanel(new GridLayout(9, 4));
+
+        salaExcludePanel.setBorder(new TitledBorder("Tipos de Sala"));
+
+        List<Room> sal = dataModel.getRoomEntries();
+        for(Room r : sal){
+            sala.addItem(r.getNomeSala());
+        }
+        sala.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                salaSelec = (Room) sala.getSelectedItem();
+                //getSalasExc().add(salaSelec);
+            }
+        });
+        salaExcludePanel.add(sala);
+
+        for(Room r : sal){
+            sala2.addItem(r.getNomeSala());
+        }
+        sala2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                salaSelec2 = (Room) sala2.getSelectedItem();
+                //getSalasExc().add(salaSelec2);
+            }
+        });
+        salaExcludePanel.add(sala2);
+
+        for(Room r : sal){
+            sala3.addItem(r.getNomeSala());
+        }
+        sala3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                salaSelec3 = (Room) sala3.getSelectedItem();
+                //getSalasExc().add(salaSelec3);
+            }
+        });
+        salaExcludePanel.add(sala3);
+
+        return salaExcludePanel;
     }
 
     private JPanel createExcludePanel() {
         JPanel excludePanel = new JPanel(new GridLayout(5,1));
         excludePanel.setBorder(new TitledBorder("Excluir"));
         excludePanel.add(createTimePeriodsPanel());
-        //excludePanel.add(createDayPanel());
-        //excludePanel.add(createSalaTypePanel());
+
+        excludePanel.add(createSalaExcludePanel());
 
         if(!isPreference) isPreference = true;
         return excludePanel;
@@ -458,6 +496,9 @@ public class TableSubstitution {
     }
     public String getWeekCount() {
         return weekCount;
+    }
+    public ArrayList<Room> getSalasExc() {
+        return rExcluded;
     }
 
 

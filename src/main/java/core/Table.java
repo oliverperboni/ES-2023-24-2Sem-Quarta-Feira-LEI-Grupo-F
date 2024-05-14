@@ -5,6 +5,7 @@ import filters.TableFilters;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import structures.LineSchedule;
+import structures.Room;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -69,6 +70,8 @@ public class Table {
         JScrollPane scrollPane = new JScrollPane(appTable);
 
         app.getContentPane().add(scrollPane);
+        GrafoGUI g = new GrafoGUI(dataModel.getScheduleEntries(),"D1.14", "14:00", "16:00", "27/09/2022");
+        g.setVisible(true);
         app.setVisible(true);
 
         // Crie uma instância do RoomFilterFrame e exiba a janela de filtragem
@@ -229,12 +232,13 @@ public class Table {
             Object value = table.getValueAt(i, index);
             if (!instances.contains(value)) {
                 instances.add(value);
-                System.out.println("oi");
+
             }
         }
 
 
         return instances;
     }
+
 
 }
