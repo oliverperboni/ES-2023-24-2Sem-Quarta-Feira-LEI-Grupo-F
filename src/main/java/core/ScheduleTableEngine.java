@@ -1,6 +1,7 @@
 package core;
 
 import structures.LineSchedule;
+import structures.Room;
 import structures.RoomPreference;
 import structures.SchedulePeriod;
 import visualize.TableSubstitution;
@@ -21,21 +22,21 @@ public class ScheduleTableEngine {
     private final ScheduleEngine engine;
     private final int rowSelected;
     private String aulaSelecionada;
-    private Boolean modify;
+    private final Boolean modify;
 
-    public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table){//, boolean modify){
+    public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table, boolean modify){
         this.scheduleData = scheduleData;
-        this.engine = new ScheduleEngine(scheduleData.getDataModel());
+        this.engine = new ScheduleEngine(scheduleData.dataModel);
         this.rowSelected = table.convertRowIndexToModel(rowSelected);
         this.aulaSelecionada = "";
         this.modify=modify;
 
-        initialize();
+        initialize(modify);
     }
 
-    public void initialize() {
+    public void initialize(Boolean modify) {
 
-        List<LineSchedule> possibilityList = setupInform();
+        List<LineSchedule> possibilityList = setupInform(modify);
 
         JFrame frame = new JFrame();
         frame.setSize(900, 800);
@@ -116,7 +117,7 @@ public class ScheduleTableEngine {
                     LineSchedule newLineSchedule = new LineSchedule(arrays[0], arrays[1], arrays[2], arrays[3], Integer.parseInt(arrays[4]), arrays[5], arrays[6], arrays[7], arrays[8], arrays[9], arrays[10]);
 
 
-                    out.println("Aula Selecionada Removida: " + scheduleData.getDataModel().getScheduleEntries().get(rowSelected));
+                    out.println("Aula Selecionada Removida: " + scheduleData.dataModel.getScheduleEntries().get(rowSelected));
 
                     scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getCurso(), rowSelected, 0);
                     scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getUnidadeCurricular(), rowSelected, 1);
@@ -149,19 +150,7 @@ public class ScheduleTableEngine {
         frame.setVisible(true);
     }
 
-    private List<LineSchedule> setupInform(){
-
-        String courseName= scheduleData.getCursoSelec().toString();
-        String curricularUnit=scheduleData.getUcSelec().toString();
-        String classTurn= scheduleData.getTurnoSelec().toString();
-        String className= scheduleData.getTurmaSelec().toString();
-        String studentCount = scheduleData.getInscritosSelec().toString();
-        //out.println(classTurn);
-
-        Date startDate = scheduleData.getDateI();
-        int weekCount =Integer.parseInt(scheduleData.getWeekCount());
-
-
+    private List<LineSchedule> setupInform(Boolean modify){
         ArrayList<SchedulePeriod> allowedPeriods = extratedSchedulePeriodAllowed();
         ArrayList<SchedulePeriod> excludePeriods = extratedSchedulePeriodExclude();
         ArrayList<RoomPreference> roomIChoose = extratedRoomPreference();
@@ -171,8 +160,21 @@ public class ScheduleTableEngine {
         out.println(roomIChoose);
         out.println(excludeRoom);
 
-        if(true){
-            return engine.suggestNewCourse(courseName,curricularUnit,classTurn,className, 30,weekCount,excludePeriods,allowedPeriods,roomIChoose, excludeRoom,startDate);
+
+        if(modify){
+            String courseName= scheduleData.getCursoSelec().toString();
+            String curricularUnit=scheduleData.getUcSelec().toString();
+            // String classTurn= scheduleData.getTurnoSelec().toString();
+            String className= scheduleData.getTurmaSelec().toString();
+            //int studentCount = Integer.parseInt(scheduleData.getInscritosSelec().toString());
+            //out.println(classTurn);
+
+            Date startDate = scheduleData.getDateI();
+            int weekCount =Integer.parseInt(scheduleData.getWeekCount());
+            return engine.suggestNewCourse(courseName,curricularUnit,"Turno1",className, 30,weekCount,excludePeriods,allowedPeriods,roomIChoose, excludeRoom,startDate);
+
+
+
         }else{
             return engine.suggestCompensation(possibilidadeHorario(), excludePeriods, allowedPeriods, roomIChoose, excludeRoom);
         }
@@ -181,7 +183,7 @@ public class ScheduleTableEngine {
 
     private LineSchedule possibilidadeHorario(){
 
-        return scheduleData.getDataModel().getScheduleEntries().get(rowSelected);
+        return scheduleData.dataModel.getScheduleEntries().get(rowSelected);
     }
 
     private ArrayList<SchedulePeriod> extratedSchedulePeriodAllowed(){
