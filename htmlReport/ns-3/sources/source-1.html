@@ -1,0 +1,439 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > LineSchedule</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">structures</a>
+</div>
+
+<h1>Coverage Summary for Class: LineSchedule (structures)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LineSchedule</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81,5%
+  </span>
+  <span class="absValue">
+    (22/27)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    58,3%
+  </span>
+  <span class="absValue">
+    (7/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,5%
+  </span>
+  <span class="absValue">
+    (54/59)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package structures;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.LocalTime;
+&nbsp;import java.time.format.DateTimeFormatter;
+&nbsp;
+&nbsp;/**
+&nbsp; * The LineSchedule class represents a line in a schedule, containing information about a particular class or event.
+&nbsp; */
+&nbsp;public class LineSchedule {
+&nbsp;
+&nbsp;    private String curso;
+&nbsp;    private String unidade_curricular;
+&nbsp;    private String turno;
+&nbsp;    private String turma;
+&nbsp;    private Integer inscritos;
+&nbsp;    private String dia_semana;
+&nbsp;    private String hora_inicio;
+&nbsp;    private String hora_fim;
+&nbsp;    private String data_aula;
+&nbsp;    private String caracteristicas_sala;
+&nbsp;    private String sala;
+&nbsp;
+&nbsp;    private ScheduleInstant scheduleInstant;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new LineSchedule object with the provided parameters.
+&nbsp;     *
+&nbsp;     * @param curso                The course name.
+&nbsp;     * @param unidade_curricular   The name of the course unit.
+&nbsp;     * @param turno                The class or event shift.
+&nbsp;     * @param turma                The class group.
+&nbsp;     * @param inscritos            The number of participants or enrolled students.
+&nbsp;     * @param dia_semana           The day of the week.
+&nbsp;     * @param hora_inicio          The start time of the class or event.
+&nbsp;     * @param hora_fim             The end time of the class or event.
+&nbsp;     * @param data_aula            The date of the class or event.
+&nbsp;     * @param caracteristicas_sala The characteristics of the room.
+&nbsp;     * @param sala                 The room where the class or event takes place.
+&nbsp;     */
+&nbsp;    public LineSchedule(String curso, String unidade_curricular, String turno, String turma, Integer inscritos,
+&nbsp;                        String dia_semana, String hora_inicio, String hora_fim, String data_aula,
+<b class="fc">&nbsp;                        String caracteristicas_sala, String sala) {</b>
+&nbsp;
+<b class="fc">&nbsp;        this.curso = curso;</b>
+<b class="fc">&nbsp;        this.unidade_curricular = unidade_curricular;</b>
+<b class="fc">&nbsp;        this.turno = turno;</b>
+<b class="fc">&nbsp;        this.turma = turma;</b>
+<b class="fc">&nbsp;        this.inscritos = inscritos;</b>
+<b class="fc">&nbsp;        this.dia_semana = dia_semana;</b>
+<b class="fc">&nbsp;        this.hora_inicio = hora_inicio;</b>
+<b class="fc">&nbsp;        this.hora_fim = hora_fim;</b>
+<b class="fc">&nbsp;        this.data_aula = data_aula;</b>
+<b class="fc">&nbsp;        this.caracteristicas_sala = caracteristicas_sala;</b>
+<b class="fc">&nbsp;        this.sala = sala;</b>
+&nbsp;
+<b class="pc">&nbsp;        if (!hora_inicio.isEmpty() &amp;&amp; !hora_fim.isEmpty() &amp;&amp; !data_aula.isEmpty()) {</b>
+<b class="fc">&nbsp;            SchedulePeriod schedulePeriod = new SchedulePeriod(LocalTime.parse(hora_inicio), LocalTime.parse(hora_fim));</b>
+<b class="fc">&nbsp;            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</b>
+<b class="fc">&nbsp;            LocalDate scheduleDate = LocalDate.parse(data_aula, formatter);</b>
+&nbsp;
+<b class="fc">&nbsp;            this.scheduleInstant = new ScheduleInstant(scheduleDate, schedulePeriod);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Copy constructor to create a new LineSchedule object from an existing one.
+&nbsp;     *
+&nbsp;     * @param schedule The LineSchedule object to be copied.
+&nbsp;     */
+<b class="fc">&nbsp;    public LineSchedule(LineSchedule schedule) {</b>
+<b class="fc">&nbsp;        this.curso = schedule.curso;</b>
+<b class="fc">&nbsp;        this.unidade_curricular = schedule.unidade_curricular;</b>
+<b class="fc">&nbsp;        this.turno = schedule.turno;</b>
+<b class="fc">&nbsp;        this.turma = schedule.turma;</b>
+<b class="fc">&nbsp;        this.inscritos = Integer.valueOf(schedule.inscritos);</b>
+<b class="fc">&nbsp;        this.dia_semana = schedule.dia_semana;</b>
+<b class="fc">&nbsp;        this.hora_inicio = schedule.hora_inicio;</b>
+<b class="fc">&nbsp;        this.hora_fim = schedule.hora_fim;</b>
+<b class="fc">&nbsp;        this.data_aula = schedule.data_aula;</b>
+<b class="fc">&nbsp;        this.caracteristicas_sala = schedule.caracteristicas_sala;</b>
+<b class="fc">&nbsp;        this.sala = schedule.sala;</b>
+&nbsp;
+<b class="pc">&nbsp;        if (!hora_inicio.isEmpty() &amp;&amp; !hora_fim.isEmpty() &amp;&amp; !data_aula.isEmpty()) {</b>
+<b class="fc">&nbsp;            SchedulePeriod schedulePeriod = new SchedulePeriod(LocalTime.parse(hora_inicio), LocalTime.parse(hora_fim));</b>
+<b class="fc">&nbsp;            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</b>
+<b class="fc">&nbsp;            LocalDate scheduleDate = LocalDate.parse(data_aula, formatter);</b>
+&nbsp;
+<b class="fc">&nbsp;            this.scheduleInstant = new ScheduleInstant(scheduleDate, schedulePeriod);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // Getters and setters
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the course name.
+&nbsp;     *
+&nbsp;     * @return The course name.
+&nbsp;     */
+&nbsp;    public String getCurso() {
+<b class="fc">&nbsp;        return curso;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the course name.
+&nbsp;     *
+&nbsp;     * @param curso The course name to set.
+&nbsp;     */
+&nbsp;    public void setCurso(String curso) {
+<b class="nc">&nbsp;        this.curso = curso;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the name of the course unit.
+&nbsp;     *
+&nbsp;     * @return The name of the course unit.
+&nbsp;     */
+&nbsp;    public String getUnidadeCurricular() {
+<b class="fc">&nbsp;        return unidade_curricular;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the name of the course unit.
+&nbsp;     *
+&nbsp;     * @param unidade_curricular The name of the course unit to set.
+&nbsp;     */
+&nbsp;    public void setUnidade_curricular(String unidade_curricular) {
+<b class="nc">&nbsp;        this.unidade_curricular = unidade_curricular;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the class or event shift.
+&nbsp;     *
+&nbsp;     * @return The class or event shift.
+&nbsp;     */
+&nbsp;    public String getTurno() {
+<b class="fc">&nbsp;        return turno;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the class or event shift.
+&nbsp;     *
+&nbsp;     * @param turno The class or event shift to set.
+&nbsp;     */
+&nbsp;    public void setTurno(String turno) {
+<b class="nc">&nbsp;        this.turno = turno;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the class group.
+&nbsp;     *
+&nbsp;     * @return The class group.
+&nbsp;     */
+&nbsp;    public String getTurma() {
+<b class="fc">&nbsp;        return turma;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the class group.
+&nbsp;     *
+&nbsp;     * @param turma The class group to set.
+&nbsp;     */
+&nbsp;    public void setTurma(String turma) {
+<b class="nc">&nbsp;        this.turma = turma;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of enrolled students.
+&nbsp;     *
+&nbsp;     * @return The number of enrolled students.
+&nbsp;     */
+&nbsp;    public Integer getInscritos() {
+<b class="fc">&nbsp;        return inscritos;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the number of participants or enrolled students.
+&nbsp;     *
+&nbsp;     * @param inscritos The number of participants or enrolled students to set.
+&nbsp;     */
+&nbsp;    public void setInscritos(Integer inscritos) {
+<b class="nc">&nbsp;        this.inscritos = inscritos;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the day of the week.
+&nbsp;     *
+&nbsp;     * @return The day of the week.
+&nbsp;     */
+&nbsp;    public String getDiaSemana() {
+<b class="fc">&nbsp;        return dia_semana;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the day of the week.
+&nbsp;     *
+&nbsp;     * @param dia_semana The day of the week to set.
+&nbsp;     */
+&nbsp;    public void setDia_semana(String dia_semana) {
+<b class="fc">&nbsp;        this.dia_semana = dia_semana;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the start time of the class.
+&nbsp;     *
+&nbsp;     * @return The start time of the class.
+&nbsp;     */
+&nbsp;    public String getHoraInicio() {
+<b class="fc">&nbsp;        return hora_inicio;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the start time of the class.
+&nbsp;     *
+&nbsp;     * @param hora_inicio The start time of the class to set.
+&nbsp;     */
+&nbsp;    public void setHora_inicio(String hora_inicio) {
+<b class="fc">&nbsp;        this.hora_inicio = hora_inicio;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the end time of the class.
+&nbsp;     *
+&nbsp;     * @return The end time of the class.
+&nbsp;     */
+&nbsp;    public String getHoraFim() {
+<b class="fc">&nbsp;        return hora_fim;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the end time of the class.
+&nbsp;     *
+&nbsp;     * @param hora_fim The end time of the class to set.
+&nbsp;     */
+&nbsp;    public void setHora_fim(String hora_fim) {
+<b class="fc">&nbsp;        this.hora_fim = hora_fim;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the date of the class.
+&nbsp;     *
+&nbsp;     * @return The date of the class.
+&nbsp;     */
+&nbsp;    public String getDataAula() {
+<b class="fc">&nbsp;        return data_aula;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the date of the class or event.
+&nbsp;     *
+&nbsp;     * @param data_aula The date of the class.
+&nbsp;     */
+&nbsp;    public void setData_aula(String data_aula) {
+<b class="fc">&nbsp;        this.data_aula = data_aula;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the characteristics of the room.
+&nbsp;     *
+&nbsp;     * @return The characteristics of the room.
+&nbsp;     */
+&nbsp;    public String getCaracteristicasSala() {
+<b class="fc">&nbsp;        return caracteristicas_sala;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the characteristics of the room.
+&nbsp;     *
+&nbsp;     * @param caracteristicas_sala The characteristics of the room to set.
+&nbsp;     */
+&nbsp;    public void setCaracteristicasSala(String caracteristicas_sala) {
+<b class="fc">&nbsp;        this.caracteristicas_sala = caracteristicas_sala;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the room where the class or event takes place.
+&nbsp;     *
+&nbsp;     * @return The room where the class or event takes place.
+&nbsp;     */
+&nbsp;    public String getSala() {
+<b class="fc">&nbsp;        return sala;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the room where the class or event takes place.
+&nbsp;     *
+&nbsp;     * @param sala The room where the class or event takes place to set.
+&nbsp;     */
+&nbsp;    public void setSala(String sala) {
+<b class="fc">&nbsp;        this.sala = sala;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the schedule instant associated with this LineSchedule.
+&nbsp;     *
+&nbsp;     * @return The schedule instant.
+&nbsp;     */
+&nbsp;    public ScheduleInstant getScheduleInstant() {
+<b class="fc">&nbsp;        return scheduleInstant;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the schedule instant associated with this LineSchedule.
+&nbsp;     *
+&nbsp;     * @param scheduleInstant The schedule instant to set.
+&nbsp;     */
+&nbsp;    public void setScheduleInstant(ScheduleInstant scheduleInstant) {
+<b class="fc">&nbsp;        this.scheduleInstant = scheduleInstant;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Overrides the toString method to return a string representation of the LineSchedule object.
+&nbsp;     *
+&nbsp;     * @return A string representation of the LineSchedule object.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return this.curso + &quot;-&quot; + this.unidade_curricular + &quot;-&quot; + this.turno + &quot;-&quot; + this.turma +</b>
+&nbsp;                &quot;-&quot; + this.inscritos + &quot;-&quot; + this.dia_semana + &quot;-&quot; + this.hora_inicio + &quot;-&quot; + this.hora_fim +
+&nbsp;                &quot;-&quot; + this.data_aula + &quot;-&quot; + this.caracteristicas_sala + &quot;-&quot; + this.sala;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

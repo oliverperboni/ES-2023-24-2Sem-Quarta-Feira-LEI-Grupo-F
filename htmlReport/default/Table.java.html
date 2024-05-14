@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>visualize.Table.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in GestaodeHorarios Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">visualize.Table.java</span></div><h1>visualize.Table.java</h1><pre class="source lang-java linenums">import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.Normalizer;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+
+public class visualize.Table {
+    private JFrame app;
+    private JTable appTable;
+
+<span class="fc" id="L16">    public core.Table(String filePath, boolean isGit) throws IOException {</span>
+        ArrayList&lt;structures.LineSchedule&gt; data;
+
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        if (isGit) {</span>
+            // Se estiver carregando do Git, use a função getInputStreamFromURL
+<span class="nc" id="L21">            InputStream inputStream = ReadCSV.getInputStreamFromURL(filePath);</span>
+<span class="nc" id="L22">            data = ReadCSV.readScheduleCSV(inputStream);</span>
+<span class="nc" id="L23">        } else {</span>
+            // Se estiver carregando localmente, use a função readScheduleCSV
+<span class="fc" id="L25">            data = ReadCSV.readScheduleCSV(filePath);</span>
+        }
+        // classe que cria e adiciona os filtros
+<span class="fc" id="L28">        filters.TableFilters tabFilter = new filters.TableFilters();</span>
+        // Cria uma tabela
+<span class="fc" id="L30">        DefaultTableModel model = new DefaultTableModel();</span>
+<span class="fc" id="L31">        addColumns(model);</span>
+
+        // adiciona as linhas do CSV a tabela
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        for (structures.LineSchedule ls : data) {</span>
+<span class="fc" id="L35">            Object[] row = {normalizeValue(ls.getCurso()), normalizeValue(ls.getUnidadeCurricular()),</span>
+<span class="fc" id="L36">                    normalizeValue(ls.getTurno()), normalizeValue(ls.getTurma()), ls.getInscritos(),</span>
+<span class="fc" id="L37">                    ls.getDiaSemana(), ls.getHoraInicio(), ls.getHoraFim(), ls.getDataAula(),</span>
+<span class="fc" id="L38">                    ls.getCaracteristicasSala(), ls.getSala(), countWeeksBetween(&quot;02/09/2022&quot;, ls.getDataAula()), getWeekOfYear(ls.getDataAula())};</span>
+<span class="fc" id="L39">            model.addRow(row);</span>
+<span class="fc" id="L40">        }</span>
+
+        // cria tabela
+<span class="fc" id="L43">        appTable = new JTable(model);</span>
+<span class="fc" id="L44">        appTable.setAutoCreateRowSorter(true); // Creates a TableRowSorter for the table</span>
+<span class="fc" id="L45">        addColumnSorting(appTable); // Method enables &quot;sort by column&quot; functionality for every column on the table</span>
+
+<span class="fc" id="L47">        app = tabFilter.addFilter(app, appTable);</span>
+<span class="fc" id="L48">        app.setExtendedState(JFrame.MAXIMIZED_BOTH);</span>
+
+        // cria a opção de scroll se necessario
+<span class="fc" id="L51">        JScrollPane scrollPane = new JScrollPane(appTable);</span>
+
+<span class="fc" id="L53">        app.getContentPane().add(scrollPane);</span>
+<span class="fc" id="L54">        app.setVisible(true);</span>
+
+<span class="fc" id="L56">    }</span>
+
+    public JTable getJTable() {
+<span class="fc" id="L59">        return appTable;</span>
+    }
+
+    private void addColumns(DefaultTableModel model) {
+<span class="fc" id="L63">        model.addColumn(&quot;Curso&quot;);</span>
+<span class="fc" id="L64">        model.addColumn(&quot;Unidade Curricular&quot;);</span>
+<span class="fc" id="L65">        model.addColumn(&quot;Turno&quot;);</span>
+<span class="fc" id="L66">        model.addColumn(&quot;Turma&quot;);</span>
+<span class="fc" id="L67">        model.addColumn(&quot;N.º Inscritos Turno&quot;);</span>
+<span class="fc" id="L68">        model.addColumn(&quot;Dia da Semana&quot;);</span>
+<span class="fc" id="L69">        model.addColumn(&quot;Hora de Início&quot;);</span>
+<span class="fc" id="L70">        model.addColumn(&quot;Hora de Fim&quot;);</span>
+<span class="fc" id="L71">        model.addColumn(&quot;Data&quot;);</span>
+<span class="fc" id="L72">        model.addColumn(&quot;Tipo de Sala&quot;);</span>
+<span class="fc" id="L73">        model.addColumn(&quot;Sala Atribuída&quot;);</span>
+<span class="fc" id="L74">        model.addColumn(&quot;Semana do Semestre&quot;);</span>
+<span class="fc" id="L75">        model.addColumn(&quot;Semana do Ano&quot;);</span>
+<span class="fc" id="L76">    }</span>
+
+    void addColumnSorting(JTable table) {
+        // Gets the table's sorter and casts it to a DefaultRowSorter
+<span class="fc" id="L80">        DefaultRowSorter sorter = ((DefaultRowSorter)table.getRowSorter());</span>
+        // Enables immediate sorting after an insert operation
+<span class="fc" id="L82">        sorter.setSortsOnUpdates(true);</span>
+
+        // ArrayList to store SortKeys for the every column in the table
+<span class="fc" id="L85">        ArrayList&lt;RowSorter.SortKey&gt; sortKeyList = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (int i = 0; i &lt; table.getColumnCount(); i++)</span>
+            // Creates a SortKey for every column, ascending order
+<span class="fc" id="L88">            sortKeyList.add(new RowSorter.SortKey(i, SortOrder.ASCENDING) );</span>
+
+        // Adds SortKeys to sorter, and sorts
+<span class="fc" id="L91">        sorter.setSortKeys(sortKeyList);</span>
+<span class="fc" id="L92">        sorter.sort();</span>
+<span class="fc" id="L93">    }</span>
+
+    private String normalizeValue(String value) {
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (value != null) {</span>
+<span class="fc" id="L97">            value = Normalizer.normalize(value, Normalizer.Form.NFD).replaceAll(&quot;[^\\p{ASCII}]&quot;, &quot;&quot;);</span>
+<span class="fc" id="L98">            return value.toUpperCase();</span>
+        }
+<span class="nc" id="L100">        return &quot;&quot;;</span>
+    }
+
+    public static int getWeekOfYear(String dateString) {
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (!dateString.isEmpty()) {</span>
+            try {
+<span class="fc" id="L106">                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</span>
+<span class="fc" id="L107">                LocalDate date = LocalDate.parse(dateString, formatter);</span>
+<span class="fc" id="L108">                return date.get(java.time.temporal.ChronoField.ALIGNED_WEEK_OF_YEAR);</span>
+<span class="fc" id="L109">            }catch (DateTimeParseException e){</span>
+<span class="fc" id="L110">                return -1;</span>
+            }
+        }
+<span class="fc" id="L113">        return -1;</span>
+    }
+
+    public static int countWeeksBetween(String startDateString, String endDateString) {
+<span class="fc bfc" id="L117" title="All 4 branches covered.">        if (!endDateString.isEmpty() &amp;&amp; !startDateString.isEmpty()) {</span>
+<span class="fc" id="L118">            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</span>
+<span class="fc" id="L119">            LocalDate startDate = LocalDate.parse(startDateString, formatter);</span>
+<span class="fc" id="L120">            LocalDate endDate = LocalDate.parse(endDateString, formatter);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">           if (startDate.isEqual(endDate)){</span>
+<span class="fc" id="L122">               return 0;</span>
+           }
+<span class="fc bfc" id="L124" title="All 2 branches covered.">           if ((int) ChronoUnit.WEEKS.between(startDate, endDate)&gt; 0){</span>
+<span class="fc" id="L125">               return (int) ChronoUnit.WEEKS.between(startDate, endDate);</span>
+           }
+        }
+<span class="fc" id="L128">        return -1;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

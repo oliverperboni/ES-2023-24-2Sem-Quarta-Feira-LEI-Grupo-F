@@ -1,0 +1,389 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GrafoGUI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">visualize</a>
+</div>
+
+<h1>Coverage Summary for Class: GrafoGUI (visualize)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GrafoGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">GrafoGUI$GrafoPanel</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27,3%
+  </span>
+  <span class="absValue">
+    (6/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (11/44)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (1/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27,3%
+  </span>
+  <span class="absValue">
+    (6/22)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21,2%
+  </span>
+  <span class="absValue">
+    (11/52)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package visualize;
+&nbsp;
+&nbsp;import structures.LineSchedule;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Set;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;/**
+&nbsp; * A graphical user interface for displaying LineSchedules on a graph.
+&nbsp; */
+&nbsp;public class GrafoGUI extends JFrame {
+&nbsp;
+&nbsp;    public Grafo grafo;
+&nbsp;    public List&lt;LineSchedule&gt; lineSchedules;
+&nbsp;    public String sala;
+&nbsp;    public String HoraFim;
+&nbsp;    public String HoraInicio;
+&nbsp;    public String Data;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a GrafoGUI with the given LineSchedules and room information.
+&nbsp;     *
+&nbsp;     * @param lineSchedules the list of LineSchedules to be displayed
+&nbsp;     * @param sala          the room name
+&nbsp;     * @param HoraInicio    the start time
+&nbsp;     * @param HoraFim       the end time
+&nbsp;     * @param Data          the date of the class
+&nbsp;     */
+&nbsp;    public GrafoGUI(List&lt;LineSchedule&gt; lineSchedules, String sala, String HoraInicio, String HoraFim, String Data) {
+<b class="nc">&nbsp;        super(&quot;Grafo GUI&quot;);</b>
+<b class="nc">&nbsp;        setSize(900, 900);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.lineSchedules = lineSchedules;</b>
+<b class="nc">&nbsp;        this.HoraFim = HoraFim;</b>
+<b class="nc">&nbsp;        this.sala = sala;</b>
+<b class="nc">&nbsp;        this.Data = Data;</b>
+<b class="nc">&nbsp;        this.HoraInicio = HoraInicio;</b>
+&nbsp;
+<b class="nc">&nbsp;        add(new GrafoPanel());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Inner class representing the panel for drawing LineSchedules.
+&nbsp;     */
+<b class="nc">&nbsp;    public class GrafoPanel extends JPanel {</b>
+&nbsp;
+&nbsp;        @Override
+&nbsp;        protected void paintComponent(Graphics g) {
+<b class="nc">&nbsp;            super.paintComponent(g);</b>
+&nbsp;
+&nbsp;            // Define the coordinates of the center for drawing the given LineSchedule
+<b class="nc">&nbsp;            int centerX = getWidth() / 2;</b>
+<b class="nc">&nbsp;            int centerY = getHeight() / 2;</b>
+<b class="nc">&nbsp;            int incrment = 1;</b>
+&nbsp;            // Draw the given LineSchedule at the center
+<b class="nc">&nbsp;            g.setColor(Color.GREEN);</b>
+<b class="nc">&nbsp;            g.fillOval(centerX, centerY, 20, 20);</b>
+<b class="nc">&nbsp;            g.drawString(&quot;Sua Sala&quot;, centerX + 25, centerY - 10);</b>
+&nbsp;
+&nbsp;            // Sua lista com elementos duplicados
+<b class="nc">&nbsp;           List&lt;LineSchedule&gt; listaSemDuplicados = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;           for (LineSchedule elemento : lineSchedules) {</b>
+<b class="nc">&nbsp;               if (listaSemDuplicados.contains(elemento)) {</b>
+<b class="nc">&nbsp;                   listaSemDuplicados.add(elemento);</b>
+&nbsp;               }
+&nbsp;           }   
+&nbsp;            // Iterate over the list of LineSchedules
+<b class="nc">&nbsp;            for (LineSchedule lineSchedule : listaSemDuplicados) {</b>
+<b class="nc">&nbsp;                if (lineSchedule.getSala().equals(sala) &amp;&amp; lineSchedule.getDataAula().equals(Data)) {</b>
+<b class="nc">&nbsp;                    Boolean comecaDepois = compararHoras(HoraInicio,lineSchedule.getHoraFim());</b>
+<b class="nc">&nbsp;                    Boolean comecaAntes = compararHoras(lineSchedule.getHoraInicio(),HoraFim);</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (!((comecaAntes ) || (comecaDepois))) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;-----------------------&quot;+lineSchedule.getHoraInicio() +&quot; &quot;+ lineSchedule.getHoraFim()+&quot;-----------------------&quot;);</b>
+<b class="nc">&nbsp;                        System.out.println(lineSchedule.getUnidadeCurricular()+&quot; &quot;+lineSchedule.getDataAula()+&quot; &quot;+ lineSchedule.getSala());</b>
+<b class="nc">&nbsp;                        drawLineSchedule(g, centerX, centerY, lineSchedule, Color.RED, incrment);</b>
+&nbsp;//                        System.out.println(lineSchedule);
+<b class="nc">&nbsp;                        incrment= (int)(Math.random()*10);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * This method draws a LineSchedule on the specified Graphics object.
+&nbsp;         *
+&nbsp;         * @param g            The Graphics object to draw on.
+&nbsp;         * @param x            The x-coordinate of the position to draw.
+&nbsp;         * @param y            The y-coordinate of the position to draw.
+&nbsp;         * @param lineSchedule The LineSchedule object to draw.
+&nbsp;         * @param color        The Color to use for drawing.
+&nbsp;         */
+&nbsp;        private void drawLineSchedule(Graphics g, int x, int y, LineSchedule lineSchedule, Color color, int i) {
+<b class="nc">&nbsp;            g.setColor(color);</b>
+&nbsp;
+&nbsp;            // Calculate the radius of the circle based on the index &#39;i&#39;
+<b class="nc">&nbsp;            int radius = 40 + i * 30; // Adjust this value as needed</b>
+&nbsp;
+&nbsp;            // Calculate the angle increment based on the number of circles &#39;i&#39;
+<b class="nc">&nbsp;            double angleIncrement = 2 * Math.PI / i;</b>
+&nbsp;
+&nbsp;            // Draw each circle along the circumference
+<b class="nc">&nbsp;            for (int j = 0; j &lt; i; j++) {</b>
+&nbsp;                // Calculate the angle for this circle
+<b class="nc">&nbsp;                double angle = j * angleIncrement;</b>
+&nbsp;
+&nbsp;                // Calculate the position of the circle on the circumference
+<b class="nc">&nbsp;                int circleX = x + (int) (radius * Math.cos(angle));</b>
+<b class="nc">&nbsp;                int circleY = y + (int) (radius * Math.sin(angle));</b>
+&nbsp;
+&nbsp;                // Draw the circle
+<b class="nc">&nbsp;                g.fillOval(circleX - 10, circleY - 10, 20, 20); // Adjust the size as needed</b>
+&nbsp;
+&nbsp;                // Draw text
+<b class="nc">&nbsp;                g.setColor(Color.BLACK);</b>
+<b class="nc">&nbsp;                g.drawString(lineSchedule.getSala() + &quot; - &quot; + lineSchedule.getUnidadeCurricular(), circleX - 10,</b>
+&nbsp;                        circleY - 10);
+&nbsp;
+&nbsp;                // Draw line from center to circle
+<b class="nc">&nbsp;                g.drawLine(x, y, circleX, circleY);</b>
+<b class="nc">&nbsp;                g.setColor(color);</b>
+&nbsp;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+&nbsp;        /**
+&nbsp;         * Compares two time strings HH:mm.
+&nbsp;         *
+&nbsp;         * @param horaA the first time string
+&nbsp;         * @param horaB the second time string
+&nbsp;         * @return true if horaA is later than horaB, false otherwise
+&nbsp;         */
+&nbsp;        public static boolean compararHoras(String horaA, String horaB) {
+&nbsp;            // Extract hours and minutes from each time
+<b class="fc">&nbsp;            String[] partesHoraA = horaA.split(&quot;:&quot;);</b>
+<b class="fc">&nbsp;            String[] partesHoraB = horaB.split(&quot;:&quot;);</b>
+&nbsp;
+&nbsp;            // Convert parts to integers
+<b class="fc">&nbsp;            int horaAInt = Integer.parseInt(partesHoraA[0]);</b>
+<b class="fc">&nbsp;            int minutoAInt = Integer.parseInt(partesHoraA[1]);</b>
+<b class="fc">&nbsp;            int horaBInt = Integer.parseInt(partesHoraB[0]);</b>
+<b class="fc">&nbsp;            int minutoBInt = Integer.parseInt(partesHoraB[1]);</b>
+&nbsp;
+&nbsp;            // Compare the hours
+<b class="fc">&nbsp;            if (horaAInt &gt; horaBInt) {</b>
+<b class="fc">&nbsp;                return true;</b>
+<b class="fc">&nbsp;            } else if (horaAInt == horaBInt) {</b>
+&nbsp;                // If hours are equal, compare the minutes
+<b class="fc">&nbsp;                return minutoAInt &gt;= minutoBInt;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                return false;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a graph composed of vertices and edges.
+&nbsp; */
+&nbsp;class Grafo {
+&nbsp;    private List&lt;Vertice&gt; vertices;
+&nbsp;    private List&lt;Aresta&gt; arestas;
+&nbsp;
+&nbsp;    public Grafo() {
+&nbsp;        vertices = new ArrayList&lt;&gt;();
+&nbsp;        arestas = new ArrayList&lt;&gt;();
+&nbsp;    }
+&nbsp;
+&nbsp;    public void adicionarVertice(Vertice v) {
+&nbsp;        vertices.add(v);
+&nbsp;    }
+&nbsp;
+&nbsp;    public void adicionarAresta(Aresta a) {
+&nbsp;        arestas.add(a);
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Vertice&gt; getVertices() {
+&nbsp;        return vertices;
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Aresta&gt; getArestas() {
+&nbsp;        return arestas;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents a vertex in a graph.
+&nbsp; */
+&nbsp;class Vertice {
+&nbsp;
+&nbsp;    private int x;
+&nbsp;    private int y;
+&nbsp;    private String nome;
+&nbsp;
+&nbsp;    public Vertice(int x, int y, String nome) {
+&nbsp;        this.x = x;
+&nbsp;        this.y = y;
+&nbsp;        this.nome = nome;
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getX() {
+&nbsp;        return x;
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getY() {
+&nbsp;        return y;
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getNome() {
+&nbsp;        return nome;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;/**
+&nbsp; * Represents an edge in a graph.
+&nbsp; */
+&nbsp;class Aresta {
+&nbsp;    private Vertice origem;
+&nbsp;    private Vertice destino;
+&nbsp;
+&nbsp;    public Aresta(Vertice origem, Vertice destino) {
+&nbsp;        this.origem = origem;
+&nbsp;        this.destino = destino;
+&nbsp;    }
+&nbsp;
+&nbsp;    public Vertice getOrigem() {
+&nbsp;        return origem;
+&nbsp;    }
+&nbsp;
+&nbsp;    public Vertice getDestino() {
+&nbsp;        return destino;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

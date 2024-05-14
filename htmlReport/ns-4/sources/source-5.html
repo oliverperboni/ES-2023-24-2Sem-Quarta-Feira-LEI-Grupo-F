@@ -1,0 +1,421 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RoomOccupancyMap</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">visualize</a>
+</div>
+
+<h1>Coverage Summary for Class: RoomOccupancyMap (visualize)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RoomOccupancyMap</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (6/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (12/48)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    43,4%
+  </span>
+  <span class="absValue">
+    (66/152)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;/**
+&nbsp; * A class representing a room occupancy heatmap with filtering capabilities.
+&nbsp; */
+&nbsp;package visualize;
+&nbsp;import com.formdev.flatlaf.FlatLightLaf;
+&nbsp;import org.knowm.xchart.HeatMapChart;
+&nbsp;import org.knowm.xchart.HeatMapChartBuilder;
+&nbsp;import org.knowm.xchart.XChartPanel;
+&nbsp;import org.knowm.xchart.style.Styler;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.FileReader;
+&nbsp;import java.io.IOException;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.format.DateTimeFormatter;
+&nbsp;import java.time.format.DateTimeParseException;
+&nbsp;import java.time.temporal.WeekFields;
+&nbsp;import java.util.List;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+&nbsp;import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+&nbsp;
+<b class="nc">&nbsp;public class RoomOccupancyMap {</b>
+&nbsp;
+&nbsp;    private static String filterDayOfWeek; // Seg, Ter, Qua, Qui, Sex, Sáb, Dom
+&nbsp;    private static String filterHour; // 08:00:00
+&nbsp;    private static String filterRoom; // D1.09
+&nbsp;
+&nbsp;    private static String filterDayOfYear; // 20/10/2022
+&nbsp;    private static String filterWeekOfYear; // 1, 10, 13
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Main method to initiate the room occupancy map GUI and functionalities.
+&nbsp;     *
+&nbsp;     * @param args Command-line arguments
+&nbsp;     */
+&nbsp;    public static void main(String[] args) {
+<b class="nc">&nbsp;        FlatLightLaf.setup();</b>
+&nbsp;        // Criar JFrame para selecionar filtro
+<b class="nc">&nbsp;        JFrame filterFrame = new JFrame(&quot;Filtro&quot;);</b>
+<b class="nc">&nbsp;        filterFrame.setLayout(new FlowLayout());</b>
+<b class="nc">&nbsp;        JCheckBox applyFilterCheckbox = new JCheckBox(&quot;Aplicar Filtro&quot;);</b>
+<b class="nc">&nbsp;        JLabel dayOfWeekLabel = new JLabel(&quot;Dia da Semana (Abreviado): &quot;);</b>
+<b class="nc">&nbsp;        JTextField dayOfWeekField = new JTextField(5);</b>
+<b class="nc">&nbsp;        JLabel hourLabel = new JLabel(&quot;Hora (Formato HH:MM:SS): &quot;);</b>
+<b class="nc">&nbsp;        JTextField hourField = new JTextField(8);</b>
+<b class="nc">&nbsp;        JLabel roomLabel = new JLabel(&quot;Nome da Sala: &quot;);</b>
+<b class="nc">&nbsp;        JTextField roomField = new JTextField(5);</b>
+<b class="nc">&nbsp;        JLabel dayOfYearLabel = new JLabel(&quot;Dia (Formato dd/MM/yyyy): &quot;);</b>
+<b class="nc">&nbsp;        JTextField dayOfYearField = new JTextField(10);</b>
+<b class="nc">&nbsp;        JLabel weekOfYearLabel = new JLabel(&quot;Número da Semana do Ano: &quot;);</b>
+<b class="nc">&nbsp;        JTextField weekOfYearField = new JTextField(5);</b>
+<b class="nc">&nbsp;        JButton showChartButton = new JButton(&quot;Mostrar Gráfico&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        filterFrame.add(applyFilterCheckbox);</b>
+<b class="nc">&nbsp;        filterFrame.add(dayOfWeekLabel);</b>
+<b class="nc">&nbsp;        filterFrame.add(dayOfWeekField);</b>
+<b class="nc">&nbsp;        filterFrame.add(hourLabel);</b>
+<b class="nc">&nbsp;        filterFrame.add(hourField);</b>
+<b class="nc">&nbsp;        filterFrame.add(roomLabel);</b>
+<b class="nc">&nbsp;        filterFrame.add(roomField);</b>
+<b class="nc">&nbsp;        filterFrame.add(dayOfYearLabel);</b>
+<b class="nc">&nbsp;        filterFrame.add(dayOfYearField);</b>
+<b class="nc">&nbsp;        filterFrame.add(weekOfYearLabel);</b>
+<b class="nc">&nbsp;        filterFrame.add(weekOfYearField);</b>
+<b class="nc">&nbsp;        filterFrame.add(showChartButton);</b>
+<b class="nc">&nbsp;        filterFrame.pack();</b>
+<b class="nc">&nbsp;        filterFrame.setVisible(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        showChartButton.addActionListener(e -&gt; {</b>
+<b class="nc">&nbsp;            boolean applyFilter = applyFilterCheckbox.isSelected();</b>
+<b class="nc">&nbsp;            filterDayOfWeek = dayOfWeekField.getText().trim();</b>
+<b class="nc">&nbsp;            filterHour = hourField.getText().trim();</b>
+<b class="nc">&nbsp;            filterRoom = roomField.getText().trim();</b>
+<b class="nc">&nbsp;            filterDayOfYear = dayOfYearField.getText().trim();</b>
+<b class="nc">&nbsp;            filterWeekOfYear = weekOfYearField.getText().trim();</b>
+&nbsp;
+<b class="nc">&nbsp;            HeatMapChart chart =</b>
+<b class="nc">&nbsp;                    new HeatMapChartBuilder().xAxisTitle(&quot;Dia da Semana&quot;).yAxisTitle(&quot;Hora de Início&quot;).theme(Styler.ChartTheme.Matlab).build();</b>
+&nbsp;
+<b class="nc">&nbsp;            chart.getStyler().setShowWithinAreaPoint(true);</b>
+<b class="nc">&nbsp;            chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideS);</b>
+<b class="nc">&nbsp;            chart.getStyler().setLegendLayout(Styler.LegendLayout.Horizontal);</b>
+&nbsp;
+<b class="nc">&nbsp;            chart.getStyler().setPlotContentSize(1);</b>
+<b class="nc">&nbsp;            chart.getStyler().setShowValue(true);</b>
+&nbsp;
+&nbsp;            // Lê os dados do arquivo CSV
+<b class="nc">&nbsp;            List&lt;String[]&gt; data = readCSV(&quot;csv/HorarioDeExemplo.csv&quot;);</b>
+&nbsp;
+&nbsp;            // Prepara os dados para o gráfico de mapa de calor
+<b class="nc">&nbsp;            int[] xData = {1, 2, 3, 4, 5, 6, 7}; // Dias da semana</b>
+<b class="nc">&nbsp;            int[] yData = {800, 830, 900, 930, 1000, 1030, 1100, 1130, 1200, 1230, 1300, 1330, 1400, 1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800, 1830, 1900, 1930, 2000, 2030, 2100, 2130}; // Horas de início</b>
+<b class="nc">&nbsp;            int[][] heatData = new int[xData.length][yData.length];</b>
+&nbsp;
+<b class="nc">&nbsp;            for (int i = 0; i &lt; xData.length; i++) {</b>
+<b class="nc">&nbsp;                for (int y = 0; y &lt; yData.length; y++) {</b>
+<b class="nc">&nbsp;                    if (applyFilter) {</b>
+<b class="nc">&nbsp;                        heatData[i][y] = haveFilter(data, i, y);</b>
+&nbsp;                    } else {
+<b class="nc">&nbsp;                        heatData[i][y] = countOccurrences(data, i, y);</b>
+&nbsp;                    }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            // Cria o gráfico de mapa de calor
+<b class="nc">&nbsp;            chart.addSeries(&quot;Basic HeatMap&quot;, xData, yData, heatData);</b>
+&nbsp;
+&nbsp;            // Cria um novo JFrame para exibir o gráfico
+<b class="nc">&nbsp;            JFrame frame = new JFrame(&quot;Heatmap&quot;);</b>
+<b class="nc">&nbsp;            JPanel chartPanel = new XChartPanel&lt;&gt;(chart);</b>
+<b class="nc">&nbsp;            frame.getContentPane().add(chartPanel);</b>
+<b class="nc">&nbsp;            frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);</b>
+<b class="nc">&nbsp;            frame.pack();</b>
+<b class="nc">&nbsp;            frame.setVisible(true);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Read CSV file and return data as a list of arrays of strings.
+&nbsp;     *
+&nbsp;     * @param filename The filename of the CSV file
+&nbsp;     * @return List of arrays of strings representing data from the CSV file
+&nbsp;     */
+&nbsp;    public static List&lt;String[]&gt; readCSV(String filename) {
+<b class="fc">&nbsp;        List&lt;String[]&gt; data = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {</b>
+&nbsp;            // Ignora primeira linha (cabeçalhos das colunas)
+<b class="fc">&nbsp;            br.readLine();</b>
+&nbsp;
+&nbsp;            String line;
+<b class="fc">&nbsp;            while ((line = br.readLine()) != null) {</b>
+<b class="fc">&nbsp;                String[] values = line.split(&quot;;&quot;);</b>
+<b class="fc">&nbsp;                data.add(values);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        } catch (IOException e) {</b>
+<b class="fc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return data;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static final Map&lt;String, Integer&gt; DAY_OF_WEEK_MAP = new HashMap&lt;&gt;();</b>
+&nbsp;    static {
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Dom&quot;, 0);</b>
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Seg&quot;, 1);</b>
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Ter&quot;, 2);</b>
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Qua&quot;, 3);</b>
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Qui&quot;, 4);</b>
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Sex&quot;, 5);</b>
+<b class="fc">&nbsp;        DAY_OF_WEEK_MAP.put(&quot;Sáb&quot;, 6);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Convert a day of the week string to an integer.
+&nbsp;     *
+&nbsp;     * @param dayOfWeek The day of the week string (Abbreviated)
+&nbsp;     * @return Integer representing the day of the week
+&nbsp;     * @throws IllegalArgumentException if the input day of the week is invalid
+&nbsp;     */
+&nbsp;    public static int convertDayOfWeekToInt(String dayOfWeek) {
+<b class="fc">&nbsp;        if (DAY_OF_WEEK_MAP.containsKey(dayOfWeek)) {</b>
+<b class="fc">&nbsp;            return DAY_OF_WEEK_MAP.get(dayOfWeek);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            throw new IllegalArgumentException(&quot;Dia da semana inválido: &quot; + dayOfWeek);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Count occurrences of a particular day of the week and start time combination.
+&nbsp;     *
+&nbsp;     * @param data       The data from the CSV file
+&nbsp;     * @param dayOfWeek  The day of the week index
+&nbsp;     * @param startTime  The start time index
+&nbsp;     * @return Number of occurrences
+&nbsp;     */
+&nbsp;    public static int countOccurrences(List&lt;String[]&gt; data, int dayOfWeek, int startTime) {
+<b class="fc">&nbsp;        int count = 0;</b>
+<b class="fc">&nbsp;        for (String[] row : data) {</b>
+<b class="fc">&nbsp;            int rowDayOfWeek = convertDayOfWeekToInt(row[5]);</b>
+<b class="fc">&nbsp;            int rowStartTime = convertDateOfDayToInt(row[6]);</b>
+<b class="pc">&nbsp;            if (rowDayOfWeek == dayOfWeek &amp;&amp; rowStartTime == startTime) {</b>
+<b class="fc">&nbsp;                count++;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Check if a particular combination meets the applied filter criteria.
+&nbsp;     *
+&nbsp;     * @param data       The data from the CSV file
+&nbsp;     * @param dayOfWeek  The day of the week index
+&nbsp;     * @param startTime  The start time index
+&nbsp;     * @return Number of occurrences meeting the criteria
+&nbsp;     */
+&nbsp;    public static int haveFilter(List&lt;String[]&gt; data, int dayOfWeek, int startTime) {
+<b class="nc">&nbsp;        int count = 0;</b>
+<b class="nc">&nbsp;        for (String[] row : data) {</b>
+<b class="nc">&nbsp;            int rowDayOfWeek = convertDayOfWeekToInt(row[5]);</b>
+<b class="nc">&nbsp;            int rowStartTime = convertDateOfDayToInt(row[6]);</b>
+<b class="nc">&nbsp;            String room = row[10];</b>
+<b class="nc">&nbsp;            String day = row[8];</b>
+<b class="nc">&nbsp;            int week = getWeekOfYear(day);</b>
+&nbsp;
+<b class="nc">&nbsp;            boolean meetsCriteria = true;</b>
+<b class="nc">&nbsp;            if (!filterDayOfWeek.isBlank()) {</b>
+<b class="nc">&nbsp;                int filtroDataInt = convertDayOfWeekToInt(filterDayOfWeek);</b>
+<b class="nc">&nbsp;                if (rowDayOfWeek != filtroDataInt) {</b>
+<b class="nc">&nbsp;                    meetsCriteria = false;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (!filterHour.isBlank()) {</b>
+<b class="nc">&nbsp;                int filtroHoraInt = convertDateOfDayToInt(filterHour);</b>
+<b class="nc">&nbsp;                if (rowStartTime != filtroHoraInt) {</b>
+<b class="nc">&nbsp;                    meetsCriteria = false;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (!filterRoom.isBlank() &amp;&amp; !room.equals(filterRoom)) {</b>
+<b class="nc">&nbsp;                meetsCriteria = false;</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (!filterDayOfYear.isBlank() &amp;&amp; !day.equals(filterDayOfYear)) {</b>
+<b class="nc">&nbsp;                meetsCriteria = false;</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (!filterWeekOfYear.isBlank() &amp;&amp; week != Integer.parseInt(filterWeekOfYear)) {</b>
+<b class="nc">&nbsp;                meetsCriteria = false;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (meetsCriteria &amp;&amp; rowDayOfWeek == dayOfWeek &amp;&amp; rowStartTime == startTime) {</b>
+<b class="nc">&nbsp;                count++;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return count;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private static final Map&lt;String, Integer&gt; DATE_OF_DAY_MAP = new HashMap&lt;&gt;();</b>
+&nbsp;    static {
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;08:00:00&quot;, 0);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;08:30:00&quot;, 1);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;09:00:00&quot;, 2);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;09:30:00&quot;, 3);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;10:00:00&quot;, 4);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;10:30:00&quot;, 5);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;11:00:00&quot;, 6);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;11:30:00&quot;, 7);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;12:00:00&quot;, 8);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;12:30:00&quot;, 9);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;13:00:00&quot;, 10);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;13:30:00&quot;, 11);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;14:00:00&quot;, 12);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;14:30:00&quot;, 13);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;15:00:00&quot;, 14);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;15:30:00&quot;, 15);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;16:00:00&quot;, 16);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;16:30:00&quot;, 17);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;17:00:00&quot;, 18);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;17:30:00&quot;, 19);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;18:00:00&quot;, 20);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;18:30:00&quot;, 21);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;19:00:00&quot;, 22);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;19:30:00&quot;, 23);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;20:00:00&quot;, 24);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;20:30:00&quot;, 25);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;21:00:00&quot;, 26);</b>
+<b class="fc">&nbsp;        DATE_OF_DAY_MAP.put(&quot;21:30:00&quot;, 27);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Convert a time of day string to an integer.
+&nbsp;     *
+&nbsp;     * @param dateOfDay The time of day string (HH:MM:SS Format)
+&nbsp;     * @return Integer representing the time of day
+&nbsp;     */
+&nbsp;    public static int convertDateOfDayToInt(String dateOfDay) {
+<b class="fc">&nbsp;        if (DATE_OF_DAY_MAP.containsKey(dateOfDay)) {</b>
+<b class="fc">&nbsp;            return DATE_OF_DAY_MAP.get(dateOfDay);</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return -1;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the week of the year from a given date string.
+&nbsp;     *
+&nbsp;     * @param dateString The date string (dd/MM/yyyy Format)
+&nbsp;     * @return The week of the year
+&nbsp;     */
+&nbsp;    public static int getWeekOfYear(String dateString) {
+<b class="pc">&nbsp;        if (!dateString.isEmpty()) {</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;dd/MM/yyyy&quot;);</b>
+<b class="fc">&nbsp;                LocalDate date = LocalDate.parse(dateString, formatter);</b>
+<b class="fc">&nbsp;                WeekFields weekFields = WeekFields.of(Locale.getDefault());</b>
+<b class="fc">&nbsp;                return date.get(weekFields.weekOfWeekBasedYear());</b>
+<b class="fc">&nbsp;            } catch (DateTimeParseException e) {</b>
+<b class="fc">&nbsp;                return -1;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        return -1;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

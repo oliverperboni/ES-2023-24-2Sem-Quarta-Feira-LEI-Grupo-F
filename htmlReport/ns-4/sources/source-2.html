@@ -1,0 +1,228 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ConflitosGUI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">visualize</a>
+</div>
+
+<h1>Coverage Summary for Class: ConflitosGUI (visualize)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ConflitosGUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ConflitosGUI$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/37)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package visualize;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import structures.LineSchedule;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;
+&nbsp;/**
+&nbsp; * A graphical user interface for viewing schedule conflicts.
+&nbsp; */
+&nbsp;public class ConflitosGUI extends JFrame {
+&nbsp;    private JTextField salaField;
+&nbsp;    private JTextField horaInicioField;
+&nbsp;    private JTextField horaFimField;
+&nbsp;    private JTextField dataField;
+&nbsp;    private List&lt;LineSchedule&gt; lineSchedules;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a ConflitosGUI with the given list of LineSchedules.
+&nbsp;     *
+&nbsp;     * @param list the list of LineSchedules to be used for checking conflicts
+&nbsp;     */
+<b class="nc">&nbsp;    public ConflitosGUI(List&lt;LineSchedule&gt; list) {</b>
+<b class="nc">&nbsp;        this.lineSchedules = list;</b>
+<b class="nc">&nbsp;        setTitle(&quot;Ver Conflitos&quot;);</b>
+<b class="nc">&nbsp;        setSize(300, 200);</b>
+<b class="nc">&nbsp;        setLocationRelativeTo(null);</b>
+&nbsp;
+<b class="nc">&nbsp;        JPanel panel = new JPanel();</b>
+<b class="nc">&nbsp;        panel.setLayout(new GridLayout(5, 2));</b>
+&nbsp;
+<b class="nc">&nbsp;        JLabel salaLabel = new JLabel(&quot;Sala:&quot;);</b>
+<b class="nc">&nbsp;        salaField = new JTextField();</b>
+<b class="nc">&nbsp;        JLabel horaInicioLabel = new JLabel(&quot;Hora Início:&quot;);</b>
+<b class="nc">&nbsp;        horaInicioField = new JTextField();</b>
+<b class="nc">&nbsp;        JLabel horaFimLabel = new JLabel(&quot;Hora Fim:&quot;);</b>
+<b class="nc">&nbsp;        horaFimField = new JTextField();</b>
+<b class="nc">&nbsp;        JLabel dataLabel = new JLabel(&quot;Data:&quot;);</b>
+<b class="nc">&nbsp;        dataField = new JTextField();</b>
+&nbsp;
+<b class="nc">&nbsp;        JButton verConflitosButton = new JButton(&quot;Ver Conflitos&quot;);</b>
+<b class="nc">&nbsp;        verConflitosButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                String sala = salaField.getText();</b>
+<b class="nc">&nbsp;                String horaInicio = horaInicioField.getText();</b>
+<b class="nc">&nbsp;                String horaFim = horaFimField.getText();</b>
+<b class="nc">&nbsp;                String data = dataField.getText();</b>
+&nbsp;
+<b class="nc">&nbsp;                if (sala.isEmpty() || horaInicio.isEmpty() || horaFim.isEmpty() || data.isEmpty()) {</b>
+<b class="nc">&nbsp;                    JOptionPane.showMessageDialog(null, &quot;Por favor, preencha todos os campos.&quot;);</b>
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+&nbsp;                // Create the GrafoGUI object with the provided parameters
+<b class="nc">&nbsp;                GrafoGUI grafo = new GrafoGUI(list, sala, horaInicio, horaFim, data);</b>
+<b class="nc">&nbsp;                grafo.setVisible(true);</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        panel.add(salaLabel);</b>
+<b class="nc">&nbsp;        panel.add(salaField);</b>
+<b class="nc">&nbsp;        panel.add(horaInicioLabel);</b>
+<b class="nc">&nbsp;        panel.add(horaInicioField);</b>
+<b class="nc">&nbsp;        panel.add(horaFimLabel);</b>
+<b class="nc">&nbsp;        panel.add(horaFimField);</b>
+<b class="nc">&nbsp;        panel.add(dataLabel);</b>
+<b class="nc">&nbsp;        panel.add(dataField);</b>
+<b class="nc">&nbsp;        panel.add(verConflitosButton);</b>
+&nbsp;
+<b class="nc">&nbsp;        add(panel);</b>
+<b class="nc">&nbsp;        setVisible(true);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

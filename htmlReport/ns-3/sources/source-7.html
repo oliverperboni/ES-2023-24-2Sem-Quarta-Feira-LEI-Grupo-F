@@ -1,0 +1,395 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SchedulePeriod</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">structures</a>
+</div>
+
+<h1>Coverage Summary for Class: SchedulePeriod (structures)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SchedulePeriod</td>
+<td class="coverageStat">
+  <span class="percent">
+    94,1%
+  </span>
+  <span class="absValue">
+    (16/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88%
+  </span>
+  <span class="absValue">
+    (22/25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,8%
+  </span>
+  <span class="absValue">
+    (89/91)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">SchedulePeriod$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    94,4%
+  </span>
+  <span class="absValue">
+    (17/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88%
+  </span>
+  <span class="absValue">
+    (22/25)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97,8%
+  </span>
+  <span class="absValue">
+    (90/92)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package structures;
+&nbsp;
+&nbsp;import java.time.DayOfWeek;
+&nbsp;import java.time.LocalTime;
+&nbsp;import java.time.format.TextStyle;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Locale;
+&nbsp;import java.util.regex.Pattern;
+&nbsp;
+&nbsp;/**
+&nbsp; * The SchedulePeriod class hosts a series of constant values referring to ISCTE-IUL schedule time slots (start and
+&nbsp; * end time), time periods (periods of a day, with start and end times), and days of the week. They are used to
+&nbsp; * represent a user&#39;s time preferences when rescheduling a class, or when scheduling an entire new course.
+&nbsp; * @since 1.0
+&nbsp; */
+&nbsp;public class SchedulePeriod implements Comparable&lt;SchedulePeriod&gt; {
+&nbsp;
+&nbsp;    // Time slots
+<b class="fc">&nbsp;    public static SchedulePeriod _08H00_09H30 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;08:00&quot;), LocalTime.parse(&quot;09:30&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _09H30_11H00 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;09:30&quot;), LocalTime.parse(&quot;11:00&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _11H00_12H30 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;11:00&quot;), LocalTime.parse(&quot;12:30&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _13H00_14H30 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;13:00&quot;), LocalTime.parse(&quot;14:30&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _14H30_16H00 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;14:30&quot;), LocalTime.parse(&quot;16:00&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _16H00_17H30 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;16:00&quot;), LocalTime.parse(&quot;17:30&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _18H00_19H30 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;18:00&quot;), LocalTime.parse(&quot;19:30&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _19H30_21H00 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;19:30&quot;), LocalTime.parse(&quot;21:00&quot;));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod _21H00_22H30 =</b>
+<b class="fc">&nbsp;            new SchedulePeriod(LocalTime.parse(&quot;21:00&quot;), LocalTime.parse(&quot;22:30&quot;));</b>
+&nbsp;
+&nbsp;    // Time periods
+<b class="fc">&nbsp;    public static SchedulePeriod MANHA = new SchedulePeriod(LocalTime.parse(&quot;08:00&quot;),</b>
+<b class="fc">&nbsp;            LocalTime.parse(&quot;12:30&quot;), List.of(_08H00_09H30, _09H30_11H00, _11H00_12H30));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod TARDE = new SchedulePeriod(LocalTime.parse(&quot;13:00&quot;),</b>
+<b class="fc">&nbsp;            LocalTime.parse(&quot;17:30&quot;), List.of(_13H00_14H30, _14H30_16H00, _16H00_17H30));</b>
+<b class="fc">&nbsp;    public static SchedulePeriod NOITE = new SchedulePeriod(LocalTime.parse(&quot;18:00&quot;),</b>
+<b class="fc">&nbsp;            LocalTime.parse(&quot;22:30&quot;), List.of(_18H00_19H30, _19H30_21H00, _21H00_22H30));</b>
+&nbsp;
+&nbsp;    // Week days
+<b class="fc">&nbsp;    public static SchedulePeriod SEGUNDA_FEIRA = new SchedulePeriod(DayOfWeek.MONDAY);</b>
+<b class="fc">&nbsp;    public static SchedulePeriod TERCA_FEIRA = new SchedulePeriod(DayOfWeek.TUESDAY);</b>
+<b class="fc">&nbsp;    public static SchedulePeriod QUARTA_FEIRA = new SchedulePeriod(DayOfWeek.WEDNESDAY);</b>
+<b class="fc">&nbsp;    public static SchedulePeriod QUINTA_FEIRA = new SchedulePeriod(DayOfWeek.THURSDAY);</b>
+<b class="fc">&nbsp;    public static SchedulePeriod SEXTA_FEIRA = new SchedulePeriod(DayOfWeek.FRIDAY);</b>
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Indicates if the SchedulePeriod instance refers to a time slot (start and end times).
+&nbsp;     */
+&nbsp;    final private boolean isTimeSlot;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * LocalTime object containing the time slot or time period start time.
+&nbsp;     */
+&nbsp;    final private LocalTime startTime;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * LocalTime object containing the time slot or time period end time.
+&nbsp;     */
+&nbsp;    final private LocalTime endTime;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Indicates if the SchedulePeriod instance refers to a time slot (period of a day with start and end times).
+&nbsp;     */
+&nbsp;    final private boolean isTimePeriod;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * List of SchedulePeriod objects consisting of the time slots that make up a time period.
+&nbsp;     */
+&nbsp;    final private List&lt;SchedulePeriod&gt; timeSlotList;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Indicates if the SchedulePeriod instance refers to a day of the week.
+&nbsp;     */
+&nbsp;    final private boolean isWeekDay;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * DayOfWeek object referring to the day of the week represented by the SchedulePeriod object.
+&nbsp;     */
+&nbsp;    final private DayOfWeek preferredDay;
+&nbsp;
+<b class="fc">&nbsp;    private String diaSemana=&quot;&quot;;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for a SchedulePeriod object representing a time slot.
+&nbsp;     *
+&nbsp;     * @param startTime LocalTime object containing the time slot&#39;s start time
+&nbsp;     * @param endTime   LocalTime object containing the time slot&#39;s end time
+&nbsp;     */
+<b class="fc">&nbsp;    public SchedulePeriod(LocalTime startTime, LocalTime endTime) {</b>
+<b class="fc">&nbsp;        this.isTimeSlot = true;</b>
+<b class="fc">&nbsp;        this.isTimePeriod = false;</b>
+<b class="fc">&nbsp;        this.isWeekDay = false;</b>
+<b class="fc">&nbsp;        this.startTime = startTime;</b>
+<b class="fc">&nbsp;        this.endTime = endTime;</b>
+<b class="fc">&nbsp;        this.timeSlotList = null;</b>
+<b class="fc">&nbsp;        this.preferredDay = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for a SchedulePeriod object representing a time period.
+&nbsp;     *
+&nbsp;     * @param startTime LocalTime object containing the time period&#39;s start time
+&nbsp;     * @param endTime   LocalTime object containing the time period&#39;s end time
+&nbsp;     * @param timeSlots List of SchedulePeriod objects consisting of the time slots that make up the time period
+&nbsp;     */
+<b class="fc">&nbsp;    public SchedulePeriod(LocalTime startTime, LocalTime endTime, List&lt;SchedulePeriod&gt; timeSlots) {</b>
+<b class="fc">&nbsp;        this.isTimeSlot = false;</b>
+<b class="fc">&nbsp;        this.isTimePeriod = true;</b>
+<b class="fc">&nbsp;        this.isWeekDay = false;</b>
+<b class="fc">&nbsp;        this.startTime = startTime;</b>
+<b class="fc">&nbsp;        this.endTime = endTime;</b>
+<b class="fc">&nbsp;        this.timeSlotList = timeSlots;</b>
+<b class="fc">&nbsp;        this.preferredDay = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for a SchedulePeriod object representing a week day
+&nbsp;     *
+&nbsp;     * @param day DayOfWeek object referring to the week day represented by the SchedulePeriod object
+&nbsp;     */
+<b class="fc">&nbsp;    public SchedulePeriod(DayOfWeek day) {</b>
+<b class="fc">&nbsp;        this.isTimeSlot = false;</b>
+<b class="fc">&nbsp;        this.isTimePeriod = false;</b>
+<b class="fc">&nbsp;        this.isWeekDay = true;</b>
+<b class="fc">&nbsp;        this.startTime = null;</b>
+<b class="fc">&nbsp;        this.endTime = null;</b>
+<b class="fc">&nbsp;        this.timeSlotList = null;</b>
+<b class="fc">&nbsp;        this.preferredDay = day;</b>
+<b class="pc">&nbsp;        switch (preferredDay){</b>
+<b class="fc">&nbsp;            case MONDAY -&gt; this.diaSemana = &quot;Seg&quot;;</b>
+<b class="fc">&nbsp;            case TUESDAY -&gt; this.diaSemana = &quot;Ter&quot;;</b>
+<b class="fc">&nbsp;            case WEDNESDAY -&gt; this.diaSemana = &quot;Qua&quot;;</b>
+<b class="fc">&nbsp;            case THURSDAY -&gt; this.diaSemana = &quot;Qui&quot;;</b>
+<b class="fc">&nbsp;            case FRIDAY -&gt; this.diaSemana = &quot;Sex&quot;;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean getIsTimeSlot() {
+<b class="fc">&nbsp;        return isTimeSlot;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean getIsTimePeriod() {
+<b class="fc">&nbsp;        return isTimePeriod;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean getIsWeekDay() {
+<b class="fc">&nbsp;        return isWeekDay;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public LocalTime getStartTime() {
+<b class="fc">&nbsp;        return startTime;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public LocalTime getEndTime() {
+<b class="fc">&nbsp;        return endTime;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;SchedulePeriod&gt; getTimeSlotList() {
+<b class="fc">&nbsp;        return timeSlotList;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public DayOfWeek getPreferredDay() {
+<b class="fc">&nbsp;        return preferredDay;</b>
+&nbsp;    }
+&nbsp;    public String getWeekDay() {
+<b class="nc">&nbsp;        return diaSemana;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;SchedulePeriod&gt; getAllTimeSlots() {
+<b class="fc">&nbsp;        return new ArrayList&lt;&gt;(Arrays.asList(_08H00_09H30, _09H30_11H00, _11H00_12H30, _13H00_14H30, _14H30_16H00,</b>
+&nbsp;                _16H00_17H30, _18H00_19H30, _19H30_21H00, _21H00_22H30));
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;SchedulePeriod&gt; getAllTimePeriods() {
+<b class="fc">&nbsp;        return new ArrayList&lt;&gt;(Arrays.asList(MANHA, TARDE, NOITE));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;SchedulePeriod&gt; getAllWeekDays() {
+<b class="fc">&nbsp;        return new ArrayList&lt;&gt;(Arrays.asList(SEGUNDA_FEIRA, TERCA_FEIRA, QUARTA_FEIRA, QUINTA_FEIRA, SEXTA_FEIRA));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Compares this SchedulePeriod with the specified SchedulePeriod for order.
+&nbsp;     * Returns a negative integer, zero, or a positive integer as this SchedulePeriod is less than, equal to,
+&nbsp;     * or greater than the specified SchedulePeriod. Comparison is based on the attributes of SchedulePeriod objects:
+&nbsp;     * - For time slots: compares based on start time. If start times are equal, compares based on end time.
+&nbsp;     * - For time periods: compares based on start time and end time. If both start and end times are less than
+&nbsp;     *   the corresponding times in the specified SchedulePeriod, returns -1. If both are equal, returns 0. Otherwise, returns 1.
+&nbsp;     * - For days of the week: compares based on the DayOfWeek object.
+&nbsp;     *
+&nbsp;     * @param o the SchedulePeriod to be compared
+&nbsp;     * @return a negative integer, zero, or a positive integer as this SchedulePeriod is less than, equal to,
+&nbsp;     * or greater than the specified SchedulePeriod
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public int compareTo(SchedulePeriod o) {
+<b class="fc">&nbsp;        if (isTimeSlot) {</b>
+<b class="fc">&nbsp;            int startComparison = this.startTime.compareTo(o.startTime);</b>
+&nbsp;
+<b class="fc">&nbsp;            if (startComparison == 0) return this.endTime.compareTo(o.endTime);</b>
+<b class="fc">&nbsp;            else return startComparison;</b>
+<b class="fc">&nbsp;        } else if (isTimePeriod) {</b>
+<b class="pc">&nbsp;            if (this.startTime.compareTo(o.startTime) &lt; 0 &amp;&amp; this.endTime.compareTo(o.endTime) &lt; 0)</b>
+<b class="fc">&nbsp;                return -1;</b>
+<b class="pc">&nbsp;            else if (this.startTime.compareTo(o.startTime) == 0 &amp;&amp; this.endTime.compareTo(o.endTime) == 0)</b>
+<b class="fc">&nbsp;                return 0;</b>
+<b class="fc">&nbsp;            else return 1;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return this.preferredDay.compareTo(o.preferredDay);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns distinct string representations depending on if the SchedulePeriod object represents a timeslot, a
+&nbsp;     * time period, or a week day. The week day representation matches the format found in ISCTE-IUL schedule files.
+&nbsp;     *
+&nbsp;     * @return String representing start and end time for time slots and periods, or first three letters of day name
+&nbsp;     * for week days
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        if (this.isTimeSlot)</b>
+<b class="fc">&nbsp;            return this.startTime + &quot; &quot; + this.endTime;</b>
+<b class="fc">&nbsp;        if (this.isTimePeriod)</b>
+<b class="fc">&nbsp;            return &quot;Período: &quot; + this.startTime + &quot; - &quot; + this.endTime;</b>
+<b class="pc">&nbsp;        if (this.isWeekDay) {</b>
+<b class="fc">&nbsp;            Locale prtLocal = new Locale.Builder().setLanguage(&quot;pt&quot;).setScript(&quot;Latn&quot;).setRegion(&quot;PT&quot;).build();</b>
+<b class="fc">&nbsp;            String smallDisplayName = preferredDay.getDisplayName(TextStyle.SHORT_STANDALONE, prtLocal).substring(0, 3);</b>
+<b class="fc">&nbsp;            return Pattern.compile(&quot;^.&quot;).matcher(smallDisplayName).replaceFirst(m -&gt; m.group().toUpperCase());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

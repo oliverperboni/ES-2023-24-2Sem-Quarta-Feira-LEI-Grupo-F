@@ -1,0 +1,387 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TableFilters</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">filters</a>
+</div>
+
+<h1>Coverage Summary for Class: TableFilters (filters)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TableFilters</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    57,1%
+  </span>
+  <span class="absValue">
+    (8/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (7/14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86,4%
+  </span>
+  <span class="absValue">
+    (89/103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package filters;
+&nbsp;
+&nbsp;import visualize.RoomOccupancyMap;
+&nbsp;import structures.LineSchedule;
+&nbsp;import structures.ScheduleDataModel;
+&nbsp;import visualize.ConflitosGUI;
+&nbsp;import visualize.Table;
+&nbsp;import visualize.TableSubstitution;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import javax.swing.table.DefaultTableModel;
+&nbsp;import javax.swing.table.TableColumn;
+&nbsp;import javax.swing.table.TableRowSorter;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+&nbsp;
+&nbsp;/**
+&nbsp; * The TableFilters class provides functionality to add filters to a JTable and perform various operations like hiding columns, revealing hidden columns, and saving changes.
+&nbsp; */
+&nbsp;
+&nbsp;public class TableFilters {
+&nbsp;
+&nbsp;    /** List to store column indexes of hidden columns */
+<b class="fc">&nbsp;    List&lt;Integer&gt; a = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public JFrame panel;
+&nbsp;
+&nbsp;    private Table table;
+&nbsp;
+<b class="fc">&nbsp;    public TableFilters(Table table) {</b>
+<b class="fc">&nbsp;        this.table = table;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds filter components to the JFrame panel.
+&nbsp;     *
+&nbsp;     * @param panel  The JFrame panel.
+&nbsp;     * @param tabela The JTable to which filters will be added.
+&nbsp;     * @return The updated JFrame panel with added filters.
+&nbsp;     */
+&nbsp;    public JFrame addFilter(JFrame panel, JTable tabela, ScheduleDataModel dataModel) {
+<b class="fc">&nbsp;        panel = new JFrame();</b>
+&nbsp;
+<b class="fc">&nbsp;        panel.setSize(900, 800);</b>
+<b class="fc">&nbsp;        panel.setLayout(new BorderLayout());</b>
+<b class="fc">&nbsp;        panel.setUndecorated(false);</b>
+<b class="fc">&nbsp;        panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, panel.getBackground()));</b>
+<b class="fc">&nbsp;        panel.setDefaultCloseOperation(EXIT_ON_CLOSE);</b>
+&nbsp;
+&nbsp;        //Paneis
+<b class="fc">&nbsp;        JPanel filterPanel = new JPanel();</b>
+<b class="fc">&nbsp;        JPanel buttonPanel = new JPanel();</b>
+&nbsp;
+&nbsp;        //TextField
+<b class="fc">&nbsp;        textFieldsCreation(filterPanel);</b>
+&nbsp;
+&nbsp;        //Botoes
+<b class="fc">&nbsp;        JButton salasbtn = new JButton(&quot;Salas&quot;);</b>
+<b class="fc">&nbsp;        JButton conflitosbtn = new JButton(&quot;Conflitos&quot;);</b>
+<b class="fc">&nbsp;        JButton heatmapbtn = new JButton(&quot;Mapa Ocupação&quot;);</b>
+<b class="fc">&nbsp;        JButton filtrarbtn = new JButton(&quot;Filtrar&quot;);</b>
+<b class="fc">&nbsp;        JButton esconderbtn = new JButton(&quot;Esconder Coluna&quot;);</b>
+<b class="fc">&nbsp;        JButton revelarbtn = new JButton(&quot;Revelar Colunas&quot;);</b>
+<b class="fc">&nbsp;        JButton substituitionButton = new JButton(&quot;Marcar Substituição&quot;);</b>
+<b class="fc">&nbsp;        JButton aulaButton = new JButton(&quot;Marcar Nova UC&quot;);</b>
+<b class="fc">&nbsp;        JButton saveButton = new JButton(&quot;Guardar&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        saveButton.addActionListener(e -&gt; table.saveChanges());</b>
+&nbsp;
+<b class="fc">&nbsp;        btnCreation(filtrarbtn, tabela, filterPanel);</b>
+<b class="fc">&nbsp;        btnCreation(esconderbtn, tabela, filterPanel);</b>
+<b class="fc">&nbsp;        btnCreation(revelarbtn, tabela, filterPanel);</b>
+&nbsp;
+<b class="fc">&nbsp;        buttonPanel.add(salasbtn);</b>
+<b class="fc">&nbsp;        buttonPanel.add(conflitosbtn);</b>
+<b class="fc">&nbsp;        buttonPanel.add(heatmapbtn);</b>
+<b class="fc">&nbsp;        buttonPanel.add(filtrarbtn);</b>
+<b class="fc">&nbsp;        buttonPanel.add(esconderbtn);</b>
+<b class="fc">&nbsp;        buttonPanel.add(revelarbtn);</b>
+<b class="fc">&nbsp;        buttonPanel.add(substituitionButton);</b>
+<b class="fc">&nbsp;        buttonPanel.add(aulaButton);</b>
+<b class="fc">&nbsp;        buttonPanel.add(saveButton);</b>
+&nbsp;
+&nbsp;        //Ações dos Botões
+<b class="fc">&nbsp;        conflitosbtn.addActionListener(e -&gt; function_conflitos(dataModel.getScheduleEntries()));</b>
+<b class="fc">&nbsp;        filtrarbtn.addActionListener(e -&gt; function_filtrarBtn(tabela, filterPanel));</b>
+<b class="fc">&nbsp;        esconderbtn.addActionListener(e -&gt; function_esconderBtn(tabela));</b>
+<b class="fc">&nbsp;        revelarbtn.addActionListener(e -&gt; function_revelarBtn(tabela));</b>
+<b class="fc">&nbsp;        substituitionButton.addActionListener(e -&gt; function_MarcarSubs(tabela));</b>
+<b class="fc">&nbsp;        aulaButton.addActionListener(e -&gt; function_MarcarAulas(tabela));</b>
+<b class="fc">&nbsp;        salasbtn.addActionListener(e -&gt; function_listaSalas());</b>
+<b class="fc">&nbsp;        heatmapbtn.addActionListener(e -&gt; function_heatMap());</b>
+&nbsp;
+<b class="fc">&nbsp;        panel.add(filterPanel, BorderLayout.NORTH);</b>
+<b class="fc">&nbsp;        panel.add(buttonPanel, BorderLayout.SOUTH);</b>
+<b class="fc">&nbsp;        return panel;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private void function_conflitos(List&lt;LineSchedule&gt; list) {
+&nbsp;
+<b class="nc">&nbsp;        ConflitosGUI gui = new ConflitosGUI(list);</b>
+&nbsp;     
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates labels and text fields for filters and adds them to the provided panel.
+&nbsp;     *
+&nbsp;     * @param filterPanel The panel to which labels and text fields will be added.
+&nbsp;     */
+&nbsp;    public void textFieldsCreation(JPanel filterPanel) {
+<b class="fc">&nbsp;        filterPanel.setLayout(new GridLayout(0, 2, 5, 5)); // 0 indica número indefinido de linhas</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Curso&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;UC&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Turno&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Turma&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;N.º de inscritos no turno&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Dia da Semana&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Hora de Início&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Hora de Fim&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Data da Aula&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Tipo de Sala&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Sala atribuida&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Semana do semestre&quot;);</b>
+<b class="fc">&nbsp;        addLabelAndTextField(filterPanel, &quot;Semana do ano&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Adds a label and a text field to the provided panel.
+&nbsp;     *
+&nbsp;     * @param panel The panel to which the label and text field will be added.
+&nbsp;     * @param label The text for the label.
+&nbsp;     */
+&nbsp;    private void addLabelAndTextField(JPanel panel, String label) {
+<b class="fc">&nbsp;        JLabel jLabel = new JLabel(label);</b>
+<b class="fc">&nbsp;        JTextField jTextField = new JTextField(&quot;&quot;);</b>
+<b class="fc">&nbsp;        panel.add(jLabel);</b>
+<b class="fc">&nbsp;        panel.add(jTextField);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates a button with specified style settings.
+&nbsp;     *
+&nbsp;     * @param btn         The button to be styled.
+&nbsp;     * @param tabela      The JTable associated with the button.
+&nbsp;     * @param filterPanel The panel containing the filters.
+&nbsp;     */
+&nbsp;    public void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
+&nbsp;
+&nbsp;        //Estilo do Botão
+&nbsp;//        btn.setForeground(Color.WHITE);
+&nbsp;//        btn.setBackground(new Color(46, 139, 87)); // Cor verde
+&nbsp;//        btn.setFocusPainted(false); // Remove a borda de foco
+&nbsp;//        btn.setFont(new Font(&quot;Arial&quot;, Font.BOLD, 14));
+&nbsp;
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    public void function_MarcarSubs(JTable tabela) {
+&nbsp;        /*ListSelectionModel selectionModel = tabela.getSelectionModel();
+&nbsp;        selectionModel.addListSelectionListener(e -&gt; {
+&nbsp;            if (!e.getValueIsAdjusting()) {*/
+<b class="nc">&nbsp;                int selectedRow = tabela.getSelectedRow();</b>
+&nbsp;                // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
+<b class="nc">&nbsp;                if (selectedRow != -1) {</b>
+&nbsp;                    // Verifica se uma linha está selecionada
+<b class="nc">&nbsp;                    new TableSubstitution(selectedRow,table,false);</b>
+&nbsp;                }
+&nbsp;            //}
+&nbsp;        /*});*/
+&nbsp;    }
+&nbsp;    public void function_MarcarAulas(JTable tabela) {
+&nbsp;
+<b class="nc">&nbsp;        int selectedRow = tabela.getSelectedRow();</b>
+&nbsp;        // Faça algo com a linha selecionada, por exemplo, imprimir os dados da linha
+<b class="nc">&nbsp;        if (selectedRow != -1) {</b>
+&nbsp;            // Verifica se uma linha está selecionada
+<b class="nc">&nbsp;            new TableSubstitution(selectedRow,table,true);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Hides the selected column from the JTable.
+&nbsp;     *
+&nbsp;     * @param tabela The JTable from which the column will be hidden.
+&nbsp;     */
+&nbsp;    public void function_esconderBtn(JTable tabela) {
+<b class="fc">&nbsp;        int columnIndex = tabela.getSelectedColumn();</b>
+<b class="fc">&nbsp;        TableColumn d = tabela.getColumnModel().getColumn(columnIndex);</b>
+<b class="fc">&nbsp;        a.add(d.getModelIndex());</b>
+<b class="fc">&nbsp;        tabela.removeColumn(d);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Reveals previously hidden columns in the JTable.
+&nbsp;     *
+&nbsp;     * @param tabela The JTable in which hidden columns will be revealed.
+&nbsp;     */
+&nbsp;    public void function_revelarBtn(JTable tabela) {
+<b class="fc">&nbsp;            for(int x :a){</b>
+<b class="fc">&nbsp;                TableColumn c = new TableColumn(x);</b>
+<b class="fc">&nbsp;                tabela.addColumn(c);</b>
+<b class="fc">&nbsp;                tabela.moveColumn(tabela.getColumnCount()-1,x);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        a.clear();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates an instance of the RoomFilterFrame class and displays its window.
+&nbsp;     */
+&nbsp;    public void function_listaSalas() {
+<b class="nc">&nbsp;        RoomFilterFrame filterFrame = new RoomFilterFrame(table.getDataModel().getRoomEntries(),</b>
+<b class="nc">&nbsp;                table.getDataModel().getRoomColumnHeaders());</b>
+<b class="nc">&nbsp;        filterFrame.show();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates an instance of the RoomOccupancyMap class and displays its window.
+&nbsp;     */
+&nbsp;    public void function_heatMap() {
+<b class="nc">&nbsp;        RoomOccupancyMap.main(new String[0]);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Filters the JTable based on the input provided in the filter panel.
+&nbsp;     *
+&nbsp;     * @param tabela       The JTable to be filtered.
+&nbsp;     * @param filterPanel  The panel containing the filter components.
+&nbsp;     */
+&nbsp;    public void function_filtrarBtn(JTable tabela, JPanel filterPanel) {
+<b class="fc">&nbsp;        int countFilterPreenchido = 0;</b>
+<b class="fc">&nbsp;        DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();</b>
+<b class="fc">&nbsp;        TableRowSorter&lt;DefaultTableModel&gt; sorter = new TableRowSorter&lt;&gt;(modelo);</b>
+<b class="fc">&nbsp;        tabela.setRowSorter(sorter);</b>
+&nbsp;
+<b class="fc">&nbsp;        ArrayList&lt;RowFilter&lt;Object, Object&gt;&gt; filters = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; filterPanel.getComponentCount(); i += 2) {</b>
+<b class="fc">&nbsp;            Component component = filterPanel.getComponent(i + 1);</b>
+<b class="pc">&nbsp;            if (component instanceof JTextField textField) {</b>
+<b class="fc">&nbsp;                String filterText = textField.getText().toUpperCase();</b>
+&nbsp;
+<b class="fc">&nbsp;                int columnIndex = i / 2;</b>
+&nbsp;
+<b class="pc">&nbsp;                if (!filterText.isEmpty()) {</b>
+<b class="fc">&nbsp;                    countFilterPreenchido++;</b>
+<b class="fc">&nbsp;                    filters.add(RowFilter.regexFilter(&quot;(?i)\\b&quot; + filterText + &quot;\\b&quot;, columnIndex));</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="pc">&nbsp;        if (countFilterPreenchido == 1) {</b>
+<b class="fc">&nbsp;            RowFilter&lt;Object, Object&gt; compoundRowFilter = RowFilter.orFilter(filters);</b>
+<b class="fc">&nbsp;            sorter.setRowFilter(compoundRowFilter);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            RowFilter&lt;Object, Object&gt; compoundRowFilter = RowFilter.andFilter(filters);</b>
+<b class="nc">&nbsp;            sorter.setRowFilter(compoundRowFilter);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public Table getTable() {
+<b class="nc">&nbsp;        return table;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

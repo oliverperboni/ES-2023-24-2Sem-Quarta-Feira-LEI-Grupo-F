@@ -1,0 +1,154 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RoomPreference</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">structures</a>
+</div>
+
+<h1>Coverage Summary for Class: RoomPreference (structures)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RoomPreference</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package structures;
+&nbsp;
+&nbsp;/**
+&nbsp; * The RoomPreference class hosts a series of constant values referring to ISCTE-IUL room specifications. They are
+&nbsp; * used to represent a user&#39;s room specification preferences when rescheduling a class, or scheduling an entire new
+&nbsp; * course.
+&nbsp; * @since 1.0
+&nbsp; */
+<b class="fc">&nbsp;public enum RoomPreference {</b>
+&nbsp;
+<b class="fc">&nbsp;	ANFITEATRO_AULAS(&quot;Anfiteatro aulas&quot;), APOIO_TECNICO_EVENTOS(&quot;Apoio técnico eventos&quot;), ARQ1(&quot;Arq 1&quot;),</b>
+<b class="fc">&nbsp;	ARQ2(&quot;Arq 2&quot;), ARQ3(&quot;Arq 3&quot;), ARQ4(&quot;Arq 4&quot;), ARQ5(&quot;Arq 5&quot;), ARQ6(&quot;Arq 6&quot;), ARQ9(&quot;Arq 9&quot;),</b>
+<b class="fc">&nbsp;	BYOD(&quot;BYOD (Bring Your Own Device)&quot;), FOCUS_GROUP(&quot;Focus Group&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_ARQUITETURA_COMPUTADORES_I(&quot;Laboratório de Arquitectura de Computadores I&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_ARQUITETURA_COMPUTADORES_II(&quot;Laboratório de Arquitectura de Computadores II&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_BASES_ENGENHARIA(&quot;Laboratório de Bases de Engenharia&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_ELETRONICA(&quot;Laboratório de Electrónica&quot;), LABORATORIO_INFORMATICA(&quot;Laboratório de Informática&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_JORNALISMO(&quot;Laboratório de Jornalismo&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_REDES_COMPUTADORES_I(&quot;Laboratório de Redes de Computadores I&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_REDES_COMPUTADORES_II(&quot;Laboratório de Redes de Computadores II&quot;),</b>
+<b class="fc">&nbsp;	LABORATORIO_TELECOMUNICACOES(&quot;Laboratório de Telecomunicações&quot;), SALA_AULAS_MESTRADO(&quot;Sala Aulas Mestrado&quot;),</b>
+<b class="fc">&nbsp;	SALA_AULAS_MESTRADO_PLUS(&quot;Sala Aulas Mestrado Plus&quot;), SALA_NEE(&quot;Sala NEE&quot;), SALA_PROVAS(&quot;Sala Provas&quot;),</b>
+<b class="fc">&nbsp;	SALA_REUNIAO(&quot;Sala Reunião&quot;), SALA_ARQUITETURA(&quot;Sala de Arquitectura&quot;), SALA_AULAS_NORMAL(&quot;Sala de Aulas normal&quot;),</b>
+<b class="fc">&nbsp;	VIDEOCONFERENCIA(&quot;videoconferéncia&quot;), ATRIO(&quot;Atrio&quot;);</b>
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Name of the specfication of the room type represented by this preference.
+&nbsp;	 */
+&nbsp;	private String stringValue;
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Constructor for the RoomPreference class.
+&nbsp;	 *
+&nbsp;	 * @param stringValue        name of the specfication of the room type represented by this preference
+&nbsp;	 */
+<b class="fc">&nbsp;	RoomPreference(String stringValue) {</b>
+<b class="fc">&nbsp;		this.stringValue = stringValue;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * Returns a string containing the name of the room&#39;s type/specification.
+&nbsp;	 *
+&nbsp;	 * @return String of the room&#39;s specification name
+&nbsp;	 */
+&nbsp;	@Override
+&nbsp;	public String toString() {
+<b class="fc">&nbsp;		return stringValue;</b>
+&nbsp;	}
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

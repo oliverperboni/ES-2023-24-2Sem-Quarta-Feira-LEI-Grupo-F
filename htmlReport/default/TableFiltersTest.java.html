@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TableFiltersTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in GestaodeHorarios Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">TableFiltersTest.java</span></div><h1>TableFiltersTest.java</h1><pre class="source lang-java linenums">import org.junit.jupiter.api.Test;
+
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+<span class="fc" id="L11">class TableFiltersTest {</span>
+
+    @Test
+    void addFilter() {
+
+<span class="fc" id="L16">        filters.TableFilters  tf = new filters.TableFilters();</span>
+         // Criação de objetos necessários
+<span class="fc" id="L18">        JFrame panel = new JFrame();</span>
+<span class="fc" id="L19">        JTable tabela = new JTable();</span>
+
+        // Chama o método addFilter
+<span class="fc" id="L22">        JFrame resultFrame = tf.addFilter(panel, tabela);</span>
+
+        // Verificações
+
+        // Verifica se o JFrame retornado não é nulo
+<span class="fc" id="L27">        assertNotNull(resultFrame);</span>
+
+        // Verifica se o tamanho do JFrame é 900x800
+<span class="fc" id="L30">        assertEquals(900, resultFrame.getWidth());</span>
+<span class="fc" id="L31">        assertEquals(800, resultFrame.getHeight());</span>
+
+        // Verifica se o layout do JFrame é BorderLayout
+<span class="fc" id="L34">        assertTrue(resultFrame.getLayout() instanceof BorderLayout);</span>
+
+        // Verifica se o JFrame não é decorado
+<span class="fc" id="L37">        assertFalse(resultFrame.isUndecorated());</span>
+
+        // Verifica se a borda do JFrame está correta
+<span class="fc" id="L40">        assertTrue(resultFrame.getRootPane().getBorder() instanceof MatteBorder);</span>
+<span class="fc" id="L41">        MatteBorder matteBorder = (MatteBorder) resultFrame.getRootPane().getBorder();</span>
+<span class="fc" id="L42">        assertEquals(20, matteBorder.getBorderInsets().top);</span>
+<span class="fc" id="L43">        assertEquals(20, matteBorder.getBorderInsets().left);</span>
+<span class="fc" id="L44">        assertEquals(20, matteBorder.getBorderInsets().bottom);</span>
+<span class="fc" id="L45">        assertEquals(20, matteBorder.getBorderInsets().right);</span>
+
+        // Verifica se os painéis foram adicionados corretamente
+<span class="fc" id="L48">        assertTrue(resultFrame.getContentPane().getComponent(0) instanceof JPanel);</span>
+<span class="fc" id="L49">        assertTrue(resultFrame.getContentPane().getComponent(1) instanceof JPanel);</span>
+
+        // Verifica se o botão de filtragem foi adicionado corretamente
+<span class="fc" id="L52">        JButton filtrarBtn = (JButton) ((JPanel) resultFrame.getContentPane().getComponent(1)).getComponent(0);</span>
+<span class="fc" id="L53">        assertEquals(&quot;Filtrar&quot;, filtrarBtn.getText());</span>
+<span class="fc" id="L54">    }</span>
+    
+    
+
+    @Test
+    void textFieldsCreation() {
+<span class="fc" id="L60">            filters.TableFilters  tf = new filters.TableFilters();</span>
+
+
+           // Criando um JPanel para testar
+<span class="fc" id="L64">           JPanel filterPanel = new JPanel();</span>
+        
+           // Chama o método textFieldsCreation
+<span class="fc" id="L67">           tf.textFieldsCreation(filterPanel);</span>
+   
+           // Verificações
+   
+           // Verifica se o layout do painel é GridLayout
+<span class="fc" id="L72">           assertTrue(filterPanel.getLayout() instanceof GridLayout);</span>
+   
+           // Verifica se o número de componentes adicionados ao painel está correto
+<span class="fc" id="L75">           assertEquals(26, filterPanel.getComponentCount());</span>
+   
+           // Verifica se os componentes adicionados são JLabels seguidos de JTextFields
+<span class="fc bfc" id="L78" title="All 2 branches covered.">           for (int i = 0; i &lt; filterPanel.getComponentCount(); i += 2) {</span>
+<span class="fc" id="L79">               assertTrue(filterPanel.getComponent(i) instanceof JLabel);</span>
+<span class="fc" id="L80">               assertTrue(filterPanel.getComponent(i + 1) instanceof JTextField);</span>
+           }
+   
+           // Verifica se os textos dos JLabels estão corretos
+<span class="fc" id="L84">           String[] expectedLabels = {&quot;Curso&quot;, &quot;UC&quot;, &quot;Turno&quot;, &quot;Turma&quot;, &quot;N.º de inscritos no turno&quot;,</span>
+                                      &quot;Dia da Semana&quot;, &quot;Hora de Início&quot;, &quot;Hora de Fim&quot;, &quot;Data da Aula&quot;,
+                                      &quot;Tipo de Sala&quot;, &quot;Sala atribuida&quot;, &quot;Semana do semestre&quot;, &quot;Semana do ano&quot;};
+<span class="fc bfc" id="L87" title="All 2 branches covered.">           for (int i = 0; i &lt; expectedLabels.length; i++) {</span>
+<span class="fc" id="L88">               JLabel label = (JLabel) filterPanel.getComponent(i * 2);</span>
+<span class="fc" id="L89">               assertEquals(expectedLabels[i], label.getText());</span>
+           }
+<span class="fc" id="L91">       }</span>
+    
+
+    @Test
+    void function_filtrarBtn() {
+
+<span class="fc" id="L97">        JTable tabela = new JTable();</span>
+<span class="fc" id="L98">        DefaultTableModel modelo = new DefaultTableModel();</span>
+<span class="fc" id="L99">        modelo.addColumn(&quot;Nome&quot;);</span>
+<span class="fc" id="L100">        modelo.addColumn(&quot;Categoria&quot;);</span>
+<span class="fc" id="L101">        Object[] row0 = {&quot;Item1&quot;, &quot;A&quot;};</span>
+<span class="fc" id="L102">        Object[] row1 = {&quot;Item2&quot;, &quot;B&quot;};</span>
+<span class="fc" id="L103">        Object[] row2 = {&quot;Item3&quot;, &quot;C&quot;};</span>
+<span class="fc" id="L104">        modelo.addRow(row0);</span>
+<span class="fc" id="L105">        modelo.addRow(row1);</span>
+<span class="fc" id="L106">        modelo.addRow(row2);</span>
+<span class="fc" id="L107">        tabela.setModel(modelo);</span>
+<span class="fc" id="L108">        JPanel filterPanel = new JPanel();</span>
+        
+<span class="fc" id="L110">        filters.TableFilters tableFilters = new filters.TableFilters(); </span>
+
+        // Adicionando filtros ao filterPanel para teste
+<span class="fc" id="L113">        JTextField textField1 = new JTextField(&quot;Item1&quot;);</span>
+<span class="fc" id="L114">        filterPanel.add(new JLabel(&quot;Nome&quot;));</span>
+<span class="fc" id="L115">        filterPanel.add(textField1);</span>
+   
+
+        // Chamando a função a ser testada
+<span class="fc" id="L119">        tableFilters.function_filtrarBtn(tabela, filterPanel);</span>
+
+        // Verificando se os filtros foram aplicados corretamente
+<span class="fc" id="L122">        assertEquals(1, tabela.getRowCount()); // Espera-se apenas uma linha após a filtragem</span>
+<span class="fc" id="L123">        assertEquals(&quot;Item1&quot;, tabela.getValueAt(0, 0)); // Espera-se que o item1 seja exibido</span>
+<span class="fc" id="L124">        assertEquals(&quot;A&quot;, tabela.getValueAt(0, 1)); // Espera-se que a categoria A seja exibida</span>
+<span class="fc" id="L125">    }</span>
+
+    @Test
+    public void testBtnCreation() {
+<span class="fc" id="L129">        filters.TableFilters tableFilters = new filters.TableFilters();</span>
+<span class="fc" id="L130">        JButton button = new JButton();</span>
+
+        // Chama o método
+<span class="fc" id="L133">        tableFilters.btnCreation(button, new JTable(), new JPanel());</span>
+
+        // Verifica se o botão tem os atributos definidos
+<span class="fc" id="L136">        assertEquals(Color.WHITE, button.getForeground());</span>
+<span class="fc" id="L137">        assertEquals(new Color(46, 139, 87), button.getBackground());</span>
+<span class="fc" id="L138">        assertFalse(button.isFocusPainted());</span>
+<span class="fc" id="L139">        assertEquals(new Font(&quot;Arial&quot;, Font.BOLD, 14), button.getFont());</span>
+<span class="fc" id="L140">    }</span>
+
+    @Test
+    public void testFunctionEsconderBtn() {
+<span class="fc" id="L144">        filters.TableFilters tableFilters = new filters.TableFilters();</span>
+<span class="fc" id="L145">        JTable table = new JTable(new DefaultTableModel(2, 2));</span>
+<span class="fc" id="L146">        table.changeSelection(1, 1, false, false);</span>
+<span class="fc" id="L147">        TableColumn column = table.getColumnModel().getColumn(1);</span>
+
+        // Chama o método
+<span class="fc" id="L150">        tableFilters.function_esconderBtn(table);</span>
+
+        // Verifica se a coluna foi removida da tabela
+<span class="fc" id="L153">        assertEquals(1, table.getColumnCount());</span>
+<span class="fc" id="L154">        assertNotEquals(column, table.getColumnModel().getColumn(0));</span>
+<span class="fc" id="L155">    }</span>
+
+    @Test
+    public void testFunctionRevelarBtn() {
+<span class="fc" id="L159">        filters.TableFilters tableFilters = new filters.TableFilters();</span>
+<span class="fc" id="L160">        JTable table = new JTable(new DefaultTableModel(2, 2));</span>
+<span class="fc" id="L161">        table.changeSelection(1, 1, false, false);</span>
+<span class="fc" id="L162">        TableColumn column = table.getColumnModel().getColumn(1);</span>
+
+        // Chama o método function_esconderBtn(), de forma a ocultar uma coluna
+<span class="fc" id="L165">        tableFilters.function_esconderBtn(table);</span>
+
+        // Chama o método a ser testado
+<span class="fc" id="L168">        tableFilters.function_revelarBtn(table);</span>
+
+        // Verifica se a coluna volta a ser visível novamente
+<span class="fc" id="L171">        assertEquals(2, table.getColumnCount());</span>
+<span class="fc" id="L172">        table.changeSelection(1, 1, false, false);</span>
+<span class="fc" id="L173">        column = table.getColumnModel().getColumn(1);</span>
+<span class="fc" id="L174">        assertEquals(column, table.getColumnModel().getColumn(1));</span>
+<span class="fc" id="L175">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

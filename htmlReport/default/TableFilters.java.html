@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>filters.TableFilters.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in GestaodeHorarios Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">filters.TableFilters.java</span></div><h1>filters.TableFilters.java</h1><pre class="source lang-java linenums">import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableRowSorter;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
+
+<span class="fc" id="L9">public class filters.TableFilters {</span>
+
+<span class="fc" id="L11">    List&lt;Integer&gt; a = new ArrayList&lt;&gt;();</span>
+
+    public JFrame panel;
+
+    public JFrame addFilter(JFrame panel, JTable tabela) {
+<span class="fc" id="L16">        panel = new JFrame();</span>
+
+<span class="fc" id="L18">        panel.setSize(900, 800);</span>
+<span class="fc" id="L19">        panel.setLayout(new BorderLayout());</span>
+<span class="fc" id="L20">        panel.setUndecorated(false);</span>
+<span class="fc" id="L21">        panel.getRootPane().setBorder(BorderFactory.createMatteBorder(20, 20, 20, 20, panel.getBackground()));</span>
+<span class="fc" id="L22">        panel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+
+        //Paneis
+<span class="fc" id="L25">        JPanel filterPanel = new JPanel();</span>
+<span class="fc" id="L26">        JPanel buttonPanel = new JPanel();</span>
+
+        //TextField
+<span class="fc" id="L29">        textFieldsCreation(filterPanel);</span>
+
+        //Botoes
+
+
+
+<span class="fc" id="L35">        JButton filtrarbtn = new JButton(&quot;Filtrar&quot;);</span>
+<span class="fc" id="L36">        JButton esconderbtn = new JButton(&quot;Esconder&quot;);</span>
+<span class="fc" id="L37">        JButton revelarbtn = new JButton(&quot;Revelar Tabelas Escondidas&quot;);</span>
+
+<span class="fc" id="L39">        btnCreation(filtrarbtn, tabela, filterPanel);</span>
+<span class="fc" id="L40">        btnCreation(esconderbtn, tabela, filterPanel);</span>
+<span class="fc" id="L41">        btnCreation(revelarbtn, tabela, filterPanel);</span>
+
+<span class="fc" id="L43">        buttonPanel.add(filtrarbtn);</span>
+<span class="fc" id="L44">        buttonPanel.add(esconderbtn);</span>
+<span class="fc" id="L45">        buttonPanel.add(revelarbtn);</span>
+
+
+        //Ações dos Botões
+<span class="pc" id="L49">        filtrarbtn.addActionListener(e -&gt; function_filtrarBtn(tabela, filterPanel));</span>
+<span class="pc" id="L50">        esconderbtn.addActionListener(e -&gt; function_esconderBtn(tabela));</span>
+<span class="pc" id="L51">        revelarbtn.addActionListener(e -&gt; function_revelarBtn(tabela));</span>
+
+
+<span class="fc" id="L54">        panel.add(filterPanel, BorderLayout.NORTH);</span>
+<span class="fc" id="L55">        panel.add(buttonPanel, BorderLayout.SOUTH);</span>
+<span class="fc" id="L56">        return panel;</span>
+    }
+
+
+    //Criação dos labels e textFields para os filtros
+    public void textFieldsCreation(JPanel filterPanel) {
+<span class="fc" id="L62">        filterPanel.setLayout(new GridLayout(0, 2, 5, 5)); // 0 indica número indefinido de linhas</span>
+<span class="fc" id="L63">        addLabelAndTextField(filterPanel, &quot;Curso&quot;);</span>
+<span class="fc" id="L64">        addLabelAndTextField(filterPanel, &quot;UC&quot;);</span>
+<span class="fc" id="L65">        addLabelAndTextField(filterPanel, &quot;Turno&quot;);</span>
+<span class="fc" id="L66">        addLabelAndTextField(filterPanel, &quot;Turma&quot;);</span>
+<span class="fc" id="L67">        addLabelAndTextField(filterPanel, &quot;N.º de inscritos no turno&quot;);</span>
+<span class="fc" id="L68">        addLabelAndTextField(filterPanel, &quot;Dia da Semana&quot;);</span>
+<span class="fc" id="L69">        addLabelAndTextField(filterPanel, &quot;Hora de Início&quot;);</span>
+<span class="fc" id="L70">        addLabelAndTextField(filterPanel, &quot;Hora de Fim&quot;);</span>
+<span class="fc" id="L71">        addLabelAndTextField(filterPanel, &quot;Data da Aula&quot;);</span>
+<span class="fc" id="L72">        addLabelAndTextField(filterPanel, &quot;Tipo de Sala&quot;);</span>
+<span class="fc" id="L73">        addLabelAndTextField(filterPanel, &quot;Sala atribuida&quot;);</span>
+<span class="fc" id="L74">        addLabelAndTextField(filterPanel, &quot;Semana do semestre&quot;);</span>
+<span class="fc" id="L75">        addLabelAndTextField(filterPanel, &quot;Semana do ano&quot;);</span>
+<span class="fc" id="L76">    }</span>
+
+    //Adicionar á tabela a Label e o Textfield
+    private void addLabelAndTextField(JPanel panel, String label) {
+<span class="fc" id="L80">        JLabel jLabel = new JLabel(label);</span>
+<span class="fc" id="L81">        JTextField jTextField = new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L82">        panel.add(jLabel);</span>
+<span class="fc" id="L83">        panel.add(jTextField);</span>
+<span class="fc" id="L84">    }</span>
+
+    //Criação do Botão Filtrar
+    public void btnCreation(JButton btn, JTable tabela, JPanel filterPanel) {
+
+        //Estilo do Botão
+<span class="fc" id="L90">        btn.setForeground(Color.WHITE);</span>
+<span class="fc" id="L91">        btn.setBackground(new Color(46, 139, 87)); // Cor verde</span>
+<span class="fc" id="L92">        btn.setFocusPainted(false); // Remove a borda de foco</span>
+<span class="fc" id="L93">        btn.setFont(new Font(&quot;Arial&quot;, Font.BOLD, 14));</span>
+
+<span class="fc" id="L95">    }</span>
+
+    public void function_esconderBtn(JTable tabela) {
+<span class="fc" id="L98">        int columnIndex = tabela.getSelectedColumn();</span>
+<span class="fc" id="L99">        TableColumn d = tabela.getColumnModel().getColumn(columnIndex);</span>
+<span class="fc" id="L100">        a.add(d.getModelIndex());</span>
+<span class="fc" id="L101">        tabela.removeColumn(d);</span>
+<span class="fc" id="L102">    }</span>
+
+    public void function_revelarBtn(JTable tabela) {
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            for(int x :a){</span>
+<span class="fc" id="L106">                TableColumn c = new TableColumn(x);</span>
+<span class="fc" id="L107">                tabela.addColumn(c);</span>
+<span class="fc" id="L108">                tabela.moveColumn(tabela.getColumnCount()-1,x);</span>
+<span class="fc" id="L109">            }</span>
+<span class="fc" id="L110">        a.clear();</span>
+<span class="fc" id="L111">    }</span>
+
+
+    public void function_filtrarBtn(JTable tabela, JPanel filterPanel) {
+<span class="fc" id="L115">        int countFilterPreenchido = 0;</span>
+<span class="fc" id="L116">        DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();</span>
+<span class="fc" id="L117">        TableRowSorter&lt;DefaultTableModel&gt; sorter = new TableRowSorter&lt;&gt;(modelo);</span>
+<span class="fc" id="L118">        tabela.setRowSorter(sorter);</span>
+
+<span class="fc" id="L120">        ArrayList&lt;RowFilter&lt;Object, Object&gt;&gt; filters = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        for (int i = 0; i &lt; filterPanel.getComponentCount(); i += 2) {</span>
+<span class="fc" id="L123">            Component component = filterPanel.getComponent(i + 1);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">            if (component instanceof JTextField textField) {</span>
+<span class="fc" id="L125">                String filterText = textField.getText().toUpperCase();</span>
+
+<span class="fc" id="L127">                int columnIndex = i / 2;</span>
+
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">                if (!filterText.isEmpty()) {</span>
+<span class="fc" id="L130">                    countFilterPreenchido++;</span>
+<span class="fc" id="L131">                    filters.add(RowFilter.regexFilter(&quot;(?i)\\b&quot; + filterText + &quot;\\b&quot;, columnIndex));</span>
+                }
+            }
+        }
+
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (countFilterPreenchido == 1) {</span>
+<span class="fc" id="L137">            RowFilter&lt;Object, Object&gt; compoundRowFilter = RowFilter.orFilter(filters);</span>
+<span class="fc" id="L138">            sorter.setRowFilter(compoundRowFilter);</span>
+<span class="fc" id="L139">        } else {</span>
+<span class="nc" id="L140">            RowFilter&lt;Object, Object&gt; compoundRowFilter = RowFilter.andFilter(filters);</span>
+<span class="nc" id="L141">            sorter.setRowFilter(compoundRowFilter);</span>
+        }
+<span class="fc" id="L143">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

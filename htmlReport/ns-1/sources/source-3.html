@@ -1,0 +1,429 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ScheduleTableEngine</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">core</a>
+</div>
+
+<h1>Coverage Summary for Class: ScheduleTableEngine (core)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ScheduleTableEngine</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/36)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/114)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ScheduleTableEngine$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/24)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/138)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package core;
+&nbsp;
+&nbsp;import structures.LineSchedule;
+&nbsp;import structures.RoomPreference;
+&nbsp;import structures.SchedulePeriod;
+&nbsp;import visualize.TableSubstitution;
+&nbsp;
+&nbsp;import javax.swing.*;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.event.ActionEvent;
+&nbsp;import java.awt.event.ActionListener;
+&nbsp;import java.awt.event.AdjustmentEvent;
+&nbsp;import java.util.*;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;import static java.lang.System.out;
+&nbsp;
+&nbsp;public class ScheduleTableEngine {
+&nbsp;
+&nbsp;    private final TableSubstitution scheduleData;
+&nbsp;    private final ScheduleEngine engine;
+&nbsp;    private final int rowSelected;
+&nbsp;    private String aulaSelecionada;
+&nbsp;    private Boolean modify;
+&nbsp;
+<b class="nc">&nbsp;    public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table){//, boolean modify){</b>
+<b class="nc">&nbsp;        this.scheduleData = scheduleData;</b>
+<b class="nc">&nbsp;        this.engine = new ScheduleEngine(scheduleData.getDataModel());</b>
+<b class="nc">&nbsp;        this.rowSelected = table.convertRowIndexToModel(rowSelected);</b>
+<b class="nc">&nbsp;        this.aulaSelecionada = &quot;&quot;;</b>
+<b class="nc">&nbsp;        this.modify=modify;</b>
+&nbsp;
+<b class="nc">&nbsp;        initialize();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void initialize() {
+&nbsp;
+<b class="nc">&nbsp;        List&lt;LineSchedule&gt; possibilityList = setupInform();</b>
+&nbsp;
+<b class="nc">&nbsp;        JFrame frame = new JFrame();</b>
+<b class="nc">&nbsp;        frame.setSize(900, 800);</b>
+<b class="nc">&nbsp;        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);</b>
+&nbsp;
+<b class="nc">&nbsp;        JPanel sugestionPanel = new JPanel();</b>
+<b class="nc">&nbsp;        sugestionPanel.setLayout(new BorderLayout());</b>
+&nbsp;
+<b class="nc">&nbsp;        JPanel sugestionallocation = new JPanel();</b>
+&nbsp;
+&nbsp;        // Ajuste o layout para GridLayout com 5 linhas e 1 coluna
+<b class="nc">&nbsp;        sugestionallocation.setLayout(new GridLayout(0, 1, 0, 10)); // 10 pixels de espaço vertical entre os componentes</b>
+&nbsp;
+&nbsp;        // Adicione margens ao JPanel
+<b class="nc">&nbsp;        sugestionallocation.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Margens de 10 pixels em todas as direções</b>
+&nbsp;
+<b class="nc">&nbsp;        ButtonGroup teste = new ButtonGroup();</b>
+&nbsp;
+<b class="nc">&nbsp;        int initialElementsToShow = 5; // Número inicial de elementos a serem mostrados</b>
+<b class="nc">&nbsp;        int totalElements = possibilityList.size(); // Número total de elementos</b>
+&nbsp;
+&nbsp;        // Adicione os elementos iniciais ao sugestionallocation
+<b class="nc">&nbsp;        for (int i = 0; i &lt; Math.min(initialElementsToShow, totalElements); i++) {</b>
+<b class="nc">&nbsp;            JRadioButton radioButton = new JRadioButton(possibilityList.get(i).toString());</b>
+<b class="nc">&nbsp;            teste.add(radioButton);</b>
+<b class="nc">&nbsp;            sugestionallocation.add(radioButton);</b>
+<b class="nc">&nbsp;            if(radioButton.isSelected()){</b>
+<b class="nc">&nbsp;                aulaSelecionada = radioButton.getText();</b>
+<b class="nc">&nbsp;                out.println(&quot;Aula de Substituição Selecionada: &quot; + aulaSelecionada);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        JScrollPane scrollPane = new JScrollPane(sugestionallocation);</b>
+<b class="nc">&nbsp;        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);</b>
+&nbsp;
+&nbsp;        // Adicione um ouvinte de rolagem ao JScrollPane
+<b class="nc">&nbsp;        scrollPane.getVerticalScrollBar().addAdjustmentListener(e -&gt; {</b>
+<b class="nc">&nbsp;            JScrollBar verticalBar = scrollPane.getVerticalScrollBar();</b>
+<b class="nc">&nbsp;            int value = verticalBar.getValue();</b>
+<b class="nc">&nbsp;            int extent = verticalBar.getVisibleAmount();</b>
+<b class="nc">&nbsp;            int maximum = verticalBar.getMaximum();</b>
+&nbsp;
+&nbsp;            // Se o usuário estiver no final do JScrollPane
+<b class="nc">&nbsp;            if (value + extent == maximum) {</b>
+<b class="nc">&nbsp;                int currentCount = sugestionallocation.getComponentCount();</b>
+<b class="nc">&nbsp;                int remainingElements = totalElements - currentCount;</b>
+&nbsp;
+&nbsp;                // Adicione mais elementos ao sugestionallocation conforme necessário
+<b class="nc">&nbsp;                for (int i = currentCount; i &lt; Math.min(currentCount + 5, totalElements); i++) {</b>
+<b class="nc">&nbsp;                    JRadioButton radioButton = new JRadioButton(possibilityList.get(i).toString());</b>
+<b class="nc">&nbsp;                    teste.add(radioButton);</b>
+<b class="nc">&nbsp;                    sugestionallocation.add(radioButton);</b>
+&nbsp;                }
+&nbsp;
+&nbsp;                // Atualize o layout e a exibição
+<b class="nc">&nbsp;                sugestionallocation.revalidate();</b>
+<b class="nc">&nbsp;                sugestionallocation.repaint();</b>
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        JPanel buttonAllocation = new JPanel();</b>
+<b class="nc">&nbsp;        buttonAllocation.setLayout(new FlowLayout());</b>
+&nbsp;
+<b class="nc">&nbsp;        JButton cancelButton = new JButton(&quot;Cancelar&quot;);</b>
+<b class="nc">&nbsp;        JButton submitButton = new JButton(&quot;Submeter&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        cancelButton.addActionListener(e -&gt; frame.dispose());</b>
+<b class="nc">&nbsp;        submitButton.addActionListener(new ActionListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void actionPerformed(ActionEvent e) {
+<b class="nc">&nbsp;                if(teste.getSelection().isSelected()){</b>
+<b class="nc">&nbsp;                    JRadioButton selectedButton = getSelectedRadioButton(teste);</b>
+<b class="nc">&nbsp;                    assert selectedButton != null;</b>
+<b class="nc">&nbsp;                    aulaSelecionada = selectedButton.getText();</b>
+<b class="nc">&nbsp;                    out.println(&quot;Aula de Substituição Selecionada: &quot; + aulaSelecionada);</b>
+&nbsp;
+<b class="nc">&nbsp;                    String[] arrays = aulaSelecionada.split(&quot;-&quot;);</b>
+<b class="nc">&nbsp;                    LineSchedule newLineSchedule = new LineSchedule(arrays[0], arrays[1], arrays[2], arrays[3], Integer.parseInt(arrays[4]), arrays[5], arrays[6], arrays[7], arrays[8], arrays[9], arrays[10]);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;                    out.println(&quot;Aula Selecionada Removida: &quot; + scheduleData.getDataModel().getScheduleEntries().get(rowSelected));</b>
+&nbsp;
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getCurso(), rowSelected, 0);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getUnidadeCurricular(), rowSelected, 1);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getTurno(), rowSelected, 2);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getTurma(), rowSelected, 3);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getInscritos(), rowSelected, 4);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getDiaSemana(), rowSelected, 5);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getHoraInicio(), rowSelected, 6);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getHoraFim(), rowSelected, 7);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getDataAula(), rowSelected, 8);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getCaracteristicasSala(), rowSelected, 9);</b>
+<b class="nc">&nbsp;                    scheduleData.getJTable().getModel().setValueAt(newLineSchedule.getSala(), rowSelected, 10);</b>
+&nbsp;
+<b class="nc">&nbsp;                    out.println(&quot;Aula de Substituição Adicionada e Original Removida da JTable&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                    frame.dispose(); // Fecha o frame atual após a submissão</b>
+&nbsp;
+<b class="nc">&nbsp;                    out.println(&quot;Salvar as mudanças&quot;);</b>
+<b class="nc">&nbsp;                    scheduleData.getTable().saveChanges();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        buttonAllocation.add(cancelButton);</b>
+<b class="nc">&nbsp;        buttonAllocation.add(submitButton);</b>
+&nbsp;
+<b class="nc">&nbsp;        sugestionPanel.add(scrollPane, BorderLayout.NORTH);</b>
+<b class="nc">&nbsp;        sugestionPanel.add(buttonAllocation, BorderLayout.SOUTH);</b>
+<b class="nc">&nbsp;        frame.add(sugestionPanel);</b>
+<b class="nc">&nbsp;        frame.setVisible(true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;LineSchedule&gt; setupInform(){
+&nbsp;
+<b class="nc">&nbsp;        String courseName= scheduleData.getCursoSelec().toString();</b>
+<b class="nc">&nbsp;        String curricularUnit=scheduleData.getUcSelec().toString();</b>
+<b class="nc">&nbsp;        String classTurn= scheduleData.getTurnoSelec().toString();</b>
+<b class="nc">&nbsp;        String className= scheduleData.getTurmaSelec().toString();</b>
+<b class="nc">&nbsp;        String studentCount = scheduleData.getInscritosSelec().toString();</b>
+&nbsp;        //out.println(classTurn);
+&nbsp;
+<b class="nc">&nbsp;        Date startDate = scheduleData.getDateI();</b>
+<b class="nc">&nbsp;        int weekCount =Integer.parseInt(scheduleData.getWeekCount());</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;SchedulePeriod&gt; allowedPeriods = extratedSchedulePeriodAllowed();</b>
+<b class="nc">&nbsp;        ArrayList&lt;SchedulePeriod&gt; excludePeriods = extratedSchedulePeriodExclude();</b>
+<b class="nc">&nbsp;        ArrayList&lt;RoomPreference&gt; roomIChoose = extratedRoomPreference();</b>
+<b class="nc">&nbsp;        ArrayList&lt;RoomPreference&gt; excludeRoom = extratedRoomExclude();</b>
+<b class="nc">&nbsp;        out.println(allowedPeriods);</b>
+<b class="nc">&nbsp;        out.println(excludePeriods);</b>
+<b class="nc">&nbsp;        out.println(roomIChoose);</b>
+<b class="nc">&nbsp;        out.println(excludeRoom);</b>
+&nbsp;
+&nbsp;        if(true){
+<b class="nc">&nbsp;            return engine.suggestNewCourse(courseName,curricularUnit,classTurn,className, 30,weekCount,excludePeriods,allowedPeriods,roomIChoose, excludeRoom,startDate);</b>
+&nbsp;        }else{
+&nbsp;            return engine.suggestCompensation(possibilidadeHorario(), excludePeriods, allowedPeriods, roomIChoose, excludeRoom);
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private LineSchedule possibilidadeHorario(){
+&nbsp;
+<b class="nc">&nbsp;        return scheduleData.getDataModel().getScheduleEntries().get(rowSelected);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private ArrayList&lt;SchedulePeriod&gt; extratedSchedulePeriodAllowed(){
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;SchedulePeriod&gt; allowedPeriods = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Map.Entry&lt;SchedulePeriod, JCheckBox&gt; pair : scheduleData.getCheckBoxMapDaysPreference().entrySet()){</b>
+<b class="nc">&nbsp;            SchedulePeriod period = pair.getKey();</b>
+<b class="nc">&nbsp;            JCheckBox checkBox = pair.getValue();</b>
+<b class="nc">&nbsp;            if (checkBox.isSelected()){</b>
+<b class="nc">&nbsp;                allowedPeriods.add(period);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (Map.Entry&lt;SchedulePeriod, JCheckBox&gt; pair : scheduleData.getCheckBoxMapPeriodPreference().entrySet()){</b>
+<b class="nc">&nbsp;            SchedulePeriod period = pair.getKey();</b>
+<b class="nc">&nbsp;            JCheckBox checkBox = pair.getValue();</b>
+<b class="nc">&nbsp;            if (checkBox.isSelected()){</b>
+<b class="nc">&nbsp;                allowedPeriods.add(period);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return allowedPeriods;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private  ArrayList&lt;SchedulePeriod&gt; extratedSchedulePeriodExclude(){
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;SchedulePeriod&gt; excludePeriods = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Map.Entry&lt;SchedulePeriod, JCheckBox&gt; pair : scheduleData.getCheckBoxMapDaysExclude().entrySet()){</b>
+<b class="nc">&nbsp;            SchedulePeriod period = pair.getKey();</b>
+<b class="nc">&nbsp;            JCheckBox checkBox = pair.getValue();</b>
+<b class="nc">&nbsp;            if (checkBox.isSelected()){</b>
+<b class="nc">&nbsp;                excludePeriods.add(period);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (Map.Entry&lt;SchedulePeriod, JCheckBox&gt; pair : scheduleData.getCheckBoxMapPeriodExclude().entrySet()){</b>
+<b class="nc">&nbsp;            SchedulePeriod period = pair.getKey();</b>
+<b class="nc">&nbsp;            JCheckBox checkBox = pair.getValue();</b>
+<b class="nc">&nbsp;            if (checkBox.isSelected()){</b>
+<b class="nc">&nbsp;                excludePeriods.add(period);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return excludePeriods;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private  ArrayList&lt;RoomPreference&gt; extratedRoomPreference(){
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;RoomPreference&gt; preferenceRoom = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Map.Entry&lt;RoomPreference, JCheckBox&gt; pair : scheduleData.getCheckBoxMapRoomPreference().entrySet()){</b>
+<b class="nc">&nbsp;            RoomPreference period = pair.getKey();</b>
+<b class="nc">&nbsp;            JCheckBox checkBox = pair.getValue();</b>
+<b class="nc">&nbsp;            if (checkBox.isSelected()){</b>
+<b class="nc">&nbsp;                preferenceRoom.add(period);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return preferenceRoom;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private  ArrayList&lt;RoomPreference&gt; extratedRoomExclude(){
+&nbsp;
+<b class="nc">&nbsp;        ArrayList&lt;RoomPreference&gt; excludeRoom = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (Map.Entry&lt;RoomPreference, JCheckBox&gt; pair : scheduleData.getCheckBoxMapRoomExclude().entrySet()){</b>
+<b class="nc">&nbsp;            RoomPreference period = pair.getKey();</b>
+<b class="nc">&nbsp;            JCheckBox checkBox = pair.getValue();</b>
+<b class="nc">&nbsp;            if (checkBox.isSelected()){</b>
+<b class="nc">&nbsp;                excludeRoom.add(period);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return excludeRoom;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static JRadioButton getSelectedRadioButton(ButtonGroup group){
+<b class="nc">&nbsp;        Enumeration&lt;AbstractButton&gt; buttons = group.getElements();</b>
+<b class="nc">&nbsp;        while(buttons.hasMoreElements()){</b>
+<b class="nc">&nbsp;            JRadioButton button = (JRadioButton) buttons.nextElement();</b>
+<b class="nc">&nbsp;            if(button.isSelected()) return button;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

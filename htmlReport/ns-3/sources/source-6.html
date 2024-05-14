@@ -1,0 +1,200 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ScheduleInstant</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">structures</a>
+</div>
+
+<h1>Coverage Summary for Class: ScheduleInstant (structures)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ScheduleInstant</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,8%
+  </span>
+  <span class="absValue">
+    (15/16)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package structures;
+&nbsp;
+&nbsp;import java.time.LocalDate;
+&nbsp;import java.time.format.TextStyle;
+&nbsp;import java.util.Locale;
+&nbsp;import java.util.regex.Pattern;
+&nbsp;
+&nbsp;/**
+&nbsp; * The ScheduleInstant class represents an ISCTE-IUL time slot and date, a schedule time slot at a precise point in
+&nbsp; * time.
+&nbsp; * @since 1.0
+&nbsp; */
+&nbsp;public class ScheduleInstant implements Comparable&lt;ScheduleInstant&gt; {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * LocalDate object containing this ScheduleInstant&#39;s date.
+&nbsp;     */
+&nbsp;    private LocalDate scheduleDate;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * SchedulePeriod object representing this ScheduleInstant&#39;s time slot.
+&nbsp;     */
+&nbsp;    private SchedulePeriod scheduleTime;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for a ScheduleInstant object representing a time slot and date.
+&nbsp;     *
+&nbsp;     * @param scheduleDate LocalDate object containing this ScheduleInstant&#39;s date
+&nbsp;     * @param scheduleTime SchedulePeriod object representing this ScheduleInstant&#39;s time slot
+&nbsp;     */
+<b class="fc">&nbsp;    public ScheduleInstant(LocalDate scheduleDate, SchedulePeriod scheduleTime) {</b>
+<b class="fc">&nbsp;        this.scheduleDate = scheduleDate;</b>
+<b class="pc">&nbsp;        if (scheduleTime.getIsTimeSlot()) {</b>
+<b class="fc">&nbsp;            this.scheduleTime = scheduleTime;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Período inserido não corresponde a um intervalo entre horas.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public LocalDate getScheduleDate() {
+<b class="fc">&nbsp;        return scheduleDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public SchedulePeriod getScheduleTime() {
+<b class="fc">&nbsp;        return scheduleTime;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setScheduleDate(LocalDate scheduleDate) {
+<b class="fc">&nbsp;        this.scheduleDate = scheduleDate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setScheduleTime(SchedulePeriod scheduleTime) {
+<b class="fc">&nbsp;        this.scheduleTime = scheduleTime;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int compareTo(ScheduleInstant o) {
+<b class="fc">&nbsp;        if (!this.scheduleDate.isEqual(o.getScheduleDate())) return this.scheduleDate.compareTo(o.getScheduleDate());</b>
+<b class="fc">&nbsp;        else return this.scheduleTime.getStartTime().compareTo(o.getScheduleTime().getStartTime());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a customized string representation for the ScheduleInstant object.
+&nbsp;     *
+&nbsp;     * @return String with string representations of SchedulePeriod time slot object and LocalDate object
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return scheduleTime.toString() + &quot; &quot; + scheduleDate.toString();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns a three-letter, first letter in uppercase, portuguese (Portugal) locale formatted, string
+&nbsp;     * representation of this ScheduleInstant&#39;s date day of the week.
+&nbsp;     *
+&nbsp;     * @return String first three letters of week day name in portuguese
+&nbsp;     */
+&nbsp;    public String weekDayToString() {
+<b class="fc">&nbsp;        Locale prtLocal = new Locale.Builder().setLanguage(&quot;pt&quot;).setScript(&quot;Latn&quot;).setRegion(&quot;PT&quot;).build();</b>
+<b class="fc">&nbsp;        String smallDisplayName =</b>
+<b class="fc">&nbsp;                scheduleDate.getDayOfWeek().getDisplayName(TextStyle.SHORT_STANDALONE, prtLocal).substring(0, 3);</b>
+<b class="fc">&nbsp;        return Pattern.compile(&quot;^.&quot;).matcher(smallDisplayName).replaceFirst(m -&gt; m.group().toUpperCase());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

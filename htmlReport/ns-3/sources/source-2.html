@@ -1,0 +1,249 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Room</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">structures</a>
+</div>
+
+<h1>Coverage Summary for Class: Room (structures)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Room</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    53,8%
+  </span>
+  <span class="absValue">
+    (7/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    68,4%
+  </span>
+  <span class="absValue">
+    (13/19)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package structures;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;/**
+&nbsp; * The Room class represents a physical room in a building.
+&nbsp; */
+&nbsp;public class Room {
+&nbsp;
+&nbsp;    private String edificio;
+&nbsp;    private String nomeSala;
+&nbsp;    private int capacidadeNormal;
+&nbsp;    private int capacidadeExame;
+&nbsp;    private String numCaracteristicas;
+&nbsp;   	private List&lt;String&gt; roomSpecs;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructs a new Room object with the given parameters.
+&nbsp;     *
+&nbsp;     * @param edificio           The building where the room is located.
+&nbsp;     * @param nomeSala           The name of the room.
+&nbsp;     * @param capacidadeNormal   The normal capacity of the room.
+&nbsp;     * @param capacidadeExame    The exam capacity of the room.
+&nbsp;     * @param numCaracteristicas The number of characteristics of the room.
+&nbsp;     * @param roomSpecs           Special specifications of the room.
+&nbsp;     */
+&nbsp;    public Room(String edificio, String nomeSala, int capacidadeNormal,
+<b class="fc">&nbsp;                int capacidadeExame, String numCaracteristicas, List&lt;String&gt; roomSpecs) {</b>
+<b class="fc">&nbsp;        this.edificio = edificio;</b>
+<b class="fc">&nbsp;        this.nomeSala = nomeSala;</b>
+<b class="fc">&nbsp;        this.capacidadeNormal = capacidadeNormal;</b>
+<b class="fc">&nbsp;        this.capacidadeExame = capacidadeExame;</b>
+<b class="fc">&nbsp;        this.numCaracteristicas = numCaracteristicas;</b>
+<b class="fc">&nbsp;        this.roomSpecs = roomSpecs;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the building where the room is located.
+&nbsp;     *
+&nbsp;     * @return The building.
+&nbsp;     */
+&nbsp;    public String getEdificio() {
+<b class="fc">&nbsp;        return edificio;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the building where the room is located.
+&nbsp;     *
+&nbsp;     * @param edificio The building to set.
+&nbsp;     */
+&nbsp;    public void setEdificio(String edificio) {
+<b class="nc">&nbsp;        this.edificio = edificio;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the name of the room.
+&nbsp;     *
+&nbsp;     * @return The name of the room.
+&nbsp;     */
+&nbsp;    public String getNomeSala() {
+<b class="fc">&nbsp;        return nomeSala;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the name of the room.
+&nbsp;     *
+&nbsp;     * @param nomeSala The name of the room to set.
+&nbsp;     */
+&nbsp;    public void setNomeSala(String nomeSala) {
+<b class="nc">&nbsp;        this.nomeSala = nomeSala;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the normal capacity of the room.
+&nbsp;     *
+&nbsp;     * @return The normal capacity of the room.
+&nbsp;     */
+&nbsp;    public int getCapacidadeNormal() {
+<b class="fc">&nbsp;        return capacidadeNormal;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the normal capacity of the room.
+&nbsp;     *
+&nbsp;     * @param capacidadeNormal The normal capacity of the room to set.
+&nbsp;     */
+&nbsp;    public void setCapacidadeNormal(int capacidadeNormal) {
+<b class="nc">&nbsp;        this.capacidadeNormal = capacidadeNormal;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the exam capacity of the room.
+&nbsp;     *
+&nbsp;     * @return The exam capacity of the room.
+&nbsp;     */
+&nbsp;    public int getCapacidadeExame() {
+<b class="fc">&nbsp;        return capacidadeExame;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the exam capacity of the room.
+&nbsp;     *
+&nbsp;     * @param capacidadeExame The exam capacity of the room to set.
+&nbsp;     */
+&nbsp;    public void setCapacidadeExame(int capacidadeExame) {
+<b class="nc">&nbsp;        this.capacidadeExame = capacidadeExame;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the number of characteristics of the room.
+&nbsp;     *
+&nbsp;     * @return The number of characteristics of the room.
+&nbsp;     */
+&nbsp;    public String getNumCaracteristicas() {
+<b class="fc">&nbsp;        return numCaracteristicas;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the number of characteristics of the room.
+&nbsp;     *
+&nbsp;     * @param numCaracteristicas The number of characteristics of the room to set.
+&nbsp;     */
+&nbsp;    public void setNumCaracteristicas(String numCaracteristicas) {
+<b class="nc">&nbsp;        this.numCaracteristicas = numCaracteristicas;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the characteristics of the room.
+&nbsp;     *
+&nbsp;     * @return The characteristics of the room.
+&nbsp;     */
+&nbsp;    public List&lt;String&gt; getRoomSpecs() {
+<b class="fc">&nbsp;        return roomSpecs;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the characteristics of the room.
+&nbsp;     *
+&nbsp;     * @param newRoomSpecs The characteristics of the room to set.
+&nbsp;     */
+&nbsp;    public void setRoomSpecs(List&lt;String&gt; newRoomSpecs) {
+<b class="nc">&nbsp;        this.roomSpecs = newRoomSpecs;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-14 18:04</div>
+</div>
+</body>
+</html>

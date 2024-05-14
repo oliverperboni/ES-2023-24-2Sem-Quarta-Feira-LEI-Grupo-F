@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReadCSV.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">All in GestaodeHorarios Coverage Results</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">ReadCSV.java</span></div><h1>ReadCSV.java</h1><pre class="source lang-java linenums">import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+<span class="nc" id="L13">public class ReadCSV {</span>
+
+    //PARA LER FICHEIROS LOCAIS
+    public static ArrayList&lt;structures.LineSchedule&gt; readScheduleCSV(String csvFile) {
+<span class="fc" id="L17">        ArrayList&lt;structures.LineSchedule&gt; lineSchedules = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L18">        try (FileReader fileReader = new FileReader(csvFile); CSVParser csvParser = CSVFormat.DEFAULT.withDelimiter(';').withHeader().parse(fileReader)) {</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">            for (CSVRecord csvRecord : csvParser) {</span>
+<span class="fc" id="L20">                structures.LineSchedule schedule = new structures.LineSchedule(csvRecord.get(&quot;Curso&quot;), csvRecord.get(&quot;Unidade Curricular&quot;), csvRecord.get(&quot;Turno&quot;), csvRecord.get(&quot;Turma&quot;), Integer.parseInt(csvRecord.get(&quot;Inscritos no turno&quot;)), csvRecord.get(&quot;Dia da semana&quot;), csvRecord.get(&quot;Hora início da aula&quot;), csvRecord.get(&quot;Hora fim da aula&quot;), csvRecord.get(&quot;Data da aula&quot;), csvRecord.get(&quot;Características da sala pedida para a aula&quot;), csvRecord.get(&quot;Sala atribuída à aula&quot;));</span>
+<span class="fc" id="L21">                lineSchedules.add(schedule);</span>
+<span class="fc" id="L22">            }</span>
+<span class="nc" id="L23">        } catch (IOException e) {</span>
+<span class="nc" id="L24">            e.printStackTrace();</span>
+<span class="fc" id="L25">        }</span>
+<span class="fc" id="L26">        return lineSchedules;</span>
+    }
+
+    //PARA LER FICHEIROS CSV DO GIT
+    public static ArrayList&lt;structures.LineSchedule&gt; readScheduleCSV(InputStream inputStream) {
+<span class="nc" id="L31">        ArrayList&lt;structures.LineSchedule&gt; lineSchedules = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L32">        try (Scanner scanner = new Scanner(inputStream)) {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (scanner.hasNextLine()) {</span>
+<span class="nc" id="L34">                scanner.nextLine();</span>
+            }
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            while (scanner.hasNextLine()) {</span>
+<span class="nc" id="L37">                String line = scanner.nextLine();</span>
+                // Process each line as needed
+<span class="nc" id="L39">                String[] fields = line.split(&quot;;&quot;); // Assumindo que os campos no CSV são separados por ponto e vírgula</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">                if (fields.length &gt;= 11) { // Certifique-se de que há pelo menos 11 campos</span>
+<span class="nc" id="L41">                    structures.LineSchedule schedule = new structures.LineSchedule(</span>
+                            fields[0], fields[1], fields[2], fields[3],
+<span class="nc" id="L43">                            Integer.parseInt(fields[4]), fields[5], fields[6],</span>
+                            fields[7], fields[8], fields[9], fields[10]
+                    );
+<span class="nc" id="L46">                    lineSchedules.add(schedule);</span>
+                }
+<span class="nc" id="L48">            }</span>
+        }
+<span class="nc" id="L50">        return lineSchedules;</span>
+    }
+
+    public static InputStream getInputStreamFromURL(String url) throws IOException {
+<span class="nc" id="L54">        URL fileUrl = new URL(url);</span>
+<span class="nc" id="L55">        return fileUrl.openStream();</span>
+    }
+
+    //ESTA MAIN E APENAS PARA VERIFICAR QUE ERA POSSIVEL LER OS FICHEIROS CSV
+    /*public static void main(String[] args) {
+        String localFile = &quot;csv/HorarioDeExemplo.csv&quot;;
+        ArrayList&lt;structures.LineSchedule&gt; lineSchedules = readScheduleCSV(localFile);
+        for (structures.LineSchedule schedule : lineSchedules) {
+            System.out.println(schedule);
+        }
+
+        System.out.println(&quot;GITTTTTTT&quot;);
+        String gitFileURL = &quot;https://raw.githubusercontent.com/oliverperboni/ES-2023-24-2Sem-Quarta-Feira-LEI-Grupo-F/main/csv/HorarioDeExemplo.csv?token=GHSAT0AAAAAACOQ4UILKTZY3WHI357PEWPGZPR5IHA&quot;;
+        try {
+            InputStream inputStream = getInputStreamFromURL(gitFileURL);
+            ArrayList&lt;structures.LineSchedule&gt; lineSchedules2 = readScheduleCSV(inputStream);
+            for (structures.LineSchedule schedule : lineSchedules2) {
+                System.out.println(schedule);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    } */
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
