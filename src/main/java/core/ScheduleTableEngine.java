@@ -24,6 +24,15 @@ public class ScheduleTableEngine {
     private String aulaSelecionada;
     private final Boolean modify;
 
+
+    /**
+     * Constructs a ScheduleTableEngine object.
+     *
+     * @param scheduleData The TableSubstitution object containing schedule data.
+     * @param rowSelected  The index of the selected row in the table.
+     * @param table        The JTable object representing the table interface.
+     * @param modify       A boolean value indicating if the operation is for modification.
+     */
     public ScheduleTableEngine(TableSubstitution scheduleData, int rowSelected, JTable table, boolean modify){
         this.scheduleData = scheduleData;
         this.engine = new ScheduleEngine(scheduleData.dataModel);
@@ -34,6 +43,11 @@ public class ScheduleTableEngine {
         initialize(modify);
     }
 
+    /**
+     * Initializes the user interface for scheduling operations.
+     *
+     * @param modify A boolean value indicating if the operation is for modification.
+     */
     public void initialize(Boolean modify) {
 
         List<LineSchedule> possibilityList = setupInform(modify);
@@ -150,6 +164,12 @@ public class ScheduleTableEngine {
         frame.setVisible(true);
     }
 
+    /**
+     * Sets up the necessary information for scheduling based on the given parameters.
+     *
+     * @param modify A boolean value indicating if the operation is for modification.
+     * @return A list of LineSchedule objects containing the suggested scheduling possibilities.
+     */
     private List<LineSchedule> setupInform(Boolean modify){
         ArrayList<SchedulePeriod> allowedPeriods = extratedSchedulePeriodAllowed();
         ArrayList<SchedulePeriod> excludePeriods = extratedSchedulePeriodExclude();
@@ -180,12 +200,21 @@ public class ScheduleTableEngine {
         }
 
     }
-
+    /**
+     * Retrieves the LineSchedule object representing the schedule entry at the selected row.
+     *
+     * @return The LineSchedule object representing the schedule entry at the selected row.
+     */
     private LineSchedule possibilidadeHorario(){
 
         return scheduleData.dataModel.getScheduleEntries().get(rowSelected);
     }
 
+    /**
+     * Extracts the selected schedule periods marked as allowed by the user.
+     *
+     * @return An ArrayList of SchedulePeriod objects representing the allowed schedule periods.
+     */
     private ArrayList<SchedulePeriod> extratedSchedulePeriodAllowed(){
 
         ArrayList<SchedulePeriod> allowedPeriods = new ArrayList<>();
@@ -209,6 +238,11 @@ public class ScheduleTableEngine {
         return allowedPeriods;
     }
 
+    /**
+     * Extracts the selected schedule periods marked for exclusion by the user.
+     *
+     * @return An ArrayList of SchedulePeriod objects representing the excluded schedule periods.
+     */
     private  ArrayList<SchedulePeriod> extratedSchedulePeriodExclude(){
 
         ArrayList<SchedulePeriod> excludePeriods = new ArrayList<>();
@@ -232,6 +266,11 @@ public class ScheduleTableEngine {
         return excludePeriods;
     }
 
+    /**
+     * Extracts the selected room preferences chosen by the user.
+     *
+     * @return An ArrayList of RoomPreference objects representing the selected room preferences.
+     */
     private  ArrayList<RoomPreference> extratedRoomPreference(){
 
         ArrayList<RoomPreference> preferenceRoom = new ArrayList<>();
@@ -247,6 +286,11 @@ public class ScheduleTableEngine {
         return preferenceRoom;
     }
 
+    /**
+     * Extracts the selected room preferences marked for exclusion by the user.
+     *
+     * @return An ArrayList of RoomPreference objects representing the room preferences marked for exclusion.
+     */
     private  ArrayList<RoomPreference> extratedRoomExclude(){
 
         ArrayList<RoomPreference> excludeRoom = new ArrayList<>();
@@ -262,6 +306,12 @@ public class ScheduleTableEngine {
         return excludeRoom;
     }
 
+    /**
+     * Retrieves the selected radio button from a given ButtonGroup.
+     *
+     * @param group The ButtonGroup containing the radio buttons.
+     * @return The selected JRadioButton, or null if no button is selected.
+     */
     private static JRadioButton getSelectedRadioButton(ButtonGroup group){
         Enumeration<AbstractButton> buttons = group.getElements();
         while(buttons.hasMoreElements()){
