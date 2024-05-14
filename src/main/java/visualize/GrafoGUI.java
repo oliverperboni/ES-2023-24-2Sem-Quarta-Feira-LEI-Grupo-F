@@ -74,9 +74,7 @@ public class GrafoGUI extends JFrame {
                 if (lineSchedule.getSala().equals(sala) && lineSchedule.getDataAula().equals(Data)) {
                     Boolean comecaDepois = compararHoras(HoraInicio,lineSchedule.getHoraFim());
                     Boolean comecaAntes = compararHoras(lineSchedule.getHoraInicio(),HoraFim);
-                 
 
-                    
                     if (!((comecaAntes ) || (comecaDepois))) {
                         System.out.println("-----------------------"+lineSchedule.getHoraInicio() +" "+ lineSchedule.getHoraFim()+"-----------------------");
                         System.out.println(lineSchedule.getUnidadeCurricular()+" "+lineSchedule.getDataAula()+" "+ lineSchedule.getSala());
