@@ -231,7 +231,7 @@ public class Table {
             Object value = table.getValueAt(i, index);
             if (!instances.contains(value)) {
                 instances.add(value);
-                System.out.println("oi");
+
             }
         }
 

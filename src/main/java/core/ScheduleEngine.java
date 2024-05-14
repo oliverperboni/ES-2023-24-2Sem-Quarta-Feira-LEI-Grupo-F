@@ -2,7 +2,11 @@ package core;
 
 import structures.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -54,10 +58,11 @@ public class ScheduleEngine {
                             for (SchedulePeriod sp2 : allowedPeriods)
                                 if (sp2.getIsTimePeriod()) { // Por cada preferência do tipo "período do dia" (manhã, tarde, noite)
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
-                                        possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
-                                } else if (sp2.getIsTimeSlot()) {
+                                        if(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions)!=null)
+                                            possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, timeSlot, rp, excludedPeriods, roomTypeExclusions));
+                                /*} else if (sp2.getIsTimeSlot()) {
                                     possibilityList.add(createSchedulePossibility(classSchedule, sp1, resultRoom, sp2, rp, excludedPeriods, roomTypeExclusions));
-                                }
+                                }*/}
 
                     }
         }
@@ -123,7 +128,7 @@ public class ScheduleEngine {
                                     for (SchedulePeriod timeSlot : sp2.getTimeSlotList()) // Por cada horário desse "período do dia"
                                         if (createSchedulePossibility2(classSchedule, sp1, resultRoom, timeSlot, excludedPeriods, roomTypeExclusions,rp, i) != null)
                                             possibilityList.add(createSchedulePossibility2(classSchedule, sp1, resultRoom, timeSlot, excludedPeriods, roomTypeExclusions,rp, i));
-                    }}
+                            }}
                 }
             }
         }
@@ -170,13 +175,10 @@ public class ScheduleEngine {
         ScheduleInstant auxInstant = new ScheduleInstant(auxDate, timeSlot);
         auxSchedule.setScheduleInstant(auxInstant);
 
-        /*for(String b : ExcludedRooms){
-            System.out.println(b);
-            System.out.println(resultRoom.getNomeSala());
-            if (b.equals(auxSchedule.getSala())) {
+        for (SchedulePeriod a : ExcludedTime)
+            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString())) {
                 return null;
             }
-        }*/
 
         auxSchedule.setDia_semana(auxInstant.weekDayToString());
         auxSchedule.setHora_inicio(auxInstant.getScheduleTime().getStartTime().toString());
@@ -212,7 +214,7 @@ public class ScheduleEngine {
         auxSchedule.setScheduleInstant(auxInstant);
 
         for (SchedulePeriod a : ExcludedTime)
-            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString())) {//a.getPreferredDay().equals(auxInstant.getScheduleDate().getDayOfWeek()))
+            if (a.equals(auxSchedule.getScheduleInstant().getScheduleTime()) || a.getWeekDay().equals(auxInstant.weekDayToString())) {
                 return null;
             }
         for(RoomPreference b: ExcludedRooms){
@@ -266,57 +268,6 @@ public class ScheduleEngine {
     }
 
     public static void main(String[] args) {
-/*
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDateTime now = LocalDateTime.now();
-        ArrayList<SchedulePeriod> allowedPeriods1 = new ArrayList<SchedulePeriod>();
-        //allowedPeriods1.add(SchedulePeriod._18H00_19H30);
-        allowedPeriods1.add(SchedulePeriod.SEGUNDA_FEIRA);
-        allowedPeriods1.add(SchedulePeriod.MANHA);
-        allowedPeriods1.add(SchedulePeriod.TERCA_FEIRA);
-        Date currentDate = new Date();
-        //System.out.println( dtf.format(now));
 
-        //System.out.println( now);
-        LineSchedule reSchedule = new LineSchedule(
-                "LCD, LCD-PL", "ANALISE DE REDES (1CICLO)",
-                "03604TP01", "CDC1", 27, "Sáb",
-                "09:30:00", "11:00:00", "03/12/2022",
-                "BYOD (Bring Your Own Device)", "D1.07");
-
-        ScheduleDataModel dataModel = new ScheduleDataModel("csv/HorarioDeExemplo.csv", false,
-                "csv/CaracterizaçãoDasSalas.csv", false);
-        ScheduleEngine engine = new ScheduleEngine(dataModel);
-//
-//        ArrayList<SchedulePeriod> allowedPeriods1 = new ArrayList<SchedulePeriod>();
-//        ArrayList<SchedulePeriod> allowedPeriods2 = new ArrayList<SchedulePeriod>();
-       ArrayList<SchedulePeriod> excludedPeriods = new ArrayList<SchedulePeriod>();
-       ArrayList<Room> excludedRoom = new ArrayList<Room>();
-//
-//        allowedPeriods1.add(SchedulePeriod._18H00_19H30);
-//        allowedPeriods1.add(SchedulePeriod._19H30_21H00);
-//        allowedPeriods1.add(SchedulePeriod._21H00_22H30);
-//        allowedPeriods1.add(SchedulePeriod.SEGUNDA_FEIRA);
-//        allowedPeriods1.add(SchedulePeriod.TERCA_FEIRA);
-//
-//        allowedPeriods2.add(SchedulePeriod.QUARTA_FEIRA);
-//        allowedPeriods2.add(SchedulePeriod.QUINTA_FEIRA);
-//        allowedPeriods2.add(SchedulePeriod.SEXTA_FEIRA);
-//
-        excludedPeriods.add(SchedulePeriod.SEGUNDA_FEIRA);
-        excludedPeriods.add(SchedulePeriod._21H00_22H30);
-        //excludedRoom.add("B1.04");
-//
-        ArrayList<RoomPreference> roomTypePreferences1 = new ArrayList<RoomPreference>();
-        //roomTypePreferences1.add(RoomPreference.SALA_AULAS_NORMAL);
-        roomTypePreferences1.add(RoomPreference.ANFITEATRO_AULAS);
-//
-//        ArrayList<RoomPreference> roomTypePreferences2 = new ArrayList<RoomPreference>();
-//        roomTypePreferences2.add(RoomPreference.SALA_AULAS_NORMAL);
-//        roomTypePreferences2.add(RoomPreference.SALA_AULAS_MESTRADO);
-
-        engine.suggestCompensation(reSchedule, new ArrayList<SchedulePeriod>(), allowedPeriods1, roomTypePreferences1, new ArrayList<RoomPreference>());
-        engine.suggestNewCourse("MEEC","TESE EM PSICOLOGIA (0 ECTS)", "", "MEECA1",30,1, excludedPeriods , allowedPeriods1, roomTypePreferences1, new ArrayList<RoomPreference>(), currentDate);
-//*/
     }
 }
